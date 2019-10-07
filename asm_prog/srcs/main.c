@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:38:28 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/07 19:47:07 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/08 00:32:45 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 static inline int	asm_compiler(t_env *env, char *file_name)
 {
 	if (loader(env, file_name)
-		|| tokenizer(env->file))
+		|| tokenizer(env))
 		return (-1);
 	return (0);
 }
