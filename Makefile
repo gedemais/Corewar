@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    Makefile                                           :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2019/10/07 12:37:04 by gedemais          #+#    #+#              #
+#    Updated: 2019/10/07 12:37:49 by gedemais         ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 COR_NAME=corewar
 ASM_NAME=asm
 
@@ -35,7 +47,7 @@ clean:
 
 fclean:
 	@make -C $(LIB_PATH) fclean
-	@make -C $(COR_PATH) flean
+	@make -C $(COR_PATH) fclean
 	@make -C $(ASM_PATH) fclean
 
-re: fclean all
+
