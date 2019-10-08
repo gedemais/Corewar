@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/08 00:53:59 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/08 17:02:21 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,42 +24,79 @@
 
 # define BUFF_READ 65536
 
-# define NB_TOKENS 1024
+# define NB_TOKENS 4096
+# define NB_OPS 16
+# define NTOKFUNCS 5
+# define FCHAR stream[0]
 
-# define DEBUG_MODE true
+# define DEBUG_MODE false
 
-typedef enum		e_token_type {
+typedef enum			e_token_type {
 	TOK_NONE,
-	TOK_NEWLINE, // "\n"
-	TOK_COLON, // ":"
-	TOK_PERCENT, // "%"
+	TOK_NEWLINE, // "\n" //
+	TOK_COLON, // ":" //
+	TOK_PERCENT, // "%" //
 	TOK_OP,
+	TOK_KEY,
+	TOK_LABEL,
 	TOK_STRING, // "qqchose"
-	TOK_REG, // "r[1-MAX_REG]"
+	TOK_REG, // "r[1-MAX_REG]" //
 	TOK_COMMENT, // ".comment STRING"
 	TOK_NAME, // ".name STRING"
 	TOK_MAX
-}					t_token_type;
+}						t_token_type;
 
-typedef struct		s_token
+typedef struct s_token	t_token;
+
+struct					s_token
 {
-	char		*ptr;
-	t_token_type	type;
-	unsigned int	line;
-}					t_token;
+	t_token				*next;
+	char				*ptr;
+	unsigned int		line;
+	unsigned int		col;
+	int					type;
+	char				pad[4];
+};
 
-typedef	struct	s_env
+typedef struct			s_tokenizer
 {
-	char		*file;
-	t_token		*tokens;
-	char		*dest;
-	int			fd;
-	char		pad[4];
-}				t_env;
+	unsigned int		line;
+	unsigned int		col;
+	unsigned int		i;
+	int					ret;
+}						t_tokenizer;
 
-int				loader(t_env *env, char *file_name);
-int				tokenizer(t_env *env);
-int				get_token_type(char *stream, unsigned int *j, unsigned int *line);
-int				free_env(t_env *env);
+typedef	struct			s_env
+{
+	char				*file;
+	t_token				*tokens;
+	char				*dest;
+	int					fd;
+	char				pad[4];
+}						t_env;
+
+/*
+** Mains
+*/
+int						loader(t_env *env, char *file_name);
+
+/*
+** Tokenizer
+*/
+int						tokenizer(t_env *env);
+
+t_token					*token_lstnew(char *stream, t_tokenizer *tok);
+int						token_pushfront(t_token **lst, t_token *new);
+int						token_del_node(t_token *node);
+int						token_free_lst(t_token *lst);
+
+int						get_monos(char *stream, unsigned int *i);
+int						get_strings(char *stream, unsigned int *i);
+int						get_ops(char *stream, unsigned int *i);
+int						get_regs(char *stream, unsigned int *i);
+int						get_com_name(char *stream, unsigned int *i);
+
+
+int						free_env(t_env *env);
 
 #endif

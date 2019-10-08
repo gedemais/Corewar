@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:38:04 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/07 19:24:55 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/08 15:57:50 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,5 +33,7 @@ int		free_env(t_env *env)
 		free(env->file);
 		env->file = NULL;
 	}
+	if (env->tokens)
+		token_free_lst(env->tokens);
 	return (0);
 }
