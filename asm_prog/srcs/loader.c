@@ -1,21 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   entry_parser.c                                     :+:      :+:    :+:   */
+/*   loader.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/07 19:43:35 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/08 20:36:02 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-static inline void	debug(t_env *env)
-{
-	fprintf((FILE*)stderr, "File :\n%s\n", env->file);
-}
 
 static inline char	*strrealloc(char *s, unsigned int size)
 {
@@ -85,7 +80,5 @@ int		loader(t_env *env, char *file_name)
 	if (!(env->file = read_file(open(file_name, O_RDONLY)))
 		|| !env->file[0])
 		return (-1);
-	if (DEBUG_MODE)
-		debug(env);
 	return (0);
 }

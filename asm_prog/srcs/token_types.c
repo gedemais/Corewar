@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 14:55:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/08 16:24:21 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/08 19:27:27 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,18 @@
 
 int		get_monos(char *stream, unsigned int *i)
 {
-	if (FCHAR == '\n' && (*i += 1))
-		return (TOK_NEWLINE);
-	else if (FCHAR == '%' && (*i += 1))
-		return (TOK_PERCENT);
+	static char		monos[NB_MONOS] = {'\n', ',', '%', '#', ':'};
+	static int		rets[NB_MONOS] = {TOK_NEWLINE, TOK_SEPARATOR,
+										TOK_PERCENT, TOK_COMMENT, TOK_COLON};
+	unsigned int	j;
+
+	j = 0;
+	while (j < NB_MONOS)
+	{
+		if (FCHAR == monos[j] && (*i += 1))
+			return (rets[j]);
+		j++;
+	}
 	return (0);
 }
 
@@ -37,7 +45,7 @@ int		get_strings(char *stream, unsigned int *i)
 	}
 	return (0);
 }
-
+/*
 int		get_ops(char *stream, unsigned int *i)
 {
 	static char	*ops_names[NB_OPS] = {"lfork", "sti", "fork", "lld", "ld",
@@ -56,7 +64,7 @@ int		get_ops(char *stream, unsigned int *i)
 			return (TOK_OP);
 		}
 	return (0);
-}
+}*/
 
 int		get_regs(char *stream, unsigned int *i)
 {
@@ -93,7 +101,33 @@ int		get_com_name(char *stream, unsigned int *i)
 	if (len > com_len && !ft_strncmp(stream, COMMENT_CMD_STRING, com_len))
 	{
 		*i += com_len;
-		return (TOK_COMMENT);
+		return (TOK_COMMENT_CMD);
 	}
 	return (0);
+}
+
+int		get_word(char *stream, unsigned int *i)
+{
+	unsigned int	j;
+
+	j = 0;
+	if (!ft_isalnum(FCHAR) && FCHAR != '_')
+		return (0);
+	while (stream[j] && (ft_isalnum(stream[j]) || stream[j] == '_'))
+		j++;
+	*i += j;
+	return (TOK_WORD);
+}
+
+int		get_numbers(char *stream, unsigned int *i)
+{
+	unsigned int	j;
+
+	j = 1;
+	if (!ft_isdigit(FCHAR) && FCHAR != '+' && FCHAR != '-')
+		return (0);
+	while (ft_isdigit(stream[j]))
+		j++;
+	*i += j;
+	return (TOK_NUMBER);
 }

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 14:15:28 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/08 15:51:03 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/08 20:21:37 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,29 @@
 ** Token's linked list boilerplate
 */
 
-int		token_del_node(t_token *node)
+int		token_snap_node(t_token **lst, t_token *node)
 {
-	free(node);
-	node = NULL;
+	t_token	*tmp;
+	t_token	*tmp2;
+
+	tmp = (*lst);
+	tmp2 = tmp->next;
+	if ((*lst) == node)
+	{
+		free(*lst);
+		(*lst) = tmp->next;
+	}
+	while (tmp2)
+	{
+		if (tmp2 == node)
+		{
+			tmp2 = tmp2->next ? tmp2->next : NULL;
+			free(tmp->next);
+			tmp->next = tmp2;
+		}
+		tmp = tmp->next;
+		tmp2 = tmp2->next;
+	}
 	return (0);
 }
 
@@ -60,6 +79,7 @@ t_token		*token_lstnew(char *stream, t_tokenizer *tok)
 	new->ptr = &stream[tok->i];
 	new->line = tok->line;
 	new->col = tok->col;
+	new->len = tok->len;
 	new->type = tok->ret;
 	return (new);
 }
