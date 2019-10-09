@@ -6,29 +6,11 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/09 13:41:03 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/09 20:04:06 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-
-static inline void	trim_tokens(t_token **lst)
-{
-	t_token		*tmp;
-
-	tmp = (*lst);
-	while (tmp->next)
-	{
-		if ((tmp->type == TOK_NEWLINE && tmp->next->type == TOK_NEWLINE)
-			|| (tmp->type == TOK_COMMENT && tmp->next->type == TOK_NEWLINE))
-		{
-			token_snap_node(lst, tmp);
-			tmp = (*lst);
-			continue ;
-		}
-		tmp = tmp->next;
-	}
-}
 
 static inline void	update_tok(char *stream, t_tokenizer *tok, unsigned int tmp)
 {
@@ -48,7 +30,7 @@ static inline void	get_token_type(char *stream, t_tokenizer *tok)
 {
 	static int		(*token_fts[NTOKFUNCS])(char*, unsigned int*) = {&get_monos,
 						&get_strings, &get_com_name, &get_regs, &get_ops,
-						&get_numbers, &get_word};
+						&get_numbers, &get_word, &get_comments};
 	unsigned int	i;
 	unsigned int	tmp;
 
@@ -65,15 +47,13 @@ static inline void	get_token_type(char *stream, t_tokenizer *tok)
 	}
 }
 
-static inline void	print_lst(t_token *lst)
+void	print_lst(t_token *lst)
 {
 	t_token	*tmp;
 
 	tmp = lst;
 	while (tmp)
 	{
-			if (tmp->type == TOK_NONE)
-				printf("UNKNOWN|");
 			if (tmp->type == TOK_NEWLINE)
 				printf("NEWLINE\n");
 			if (tmp->type == TOK_COLON)
@@ -86,7 +66,7 @@ static inline void	print_lst(t_token *lst)
 				printf("REGISTER(%u)|", tmp->len);
 			if (tmp->type == TOK_COMMENT_CMD)
 				printf("COMMENT_CMD(%u)|", tmp->len);
-			if (tmp->type == TOK_NAME)
+			if (tmp->type == TOK_NAME_CMD)
 				printf("NAME_CMD(%u)|", tmp->len);
 			if (tmp->type == TOK_SEPARATOR)
 				printf("SEPARATOR|");
@@ -133,8 +113,7 @@ int		tokenizer(t_env *env)
 			return (-1);
 		nb_tokens++;
 	}
-	trim_tokens(&env->tokens);
-	if (DEBUG_MODE)
-		print_lst(env->tokens);
+	print_lst(env->tokens);
+	printf("\n");
 	return (0);
 }

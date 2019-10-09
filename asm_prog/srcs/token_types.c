@@ -6,11 +6,20 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 14:55:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/09 13:38:16 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/09 15:08:21 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+
+int		get_comments(char *stream, unsigned int *i)
+{
+	if (FCHAR != '#')
+		return (0);
+	while (stream[*i] && stream[*i] != '\n')
+		*i += 1;
+	return (TOK_COMMENT);
+}
 
 int		get_monos(char *stream, unsigned int *i)
 {
@@ -96,7 +105,7 @@ int		get_com_name(char *stream, unsigned int *i)
 	if (len > name_len && !ft_strncmp(stream, NAME_CMD_STRING, name_len))
 	{
 		*i += name_len;
-		return (TOK_NAME);
+		return (TOK_NAME_CMD);
 	}
 	if (len > com_len && !ft_strncmp(stream, COMMENT_CMD_STRING, com_len))
 	{
