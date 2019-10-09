@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/08 21:20:37 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/09 13:38:56 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define NB_TOKENS 4096
 # define NB_MONOS 5
 # define NB_OPS 16
-# define NTOKFUNCS 6
+# define NTOKFUNCS 7
 # define FCHAR stream[0]
 
 # define DEBUG_MODE true
@@ -48,6 +48,7 @@ typedef enum			e_token_type {
 	TOK_PERCENT, // '%' //
 	TOK_SEPARATOR, // ',' //
 	TOK_NUMBER, // 0-9 only //
+	TOK_OPCODE,
 	TOK_WORD, // alphanumerics only //
 	TOK_STRING, // "qqchose"
 	TOK_REG, // "r[1-MAX_REG]" //
@@ -105,7 +106,7 @@ int						token_free_lst(t_token *lst);
 
 int						get_monos(char *stream, unsigned int *i);
 int						get_strings(char *stream, unsigned int *i);
-//int						get_ops(char *stream, unsigned int *i);
+int						get_ops(char *stream, unsigned int *i);
 int						get_regs(char *stream, unsigned int *i);
 int						get_com_name(char *stream, unsigned int *i);
 int						get_word(char *stream, unsigned int *i);

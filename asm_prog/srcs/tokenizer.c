@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/08 21:07:01 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/09 13:41:03 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ static inline void	update_tok(char *stream, t_tokenizer *tok, unsigned int tmp)
 static inline void	get_token_type(char *stream, t_tokenizer *tok)
 {
 	static int		(*token_fts[NTOKFUNCS])(char*, unsigned int*) = {&get_monos,
-						&get_strings, &get_com_name, &get_regs, &get_numbers,
-						&get_word};
+						&get_strings, &get_com_name, &get_regs, &get_ops,
+						&get_numbers, &get_word};
 	unsigned int	i;
 	unsigned int	tmp;
 
@@ -92,6 +92,8 @@ static inline void	print_lst(t_token *lst)
 				printf("SEPARATOR|");
 			if (tmp->type == TOK_COMMENT)
 				printf("COMMENT|");
+			if (tmp->type == TOK_OPCODE)
+				printf("OPCODE(%u)|", tmp->len);
 			if (tmp->type == TOK_WORD)
 				printf("WORD(%u)|", tmp->len);
 			if (tmp->type == TOK_NUMBER)

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/08 14:55:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/08 19:27:27 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/09 13:38:16 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int		get_strings(char *stream, unsigned int *i)
 	}
 	return (0);
 }
-/*
+
 int		get_ops(char *stream, unsigned int *i)
 {
 	static char	*ops_names[NB_OPS] = {"lfork", "sti", "fork", "lld", "ld",
@@ -61,10 +61,10 @@ int		get_ops(char *stream, unsigned int *i)
 		if (nlen < len && ft_strncmp(stream, ops_names[j], nlen) == 0)
 		{
 			*i += nlen;
-			return (TOK_OP);
+			return (TOK_OPCODE);
 		}
 	return (0);
-}*/
+}
 
 int		get_regs(char *stream, unsigned int *i)
 {
