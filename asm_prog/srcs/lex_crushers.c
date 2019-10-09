@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 14:53:38 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/09 20:01:38 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/09 20:56:05 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,8 @@ int		crush_newline(t_env *env, t_token *node)
 
 int		crush_colon(t_env *env, t_token *node)
 {
-	if (!node->next && lexerr(node->ptr, node->line, node->col, UNEX_CHAR_E1))
-		return (-1);
-	else if (node->next->type == TOK_WORD
-		&& find_label(env->labels, node->next->ptr, node->next->len))
-	{
-		node->next->type = LEX_IDLABEL_CALL;
-		node->next->ptr = node->ptr;
-		node->next->len++;
-	}
+	(void)env;
+	(void)node;
 	return (0);
 }
 
