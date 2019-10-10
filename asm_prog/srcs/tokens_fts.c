@@ -66,7 +66,7 @@ char	get_tok_reg(t_env *env, char *stream, unsigned int *i)
 		return (0);
 	while (stream[j] && ft_isdigit(stream[j]))
 		j++;
-	if (j == 1 || j > 3 || ft_atoi(&stream[1]) >= REG_NUMBER)
+	if (j == 1 || j > 3 || ft_atoi(&stream[1]) > REG_NUMBER)
 		return (0);
 	*i += j;
 	return (TOK_REG);
@@ -111,7 +111,7 @@ char	get_tok_dlaba(t_env *env, char *stream, unsigned int *i)
 	size = 2;
 	if (FCHAR != '%' || stream[1] != ':')
 		return (0);
-	while (stream[size] && ft_isalnum(stream[size]))
+	while (stream[size] && (ft_isalnum(stream[size]) || stream[size] == '_'))
 		size++;
 	if (!is_label(env, &stream[2], size))
 		return (0);
@@ -143,13 +143,13 @@ char	get_tok_opcode(t_env *env, char *stream, unsigned int *i)
 	j = 0;
 	while (j < NB_OPS)
 	{
-		size = ft_strlen(g_ops_names[j]);
-		if (!ft_strncmp(&stream[j], g_ops_names[j], size))
-			if (stream[size] && ft_isalnum(stream[size]))
-			{
-				*i += size;
-				return (TOK_OPCODE);
-			}
+		size = ft_strlen(g_opnames[j]);
+		if (ft_strncmp(g_opnames[j], stream, size) == 0
+			&& ft_is_whitespace(stream[size]))
+		{
+			*i += size;
+			return (TOK_OPCODE);
+		}
 		j++;
 	}
 	return (0);
@@ -174,7 +174,7 @@ char	get_tok_label(t_env *env, char *stream, unsigned int *i)
 	j = 0;
 	if (!ft_isalnum(FCHAR))
 		return (0);
-	while (stream[j] && ft_isalnum(stream[j]))
+	while (stream[j] && (ft_isalnum(stream[j]) || stream[j] == '_'))
 		j++;
 	if (stream[j] != ':')
 		return (0);

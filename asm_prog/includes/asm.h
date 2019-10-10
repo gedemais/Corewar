@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/10 23:47:54 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/11 01:03:01 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 
 # define DEBUG_MODE true
 
-static char					*g_ops_names[NB_OPS] = {"add", "aff", "and", "fork", "lfork", "ld", "ldi", "lld", "lldi", "live", "or", "st", "sti", "sub", "xor", "zjmp"};
+static char					*g_opnames[NB_OPS] = {"add", "aff", "and", "fork", "lfork", "ld", "ldi", "lld", "lldi", "live", "or", "st", "sti", "sub", "xor", "zjmp"};
 
 typedef enum			e_token_type
 {

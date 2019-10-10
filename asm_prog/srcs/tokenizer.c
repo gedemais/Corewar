@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/10 23:49:50 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/11 01:07:56 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,12 @@ int		tokenizer(t_env *env)
 		cross_whitespaces(env->file, &tok.i);
 		get_token_type(env, &tok);
 		print_token(tok.ret);
+		printf("--------------------------------\n");
+		printf("Tokenizer->%s\n-----------------------\n", &env->file[tok.i]);
 		if (tok.ret == TOK_NONE)
+		{
 			return (-1);
+		}
 /*		if (token_pushfront(&env->tokens, token_lstnew(env->file, &tok)) != 0)
 			return (-1);*/
 		tok.index++;
