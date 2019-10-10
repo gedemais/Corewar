@@ -48,7 +48,8 @@ destination : liste chainee de tokens -> union (propriete, opcode, label, regist
 intermediaires :
 enum pour les tokens
 
-
+todo:
+is_label(char *ptr, size_t size)
 
 
 
