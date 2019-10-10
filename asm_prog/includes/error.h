@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/09 16:08:20 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/10 13:35:03 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,5 +21,7 @@
 
 # define UNEX_CHAR_E1 "Unexpected character :"
 # define UNEX_ID_E1 "Unexpected identifier :"
+
+# define UNEX_SYNTAX "Unexpected syntax"
 
 #endif

@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/09 17:38:06 by gedemais         ###   ########.fr        #
+#    Updated: 2019/10/10 14:03:02 by demaisonc        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,12 +46,7 @@ SRCS_PATH=srcs/
 SRCS_NAME=	main.c\
 			loader.c\
 			tokenizer.c\
-			token_types.c\
 			token_lst.c\
-			lexer.c\
-			label_lst.c\
-			lex_crushers.c\
-			error.c\
 			free.c
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
