@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/11 02:27:54 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/11 19:20:29 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static inline void	update_tok(char *stream, t_tokenizer *tok, unsigned int tmp)
 	tok->len = tok->i - tmp;
 }
 
-static inline void	get_token_type(t_env *env, t_tokenizer *tok)
+static inline int	get_token_type(t_env *env, t_tokenizer *tok)
 {
 	unsigned int	i;
 	unsigned int	tmp;
@@ -37,11 +37,15 @@ static inline void	get_token_type(t_env *env, t_tokenizer *tok)
 	{
 		if ((tok->ret = g_token_fts[i](env, &env->file[tok->i], &tok->i)))
 		{
+			if (tok->ret == -1 && !undefined_label_err(env, tok))
+				return (-1);
 			update_tok(env->file, tok, tmp);
 			break ;
 		}
+		update_tok(env->file, tok, tmp);
 		i++;
 	}
+	return (0);
 }
 
 void	cross_whitespaces(char *stream, unsigned int *i)
@@ -56,7 +60,7 @@ void	cross_whitespaces(char *stream, unsigned int *i)
 		*i += 1;
 	}
 }
-
+/*
 static inline void	print_token(int tok)
 {
 	switch (tok)
@@ -106,7 +110,6 @@ static inline void	print_token(int tok)
 	}
 	fflush(stdout);
 }
-
 static inline void	print_tokens(t_token *lst)
 {
 	t_token	*tmp;
@@ -118,28 +121,34 @@ static inline void	print_tokens(t_token *lst)
 		tmp = tmp->next;
 	}
 }
-
-int		tokenizer(t_env *env)
+*/
+int		tokenizer(t_env *env, t_tokenizer tok)
 {
-	t_tokenizer	tok;
+	int		ret;
 
 	ft_memset(&tok, 0, sizeof(t_tokenizer));
 	if (init_labels(env) != 0)
 		return (-1);
+	if (DEBUG_MODE)
+		DBPRINT("Tokenizer...")
 	while (env->file[tok.i])
 	{
 		cross_whitespaces(env->file, &tok.i);
-		get_token_type(env, &tok);
-	//	print_token(tok.ret);
-	//	printf("----->%s\n----------------\n", &env->file[tok.i]);
+		ret = get_token_type(env, &tok);
+		if (ret == -1)
+			return (-1);
 		if (tok.ret == TOK_NONE && invalid_syntax_err(env, &tok) == 0)
 			return (-1);
 		if (token_pushfront(&env->tokens, token_lstnew(env, &tok)) != 0)
 			return (-1);
 		tok.index++;
 	}
-	print_tokens(env->tokens);
-//	print_lst(env->tokens);
-//	printf("\n");
+//	print_tokens(env->tokens);
+	if (DEBUG_MODE)
+	{
+		printf("%u tokens...", tok.index);
+		DBPRINT("Fine !\n\n")
+	}
+	env->nb_tokens = tok.index;
 	return (0);
 }

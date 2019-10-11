@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/11 01:36:01 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/11 15:35:13 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,11 @@
 # define NAME_CMD_E0 "Expected string for .name cmd"
 # define NAME_CMD_E1 "Invalid parameter for .name cmd"
 
-# define UNEX_CHAR_E1 "Unexpected character :"
-# define UNEX_ID_E1 "Unexpected identifier :"
 
-# define INV_SYNTAX "Invalid syntax on line "
-# define INV_SYNTAX_BIS " at col "
+# define INVALID_SYNTAX "Invalid syntax "
+# define UNDEFINED_LABEL "Reference to undefined label "
+
+# define LINE "on line "
+# define COL " at col "
 
 #endif

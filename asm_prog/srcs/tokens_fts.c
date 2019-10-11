@@ -1,13 +1,5 @@
 #include "asm.h"
 
-static inline bool	is_label(t_env *env, char *stream, size_t size)
-{
-	(void)env;
-	(void)stream;
-	(void)size;
-	return (true);
-}
-
 char	get_tok_p_name(t_env *env, char *stream, unsigned int *i)
 {
 	size_t	prop_len;
@@ -113,8 +105,8 @@ char	get_tok_dlaba(t_env *env, char *stream, unsigned int *i)
 		return (0);
 	while (stream[size] && (ft_isalnum(stream[size]) || stream[size] == '_'))
 		size++;
-	if (!is_label(env, &stream[2], size))
-		return (0);
+	if (!is_label(env, &stream[2]))
+		return (-1);
 	*i += size;
 	return (TOK_DLABA);
 }
@@ -126,11 +118,11 @@ char	get_tok_indlaba(t_env *env, char *stream, unsigned int *i)
 	size = 1;
 	if (FCHAR != ':')
 		return (0);
-	while (stream[size] && ft_isalnum(stream[size]))
+	while (stream[size] && (ft_isalnum(stream[size]) || stream[size] == '_'))
 		size++;
 	if (size == 1)
 		return (0);
-	if (!is_label(env, &stream[1], size))
+	if (!is_label(env, &stream[1]))
 		return (0);
 	*i += size + 1;
 	return (TOK_INDLABA);
