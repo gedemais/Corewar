@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/11 02:21:37 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/11 11:31:19 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,9 @@ typedef	struct			s_env
 	t_token				*tokens;
 	t_label				*labels;
 	unsigned int			nb_labels;
+	unsigned int			lab_i;
 	int				fd;
+	char				pad[4];
 }						t_env;
 
 /*
@@ -119,9 +121,10 @@ int						loader(t_env *env, char *file_name);
 ** Tokenizer
 */
 int						tokenizer(t_env *env);
+void						cross_whitespaces(char *stream, unsigned int *i);
 
 int						init_labels(t_env *env);
-void						cross_whitespaces(char *stream, unsigned int *i);
+int						add_label(t_env *env, unsigned int i);
 
 t_token						*token_lstnew(t_env *env, t_tokenizer *tok);
 int						token_pushfront(t_token **lst, t_token *new);

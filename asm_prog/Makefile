@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/11 01:41:38 by demaisonc        ###   ########.fr        #
+#    Updated: 2019/10/11 11:18:19 by demaisonc        ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ SRCS_NAME=	main.c\
 			tokenizer.c\
 			token_lst.c\
 			tokens_fts.c\
+			tokens_fts_bis.c\
 			labels.c\
 			error.c\
 			free.c
