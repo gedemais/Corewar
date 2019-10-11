@@ -1,9 +1,7 @@
 #ifndef VM_H
 # define VM_H
 
-# define MAX_PLAYERS 4
-# define REG_SIZE 4
-# define REG_NUMBER 16
+# define MAX_ARGS 30
 
 typedef struct		s_env
 {
