@@ -80,9 +80,9 @@ char	get_tok_number(t_env *env, char *stream, unsigned int *i)
 	j = 0;
 	if (!ft_isdigit(FCHAR) && FCHAR != '-' && FCHAR != '+')
 		return (0);
-	while (stream[j] && ft_isdigit(stream[j]))
+	while (stream[j] && (ft_isdigit(stream[j]) || stream[j] == '-' || stream[j] == '+'))
 		j++;
-	if (j == 0 || ft_atoi(&stream[1]) >= REG_NUMBER)
+	if (j == 0)
 		return (0);
 	*i += j;
 	return (TOK_NUMBER);
@@ -128,6 +128,8 @@ char	get_tok_indlaba(t_env *env, char *stream, unsigned int *i)
 		return (0);
 	while (stream[size] && ft_isalnum(stream[size]))
 		size++;
+	if (size == 1)
+		return (0);
 	if (!is_label(env, &stream[1], size))
 		return (0);
 	*i += size + 1;

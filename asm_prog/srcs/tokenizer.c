@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/11 01:07:56 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/11 02:27:54 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static inline void	update_tok(char *stream, t_tokenizer *tok, unsigned int tmp)
 	if (tok->ret == TOK_NEWLINE)
 	{
 		tok->line++;
-		tok->line_start = tmp;
+		tok->line_start = tmp + 1;
 	}
 	tok->col = tok->i - tok->line_start;
 	if (tok->ret == TOK_COMMENT)
@@ -62,49 +62,61 @@ static inline void	print_token(int tok)
 	switch (tok)
 	{
 	case 1:
-		printf("name_properity\n");
+		printf("name_properity->");
 		break;
 	case 2:
-		printf("comment_properity\n");
+		printf("comment_properity->");
 		break;
 	case 3:
-		printf("string\n");
+		printf("string->");
 		break;
 	case 4:
-		printf("register\n");
+		printf("register->");
 		break;
 	case 5:
-		printf("label\n");
+		printf("label->");
 		break;
 	case 6:
-		printf("number\n");
+		printf("number->");
 		break;
 	case 7:
-		printf("lnumber\n");
+		printf("lnumber->");
 		break;
 	case 8:
-		printf("direct label access\n");
+		printf("direct label access->");
 		break;
 	case 9:
-		printf("indirect label access\n");
+		printf("indirect label access->");
 		break;
 	case 10:
-		printf("Opcode\n");
+		printf("Opcode->");
 		break;
 	case 11:
-		printf("Separator\n");
+		printf("Separator->");
 		break;
 	case 12:
 		printf("newline\n");
 		break;
 	case 13:
-		printf("comment\n");
+		printf("comment->");
 		break;
 	default:
-		printf("NONE\n");
+		printf("NONE->");
 		break;
 	}
 	fflush(stdout);
+}
+
+static inline void	print_tokens(t_token *lst)
+{
+	t_token	*tmp;
+
+	tmp = lst;
+	while (tmp)
+	{
+		print_token(tmp->type);
+		tmp = tmp->next;
+	}
 }
 
 int		tokenizer(t_env *env)
@@ -118,17 +130,15 @@ int		tokenizer(t_env *env)
 	{
 		cross_whitespaces(env->file, &tok.i);
 		get_token_type(env, &tok);
-		print_token(tok.ret);
-		printf("--------------------------------\n");
-		printf("Tokenizer->%s\n-----------------------\n", &env->file[tok.i]);
-		if (tok.ret == TOK_NONE)
-		{
+	//	print_token(tok.ret);
+	//	printf("----->%s\n----------------\n", &env->file[tok.i]);
+		if (tok.ret == TOK_NONE && invalid_syntax_err(env, &tok) == 0)
 			return (-1);
-		}
-/*		if (token_pushfront(&env->tokens, token_lstnew(env->file, &tok)) != 0)
-			return (-1);*/
+		if (token_pushfront(&env->tokens, token_lstnew(env, &tok)) != 0)
+			return (-1);
 		tok.index++;
 	}
+	print_tokens(env->tokens);
 //	print_lst(env->tokens);
 //	printf("\n");
 	return (0);

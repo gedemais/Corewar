@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/11 01:03:01 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/11 02:21:37 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,8 @@ typedef struct			s_tokenizer
 	unsigned int		len;
 	unsigned int		line_start;
 	unsigned int		index;
-	int					ret;
+	char			ret;
+	char			pad[3];
 }						t_tokenizer;
 
 typedef struct			s_label
@@ -121,6 +122,10 @@ int						tokenizer(t_env *env);
 
 int						init_labels(t_env *env);
 void						cross_whitespaces(char *stream, unsigned int *i);
+
+t_token						*token_lstnew(t_env *env, t_tokenizer *tok);
+int						token_pushfront(t_token **lst, t_token *new);
+void						token_free_lst(t_token *lst);
 
 char						get_tok_p_name(t_env *env, char *stream, unsigned int *i);
 char						get_tok_p_com(t_env *env, char *stream, unsigned int *i);
@@ -158,6 +163,11 @@ static char					(*g_token_fts[NB_TOKENS_FUNCS])(t_env*, char*, unsigned int*) = 
 /*
 ** Errors reporting
 */
+int						invalid_syntax_err(t_env *env, t_tokenizer *tok);
+
+
+
+
 int						free_env(t_env *env);
 
 #endif
