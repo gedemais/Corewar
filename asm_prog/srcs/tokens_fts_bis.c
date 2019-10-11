@@ -44,6 +44,7 @@ char	get_tok_label(t_env *env, char *stream, unsigned int *i)
 		j++;
 	if (stream[j] != ':')
 		return (0);
+	
 	// repertorier le label
 	*i += j + 1;
 	return (TOK_LABEL);
