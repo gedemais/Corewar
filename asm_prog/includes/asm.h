@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/12 21:10:24 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/12 21:19:13 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -241,7 +241,7 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 						TOK_REG, 0, 0, // ____ second param
 						TOK_REG, 0, 0},// add
 
-						{TOK_REG, 0, 0
+						{TOK_REG, 0, 0,
 						0, 0, 0,
 						0, 0, 0}, // aff
 
@@ -250,11 +250,11 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 						TOK_REG, 0, 0}, // and
 						
 						{TOK_LNUMBER, 0, 0,
-						0, 0, 0
+						0, 0, 0,
 						0, 0, 0}, //fork
 						
 						{TOK_LNUMBER, 0, 0,
-						0, 0, 0
+						0, 0, 0,
 						0, 0, 0}, //lfork
 						
 						{TOK_NUMBER, TOK_LNUMBER, 0,
@@ -285,7 +285,21 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 						TOK_LNUMBER, TOK_NUMBER, 0,
 						0, 0, 0}, //st
 
-						{}
+						{TOK_REG, 0, 0,
+						TOK_REG, TOK_LNUMBER, TOK_NUMBER,
+						TOK_LNUMBER, TOK_REG},//sti
+
+						{TOK_REG, 0, 0,
+						TOK_REG, 0, 0,
+						TOK_REG, 0, 0}, //sub
+
+						{TOK_REG, TOK_LNUMBER, TOK_NUMBER,
+						TOK_REG, TOK_LNUMBER, TOK_NUMBER,
+						TOK_REG, 0, 0}, //xor
+
+						{TOK_LNUMBER, 0, 0,
+						0, 0, 0,
+						0, 0, 0}//zjmp
 };
 
 static char				(*g_lex_fts[NB_LEX_FUNCS])(t_env*, t_token*) = {
