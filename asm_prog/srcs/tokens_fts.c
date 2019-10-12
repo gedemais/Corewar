@@ -108,7 +108,7 @@ char	get_tok_dlaba(t_env *env, char *stream, unsigned int *i)
 	if (!is_label(env, &stream[2]))
 		return (-1);
 	*i += size;
-	return (TOK_DLABA);
+	return (TOK_LNUMBER);
 }
 
 char	get_tok_indlaba(t_env *env, char *stream, unsigned int *i)
@@ -125,5 +125,5 @@ char	get_tok_indlaba(t_env *env, char *stream, unsigned int *i)
 	if (!is_label(env, &stream[1]))
 		return (0);
 	*i += size + 1;
-	return (TOK_INDLABA);
+	return (TOK_NUMBER);
 }

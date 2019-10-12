@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/11 20:06:01 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/12 21:10:24 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@
 
 # define NB_OPS 16
 # define NB_TOKENS_FUNCS 13
+# define NB_LEX_FUNCS 3
 # define FCHAR stream[0]
+
+# define MAX_PARAM_NB 3
 
 # define DEBUG_MODE true
 # define DBPRINT(str) if (DEBUG_MODE)\
@@ -86,18 +89,12 @@ typedef enum			e_lexemes_type
 	LEX_NONE,
 	LEX_NAME_PROP,
 	LEX_COMMENT_PROP,
+	LEX_LABEL,
 	LEX_OPCODE,
 	LEX_MAX
 }						t_lexemes_type;
 
-static int				g_lexmatch[LEX_COMB][LEX_DEPTH] = {
-						{TOK_P_NAME, TOK_STRING, TOK_NEWLINE, -1},
-						{TOK_P_COM, TOK_STRING, TOK_NEWLINE, -1},
-						{};
-};
-
-
-typedef struct			s_lexeme
+typedef struct			s_lexem
 {
 	unsigned int		start;
 	char				type;
@@ -111,7 +108,7 @@ typedef struct			s_lexeme
 		int				nb;
 		char			pad[3];
 	}args;
-}						t_lexeme;
+}						t_lexem;
 
 
 typedef struct s_token	t_token;
@@ -155,7 +152,7 @@ typedef	struct			s_env
 	char				*file;
 	char				*dest;
 	t_token				*tokens;
-	t_lexeme			*lexemes;
+	t_lexem				*lexemes;
 	t_label				*labels;
 	unsigned int		nb_labels;
 	unsigned int		lab_i;
@@ -182,7 +179,6 @@ bool					is_label(t_env *env, char *label);
 t_token					*token_lstnew(t_env *env, t_tokenizer *tok);
 int						token_pushfront(t_token **lst, t_token *new);
 void					token_free_lst(t_token *lst);
-
 char					get_tok_p_name(t_env *env, char *stream, unsigned int *i);
 char					get_tok_p_com(t_env *env, char *stream, unsigned int *i);
 char					get_tok_string(t_env *env, char *stream, unsigned int *i);
@@ -217,12 +213,95 @@ static char				(*g_token_fts[NB_TOKENS_FUNCS])(t_env*, char*, unsigned int*) = {
 ** Lexer
 */
 int						lexer(t_env *env);
+/*
+											"add",
+											"aff"
+											"and"
+											"fork"
+											"lfork"
+											"ld"
+											"ldi"
+											"lld"
+											"lldi"
+											"live"
+											"or"
+											"st"
+											"sti"
+											"sub"
+											xor
+											zjmp
+*/
+
+char					get_lex_name_prop(t_env *env, t_token *tok);
+char					get_lex_comment_prop(t_env *env, t_token *tok);
+
+static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
+
+						{TOK_REG, 0, 0, // Types possibles du premier param
+						TOK_REG, 0, 0, // ____ second param
+						TOK_REG, 0, 0},// add
+
+						{TOK_REG, 0, 0
+						0, 0, 0,
+						0, 0, 0}, // aff
+
+						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+						TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+						TOK_REG, 0, 0}, // and
+						
+						{TOK_LNUMBER, 0, 0,
+						0, 0, 0
+						0, 0, 0}, //fork
+						
+						{TOK_LNUMBER, 0, 0,
+						0, 0, 0
+						0, 0, 0}, //lfork
+						
+						{TOK_NUMBER, TOK_LNUMBER, 0,
+						TOK_REG, 0, 0,
+						0, 0, 0}, //ld
+
+						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+						TOK_REG, TOK_LNUMBER, 0,
+						T_REG, 0, 0}, //ldi
+
+						{TOK_NUMBER, TOK_LNUMBER, 0,
+						TOK_REG, 0, 0,
+						0, 0, 0}, //lld
+
+						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+						TOK_NUMBER, TOK_REG, 0,
+						TOK_REG, 0, 0}, //lldi
+
+						{TOK_LNUMBER, 0, 0,
+						0, 0, 0,
+						0, 0, 0}, //live
+
+						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+						TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+						TOK_REG, 0, 0}, // or
+
+						{TOK_REG, 0, 0,
+						TOK_LNUMBER, TOK_NUMBER, 0,
+						0, 0, 0}, //st
+
+						{}
+};
+
+static char				(*g_lex_fts[NB_LEX_FUNCS])(t_env*, t_token*) = {
+						&get_lex_name_prop,
+						NULL,
+						NULL,
+};
+
 
 /*
 ** Errors reporting
 */
 int						invalid_syntax_err(t_env *env, t_tokenizer *tok);
 int						undefined_label_err(t_env *env, t_tokenizer *tok);
+int						property_error(char *file, t_token *tok);
+int						expected_newline_err(t_token *tok);
 
 
 

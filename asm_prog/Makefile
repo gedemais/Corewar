@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/11 11:18:19 by demaisonc        ###   ########.fr        #
+#    Updated: 2019/10/12 18:22:55 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -50,6 +50,8 @@ SRCS_NAME=	main.c\
 			tokens_fts.c\
 			tokens_fts_bis.c\
 			labels.c\
+			lexer.c\
+			lexer_fts.c\
 			error.c\
 			free.c
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
@@ -60,6 +62,9 @@ OBJS_NAME=$(SRCS_NAME:.c=.o)
 OBJS=$(addprefix $(OBJS_PATH), $(OBJS_NAME))
 
 all: $(LIB) $(NAME)
+
+$(LIB):
+	@make -C $(LIB_PATH)
 
 $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS)  $(LIB)
@@ -73,8 +78,11 @@ $(OBJS_PATH)%.o : $(SRCS_PATH)%.c $(INC)
 
 clean:
 	@rm -rf $(OBJS_PATH)
+	@make -C $(LIB_PATH) clean
 
 fclean: clean
 	@rm -rf $(NAME)
+	@make -C $(LIB_PATH) fclean
+
 
 re: fclean all

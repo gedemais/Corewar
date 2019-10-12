@@ -1,27 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.h                                            :+:      :+:    :+:   */
+/*   crush_tokens.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/12 18:15:11 by gedemais         ###   ########.fr       */
+/*   Created: 2019/10/12 20:27:31 by gedemais          #+#    #+#             */
+/*   Updated: 2019/10/12 20:32:45 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef ERROR_H
-# define ERROR_H
+#include "asm.h"
 
-# define COMMENT_CMD_ERR "Invalid parameter for comment property"
-# define NAME_CMD_ERR "Invalid parameter for name property"
+// Virer les commentaires
+// Virer les \n consecutifs
 
-# define INVALID_SYNTAX "Invalid syntax "
-# define UNDEFINED_LABEL "Reference to undefined label "
+int		crush_tokens(t_env *env)
+{
+	t_token			*tmp;
+	t_token			*tmp2;
 
-# define EX_NEWLINE "Expected newline"
-
-# define LINE "on line "
-# define COL " at col "
-
-#endif
+	tmp = env->tokens;
+	while (tmp)
+	{
+		if (get_comment(tmp) || get_newline(tmp))
+		{
+			tmp->prev->next = tmp->next;
+			free(tmp);
+			tmp = env->tokens;
+			continue ;
+		}
+		tmp = tmp->next;
+	}
+	return (0);
+}

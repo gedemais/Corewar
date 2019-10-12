@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/08 20:36:02 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/12 21:07:17 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,6 @@ static inline char	*read_file(int fd)
 
 int		loader(t_env *env, char *file_name)
 {
-	int		fd;
-
-	if ((fd = open(file_name, O_RDONLY) == -1))
-	{
-		ft_putendl_fd(FILE_ERR_MSG, 2);
-		return (-1);
-	}
 	if (!(env->file = read_file(open(file_name, O_RDONLY)))
 		|| !env->file[0])
 		return (-1);

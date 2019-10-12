@@ -34,6 +34,7 @@ t_token	*token_lstnew(t_env *env, t_tokenizer *tok)
 		return (NULL);
 	new->type = tok->ret;
 	new->ptr = &env->file[tok->i];
+	new->index = tok->i;
 	new->line = tok->line;
 	new->col = tok->col;
 	return (new);
