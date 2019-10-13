@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/13 12:37:29 by gedemais         ###   ########.fr        #
+#    Updated: 2019/10/13 17:57:24 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -69,6 +69,7 @@ $(LIB):
 
 $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS)  $(LIB)
+	@cp $(NAME) ../
 	@echo "$(GRE)Done !$(DEF)"
 
 $(OBJS_PATH)%.o : $(SRCS_PATH)%.c $(INC)

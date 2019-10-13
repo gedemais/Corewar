@@ -6,7 +6,7 @@
 /*   By: gedemais <gedemais@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/16 09:05:11 by gedemais          #+#    #+#             */
-/*   Updated: 2019/09/15 04:41:03 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/13 18:45:51 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@
 */
 char				*ft_sed(char *str, char *needle, char *replace);
 size_t				ft_strlen(const char *s);
+size_t				ft_strwlen(char *s);
 char				*ft_strdup(const char *s1);
 char				*ft_strndup(char *str, int size);
 char				*ft_strcpy(char *dst, const char *src);

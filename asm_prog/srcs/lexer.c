@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 17:16:51 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/13 21:17:18 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,7 @@ int		lexer(t_env *env)
 	ft_memset(env->lexemes, 0, sizeof(t_lexem) * env->nb_tokens);
 	while (tmp)
 	{
+		sleep(1);
 		if ((ret = get_lexeme_type(env, tmp)) <= LEX_NONE)
 		{
 			printf("Unexpected Token\n");
