@@ -1,25 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strncmp.c                                       :+:      :+:    :+:   */
+/*   get_name_len.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/05 17:27:38 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 16:21:20 by moguy            ###   ########.fr       */
+/*   Created: 2019/10/12 20:52:49 by moguy             #+#    #+#             */
+/*   Updated: 2019/10/13 17:28:25 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "corewar.h"
 
-int		ft_strncmp(const char *s1, const char *s2, size_t n)
+unsigned int		get_name_len(char *name)
 {
-	size_t	i;
+	unsigned int	len;
 
-	i = 0;
-	if (!n)
+	len = 0;
+	if (!name)
 		return (0);
-	while (i < n - 1 && s1[i] == s2[i] && s1[i] && s2[i])
-		i++;
-	return ((unsigned char)s1[i] - (unsigned char)s2[i]);
+	while (name[len] && !ft_is_whitespace(name[len]))
+		len++;
+	return (len);
 }
