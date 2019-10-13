@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 17:16:51 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/13 15:39:23 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@ static inline char	get_lexeme_type(t_env *env, t_token *tok)
 	char			ret;
 
 	i = 0;
+	printf("Token type = %d\n", tok->type);
 	while (i < NB_LEX_FUNCS)
 	{
 		ret = g_lex_fts[i](env, tok);
+		printf("ret = %d\n", ret);
 		if (ret == -1)
 			return (-1);
 		if (ret > TOK_NONE)
@@ -50,31 +52,13 @@ static inline int	load_lexeme(t_env *env, unsigned int lex, char type, t_token *
 			break ;
 		i++;
 	}
+	printf("Depth = %d\n", depth);
 	while ((*tok) && depth > 0)
 	{
 		(*tok) = (*tok)->next;
 		depth--;
 	}
 	return (depth > 0 ? -1 : 0);
-}
-
-static inline void	print_lexem(t_lexem lex)
-{
-	switch (lex.type)
-	{
-		case LEX_NAME_PROP:
-			printf("NAME_PROP\n");
-			break;
-		case LEX_COMMENT_PROP:
-			printf("COMMENT_PROP\n");
-			break;
-		case LEX_LABEL:
-			printf("LABEL\n");
-			break;
-		case LEX_OPCODE:
-			printf("OPCODE\n");
-			break;
-	}
 }
 
 int		lexer(t_env *env)
@@ -92,14 +76,14 @@ int		lexer(t_env *env)
 	{
 		if ((ret = get_lexeme_type(env, tmp)) <= LEX_NONE)
 		{
-			printf("Unexpected Token\n");
-			fflush(stdout);
+			printf("Error\n");
 			// unex token
 			return (-1);
 		}
+//		printf("Lexeme %u : %d\n", lex, ret);
 		if (load_lexeme(env, lex, ret, &tmp) != 0)
 			return (-1);
-		print_lexem(env->lexemes[lex]);
+		printf("Token type 2 = %d\n", tmp->type);
 		lex++;
 	}
 	return (0);

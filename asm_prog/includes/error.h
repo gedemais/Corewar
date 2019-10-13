@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/12 18:15:11 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/13 12:45:22 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,8 @@
 
 # define LINE "on line "
 # define COL " at col "
+
+# define NAME_LENGTH_ERR "Program name length exceed "
+# define COMMENT_LENGTH_ERR "Comment length exceed "
 
 #endif

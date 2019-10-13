@@ -6,11 +6,33 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/11 19:20:29 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/13 17:04:09 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+
+static inline int	crush_tokens(t_env *env)
+{
+	t_token	*t;
+
+	t = env->tokens;
+	while (t)
+	{
+		if ((t->type == TOK_NEWLINE && t->next && t->next->type == TOK_NEWLINE)
+			|| (t->type == TOK_COMMENT && t->next && t->next->type == TOK_NEWLINE))
+		{
+			t->prev->next = t->next;
+			t->next->prev = t->prev;
+			free(t);
+			env->nb_tokens--;
+			t = env->tokens;
+			continue ;
+		}
+		t = t->next;
+	}
+	return (0);
+}
 
 static inline void	update_tok(char *stream, t_tokenizer *tok, unsigned int tmp)
 {
@@ -60,7 +82,7 @@ void	cross_whitespaces(char *stream, unsigned int *i)
 		*i += 1;
 	}
 }
-/*
+
 static inline void	print_token(int tok)
 {
 	switch (tok)
@@ -121,7 +143,7 @@ static inline void	print_tokens(t_token *lst)
 		tmp = tmp->next;
 	}
 }
-*/
+
 int		tokenizer(t_env *env, t_tokenizer tok)
 {
 	int		ret;
@@ -143,12 +165,16 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 			return (-1);
 		tok.index++;
 	}
-//	print_tokens(env->tokens);
+	env->nb_tokens = tok.index;
+	print_tokens(env->tokens);
+	printf("\n");
+	if (crush_tokens(env) != 0)
+		return (-1);
+	print_tokens(env->tokens);
 	if (DEBUG_MODE)
 	{
-		printf("%u tokens...", tok.index);
+		printf("%u tokens...", env->nb_tokens);
 		DBPRINT("Fine !\n\n")
 	}
-	env->nb_tokens = tok.index;
 	return (0);
 }

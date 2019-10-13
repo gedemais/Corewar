@@ -33,7 +33,8 @@ t_token	*token_lstnew(t_env *env, t_tokenizer *tok)
 	if (!(new = (t_token*)malloc(sizeof(t_token))))
 		return (NULL);
 	new->type = tok->ret;
-	new->ptr = &env->file[tok->i];
+	new->ptr = &env->file[tok->i - tok->len];
+		new->ptr--;
 	new->index = tok->i;
 	new->line = tok->line;
 	new->col = tok->col;

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/12 21:19:13 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/13 17:04:26 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,8 @@
 
 # define NB_OPS 16
 # define NB_TOKENS_FUNCS 13
-# define NB_LEX_FUNCS 3
+# define NB_LEX_FUNCS 4
+# define NB_LEX_LOAD_FUNCS 4
 # define FCHAR stream[0]
 
 # define MAX_PARAM_NB 3
@@ -94,20 +95,26 @@ typedef enum			e_lexemes_type
 	LEX_MAX
 }						t_lexemes_type;
 
+typedef union		u_args
+{
+	char			*str;
+	int				reg_a;
+	int				reg_b;
+	int				reg_c;
+	int				nb_a;
+	int				nb_b;
+	int				nb_c;
+	int				lnb_a;
+	int				lnb_b;
+	int				lnb_c;
+}					t_args;
+
 typedef struct			s_lexem
 {
 	unsigned int		start;
 	char				type;
-	char			pad[3];
-	union
-	{
-		char			*str;
-		int				reg_a;
-		int				reg_b;
-		int				reg_c;
-		int				nb;
-		char			pad[3];
-	}args;
+	char				pad[3];
+	t_args				args[MAX_ARGS_NUMBER];
 }						t_lexem;
 
 
@@ -234,6 +241,13 @@ int						lexer(t_env *env);
 
 char					get_lex_name_prop(t_env *env, t_token *tok);
 char					get_lex_comment_prop(t_env *env, t_token *tok);
+char					get_lex_label(t_env *env, t_token *tok);
+char					get_lex_opcode(t_env *env, t_token *tok);
+
+int						load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok);
+int						load_lex_comment_prop(t_env *env, t_lexem *lex, t_token **tok);
+int						load_lex_label(t_env *env, t_lexem *lex, t_token **tok);
+int						load_lex_opcode(t_env *env, t_lexem *lex, t_token **tok);
 
 static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 
@@ -304,8 +318,9 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 
 static char				(*g_lex_fts[NB_LEX_FUNCS])(t_env*, t_token*) = {
 						&get_lex_name_prop,
-						NULL,
-						NULL,
+						&get_lex_comment_prop,
+						&get_lex_label,
+						&get_lex_opcode
 };
 
 
