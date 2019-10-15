@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:40:45 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/14 20:09:06 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 15:46:47 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,8 +56,9 @@ char	get_lex_label(t_env *env, t_token *tok)
 	(void)env;
 	if (!tok || tok->type != TOK_LABEL)
 		return (0);
-	if (!tok->next
-		|| (tok->next->type != TOK_OPCODE && tok->next->type != TOK_NEWLINE))
+	if (!tok->next || ((tok->next->type == TOK_NEWLINE && check_after(tok->next)) && invalid_label_err(tok)))
+		return (-1);
+	if (tok->next->type != TOK_OPCODE && tok->next->type != TOK_NEWLINE)
 		return (-1);
 		tok = tok->next;
 	while (tok && tok->type == TOK_NEWLINE)
@@ -119,8 +120,12 @@ static inline int	check_opcode_params(t_token *tok, int op, int nb_params)
 			return (-1);
 		tok = tok->next;
 		if (nb_params > 0 && tok->type != TOK_SEPARATOR)
+		{
+			if (tok->type == TOK_NEWLINE)
+				not_eno_args(tok, op);
 			return (-1);
-		tok = nb_params ? tok->next : tok;
+		}
+		tok = nb_params > 0 ? tok->next : tok;
 		if (nb_params > 0 && tok->type == TOK_NEWLINE && not_eno_args(tok, op))
 			return (-1);
 		i += 3;
@@ -150,11 +155,11 @@ char	get_lex_opcode(t_env *env, t_token *tok)
 		return (0);
 	while (ft_is_whitespace(*tok->ptr))
 		tok->ptr++;
-	if ((op = find_op(tok->ptr)) == -1)
+	if ((op = find_op(tok->ptr)) == -1 || (tok->next && tok->next->type == TOK_NEWLINE && not_eno_args(tok, op)))
 		return (-1);
 	tok = tok->next;
 	nb_params = 0;
-	while (g_op_args[op][i] != 0)
+	while (i < 9 && g_op_args[op][i] != 0)
 	{
 		nb_params++;
 		i += 3;

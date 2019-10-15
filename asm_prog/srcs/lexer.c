@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/14 20:04:32 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:09:52 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 static inline char	get_lexeme_type(t_env *env, t_token *tok)
 {
+	static char			(*g_lex_fts[NB_LEX_FUNCS])(t_env*, t_token*) = {
+						&get_lex_name_prop,
+						&get_lex_comment_prop,
+						&get_lex_label,
+						&get_lex_opcode};
 	unsigned int	i;
 	char			ret;
 

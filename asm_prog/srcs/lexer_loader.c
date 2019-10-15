@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:15:53 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/14 18:43:17 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 15:42:25 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ int		load_lex_label(t_env *env, t_lexem *lex, t_token **tok)
 		return (0);
 	lex->type = LEX_LABEL;
 	lex->start = (unsigned int)((*tok)->ptr - env->file);
+	lex->args[0].nb = lex->start;
+	lex->encoding = encoding_byte(lex->encoding, 0, TOK_NUMBER);
 	return ((*tok)->next->type == TOK_NEWLINE ? 2 : 1);
 }
 
@@ -90,6 +92,8 @@ int		load_lex_opcode(t_env *env, t_lexem *lex, t_token **tok)
 	{
 		if (tmp->type == TOK_REG)
 			lex->args[param].reg = (int)ft_atoi(&tmp->ptr[1]);
+		else if (tmp->label > 0 && (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER))
+			lex->args[param].stick = tmp->label;
 		else if (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER)
 			lex->args[param].nb = ft_atoi(tmp->type == TOK_NUMBER ? tmp->ptr : &tmp->ptr[1]);
 		lex->encoding = encoding_byte(lex->encoding, param, tmp->type);

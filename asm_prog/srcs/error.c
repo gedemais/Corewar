@@ -1,5 +1,12 @@
 #include "asm.h"
 
+static inline void	print_err_name(char *err)
+{
+	ft_putstr_fd(L_RED, 2);
+	ft_putstr_fd(err, 2);
+	ft_putstr_fd(STOP, 2);
+}
+
 static inline void	print_cursor(char *line, unsigned int col)
 {
 	unsigned int	i;
@@ -41,9 +48,7 @@ int					expected_newline_err(t_token *tok)
 
 	if (!(nline = ft_itoa(tok->line)))
 		return (-1);
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd(EX_NEWLINE, 2);
-	ft_putstr_fd(STOP, 2);
+	print_err_name(EX_NEWLINE);
 	ft_putstr_fd(LINE, 2);
 	ft_putendl_fd(nline, 2);
 	free(nline);
@@ -56,9 +61,7 @@ int					property_error(char *file, t_token *tok)
 	unsigned int	tmp;
 
 	i = tok->index;
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd((tok->type == TOK_P_COM) ? COMMENT_CMD_ERR : NAME_CMD_ERR, 2);
-	ft_putstr_fd(STOP, 2);
+	print_err_name((tok->type == TOK_P_COM) ? COMMENT_CMD_ERR : NAME_CMD_ERR);
 	ft_putchar_fd(' ', 2);
 	print_line_n_col(tok->line, tok->col);
 	while (i > 0 && file[i] != '\n')
@@ -80,9 +83,7 @@ int					undefined_label_err(t_env *env, t_tokenizer *tok)
 	unsigned int	i;
 
 	i = 0;
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd(UNDEFINED_LABEL, 2);
-	ft_putstr_fd(STOP, 2);
+	print_err_name(UNDEFINED_LABEL);
 	print_line_n_col(tok->line, tok->col);
 	while (&env->file[tok->line_start + i] && env->file[tok->line_start + i] != '\n')
 	{
@@ -99,9 +100,7 @@ int					invalid_syntax_err(t_env *env, t_tokenizer *tok)
 	unsigned int	j;
 
 	j = 0;
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd(INVALID_SYNTAX, 2);
-	ft_putstr_fd(STOP, 2);
+	print_err_name(INVALID_SYNTAX);
 	print_line_n_col(tok->line, tok->col);
 	while (env->file[tok->line_start + j]
 		&& env->file[tok->line_start + j] != '\n')
@@ -170,9 +169,7 @@ int					invalid_op_parameter(t_token *tok, int op)
 	unsigned int		j;
 
 	j = 0;
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd(INVALID_OP_PARAM, 2);
-	ft_putstr_fd(STOP, 2);
+	print_err_name(INVALID_OP_PARAM);
 	print_line_n_col(tok->line, tok->col);
 	ft_putstr_fd("Incompatible type ", 1);
 	get_type_str(tok->type, &type[0]);
@@ -190,8 +187,7 @@ int					invalid_op_parameter(t_token *tok, int op)
 
 int					too_few_op_args(t_token *tok, int op)
 {
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd(TOO_FEW_ARGS, 2);
+	print_err_name(TOO_FEW_ARGS);
 	ft_putstr_fd(L_GREEN, 2);
 	ft_putstr_fd(g_opnames[op], 2);
 	ft_putstr_fd(STOP, 2);
@@ -207,9 +203,7 @@ int		unknown_properity(char *stream)
 	unsigned int	i;
 
 	i = 0;
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd(UNKNOWN_PROPERITY, 2);
-	ft_putstr_fd(STOP, 2);
+	print_err_name(UNKNOWN_PROPERITY);
 	ft_putstr_fd(": ", 2);
 	while (stream[i] && stream[i] != '\n')
 		i++;
@@ -223,8 +217,7 @@ int		not_eno_args(t_token *tok, int op)
 	unsigned int	i;
 
 	i = 0;
-	ft_putstr_fd(L_RED, 2);
-	ft_putstr_fd(NOT_ENO_ARGS, 2);
+	print_err_name(NOT_ENO_ARGS);
 	ft_putstr_fd(L_GREEN, 2);
 	ft_putstr_fd(g_opnames[op], 2);
 	ft_putstr_fd(STOP, 2);
@@ -233,4 +226,47 @@ int		not_eno_args(t_token *tok, int op)
 	op_usage(op);
 	ft_putchar_fd('\n', 2);
 	return (1);
+}
+
+int		invalid_label_err(t_token *tok)
+{
+	unsigned int	i;
+
+	i = 0;
+	print_err_name(INVALID_LABEL);
+	print_line_n_col(tok->line, tok->col);
+	while (tok->ptr[i] && tok->ptr[i] != '\n')
+	{
+		ft_putchar_fd(tok->ptr[i], 2);
+		i++;
+	}
+	ft_putchar_fd('\n', 2);
+	return (1);
+}
+
+int		dup_label_err(char *label)
+{
+	unsigned int	i;
+
+	i = 0;
+	print_err_name(DUP_LABEL);
+	ft_putchar_fd('\n', 2);
+	while (label[i] && label[i] != '\n')
+	{
+		ft_putchar_fd(label[i], 2);
+		i++;
+	}
+	ft_putchar_fd('\n', 2);
+	return (1);
+}
+
+bool	check_after(t_token *tok)
+{
+	while (tok)
+	{
+		if (tok->type != TOK_NEWLINE)
+			return (false);
+		tok = tok->next;
+	}
+	return (true);
 }

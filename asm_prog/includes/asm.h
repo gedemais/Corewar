@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/14 20:11:22 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:12:37 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@
 
 # define MAX_PARAM_NB 3
 
-# define DEBUG_MODE true
+# define DEBUG_MODE false
 # define DBPRINT(str) if (DEBUG_MODE)\
 						printf(str);\
 						fflush(stdout);
@@ -101,6 +101,7 @@ typedef union		u_args
 {
 	char			*str;
 	int				reg;
+	unsigned int	stick;
 	long long int	nb;
 }					t_args;
 
@@ -125,8 +126,9 @@ struct					s_token
 	unsigned int		col;
 	unsigned int		len;
 	unsigned int		index;
+	unsigned int		label;
 	char				type;
-	char				pad[7];
+	char				pad[3];
 };
 
 typedef struct			s_tokenizer
@@ -179,10 +181,13 @@ void					cross_whitespaces(char *stream, unsigned int *i);
 int						init_labels(t_env *env);
 int						add_label(t_env *env, unsigned int i);
 bool					is_label(t_env *env, char *label);
+int						find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels);
 
 t_token					*token_lstnew(t_env *env, t_tokenizer *tok);
 int						token_pushfront(t_token **lst, t_token *new);
+void					token_snap_node(t_token **lst, t_token *node);
 void					token_free_lst(t_token *lst);
+
 char					get_tok_p_name(t_env *env, char *stream, unsigned int *i);
 char					get_tok_p_com(t_env *env, char *stream, unsigned int *i);
 char					get_tok_string(t_env *env, char *stream, unsigned int *i);
@@ -316,12 +321,6 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 						0, 0, 0}//zjmp
 };
 
-static char				(*g_lex_fts[NB_LEX_FUNCS])(t_env*, t_token*) = {
-						&get_lex_name_prop,
-						&get_lex_comment_prop,
-						&get_lex_label,
-						&get_lex_opcode
-};
 
 
 /*
@@ -335,8 +334,11 @@ int						invalid_op_parameter(t_token *tok, int op);
 int						too_few_op_args(t_token *tok, int op);
 int						unknown_properity(char *stream);
 int						not_eno_args(t_token *tok, int op);
+int						invalid_label_err(t_token *tok);
+int						dup_label_err(char *label);
 
 
+bool					check_after(t_token *tok);
 
 
 int						free_env(t_env *env);
