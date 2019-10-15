@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 17:09:52 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:42:13 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,29 @@ static inline void	print_lexem(t_lexem lex)
 	}
 }
 
+static inline int	check_properitys(t_token *tok)
+{
+	bool	name;
+	bool	comment;
+
+	name = true;
+	comment = true;
+	while (tok)
+	{
+		if (tok->type == TOK_P_NAME)
+			name = false;
+		if (tok->type == TOK_P_COM)
+			comment = false;
+		tok = tok->next;
+	}
+	if (name || comment)
+	{
+		missing_properity(name, comment);
+		return (-1);
+	}
+	return (0);
+}
+
 int		lexer(t_env *env)
 {
 	t_token			*tmp;
@@ -120,6 +143,8 @@ int		lexer(t_env *env)
 	if (!(env->lexemes = (t_lexem*)malloc(sizeof(t_lexem) * env->nb_tokens)))
 		return (-1);
 	ft_memset(env->lexemes, 0, sizeof(t_lexem) * env->nb_tokens);
+	if (check_properitys(env->tokens) == -1)
+		return (-1);
 	while (tmp && tmp->next)
 	{
 		if ((ret = get_lexeme_type(env, tmp)) <= LEX_NONE)

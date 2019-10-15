@@ -260,6 +260,23 @@ int		dup_label_err(char *label)
 	return (1);
 }
 
+int		missing_properity(bool name, bool comment)
+{
+	if (name)
+		ft_putstr_fd("name ", 2);
+	if (name && comment)
+	{
+		ft_putstr_fd(STOP, 2);
+		ft_putstr_fd("and", 2);
+	}
+	if (comment)
+		ft_putstr_fd(" comment ", 2);
+	ft_putstr_fd(L_RED, 2);
+	ft_putendl_fd(MISSING_PROPERITY, 2);
+	ft_putstr_fd(STOP, 2);
+	return (1);
+}
+
 bool	check_after(t_token *tok)
 {
 	while (tok)

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 16:17:29 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:33:03 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # define COMMENT_CMD_ERR "Invalid parameter for comment property"
 # define NAME_CMD_ERR "Invalid parameter for name property"
+# define MISSING_PROPERITY "properity(s) missing "
 # define UNKNOWN_PROPERITY "Unknown properity "
 
 # define INVALID_SYNTAX "Invalid syntax "

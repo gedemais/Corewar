@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 17:12:37 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 17:34:23 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -336,6 +336,7 @@ int						unknown_properity(char *stream);
 int						not_eno_args(t_token *tok, int op);
 int						invalid_label_err(t_token *tok);
 int						dup_label_err(char *label);
+int						missing_properity(bool name, bool comment);
 
 
 bool					check_after(t_token *tok);

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 17:11:27 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/15 18:40:39 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ void	cross_whitespaces(char *stream, unsigned int *i)
 		*i += 1;
 	}
 }
-
+/*
 static inline void	print_token(int tok)
 {
 	switch (tok)
@@ -149,7 +149,7 @@ static inline void	print_tokens(t_token *lst)
 		print_token(tmp->type);
 		tmp = tmp->next;
 	}
-}
+}*/
 
 int		tokenizer(t_env *env, t_tokenizer tok)
 {
@@ -173,11 +173,9 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 		tok.index++;
 	}
 	env->nb_tokens = tok.index;
-	print_tokens(env->tokens);
-	printf("\n");
 	if (crush_tokens(env) != 0)
 		return (-1);
-	print_tokens(env->tokens);
+//	print_tokens(env->tokens);
 	if (DEBUG_MODE)
 	{
 		printf("%u tokens found...", env->nb_tokens);
