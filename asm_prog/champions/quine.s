@@ -11,6 +11,6 @@ while:	ldi		%:live,r3,r9
 		sub		r9,r5,r6
 		zjmp	%412
 		add		r3,r7,r3
-		sti		r9,%400,r3
+		sti		r16,%400,r16
 		add		r8,r8,r8
 		zjmp	%:while

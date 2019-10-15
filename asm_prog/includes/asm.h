@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 17:04:26 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/14 20:11:22 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include <stdio.h>
 
 # define BLACK "\033[22;30m"
-# define BLUE "\033[22;34m"
-# define RED "\033[22;31m"
-# define L_RED "\033[01;31m"
-# define L_GREEN "\033[01;32m"
+# define BLUE "\033[1;36m"
+# define RED "\033[1;31m"
+# define L_RED "\033[1;31m"
+# define L_GREEN "\033[1;32m"
 # define GRA "\033[1m"
 # define STOP "\033[0m"
 
@@ -41,6 +41,8 @@
 # define NB_LEX_FUNCS 4
 # define NB_LEX_LOAD_FUNCS 4
 # define FCHAR stream[0]
+
+# define MAX_TYPE_SIZE 32
 
 # define MAX_PARAM_NB 3
 
@@ -91,32 +93,26 @@ typedef enum			e_lexemes_type
 	LEX_NAME_PROP,
 	LEX_COMMENT_PROP,
 	LEX_LABEL,
-	LEX_OPCODE,
+	LEX_OP,
 	LEX_MAX
 }						t_lexemes_type;
 
 typedef union		u_args
 {
 	char			*str;
-	int				reg_a;
-	int				reg_b;
-	int				reg_c;
-	int				nb_a;
-	int				nb_b;
-	int				nb_c;
-	int				lnb_a;
-	int				lnb_b;
-	int				lnb_c;
+	int				reg;
+	long long int	nb;
 }					t_args;
 
 typedef struct			s_lexem
 {
 	unsigned int		start;
+	char				opcode;
 	char				type;
-	char				pad[3];
+	char				encoding;
+	char				pad;
 	t_args				args[MAX_ARGS_NUMBER];
 }						t_lexem;
-
 
 typedef struct s_token	t_token;
 
@@ -161,16 +157,17 @@ typedef	struct			s_env
 	t_token				*tokens;
 	t_lexem				*lexemes;
 	t_label				*labels;
-	unsigned int		nb_labels;
 	unsigned int		lab_i;
 	unsigned int		nb_tokens;
-	int					fd;
+	unsigned int		nb_labels;
+	unsigned int		nb_lex;
 }						t_env;
 
 /*
 ** Mains
 */
 void					print_lst(t_token *lst);
+void print_byte_as_bits(char val);
 int						loader(t_env *env, char *file_name);
 
 /*
@@ -239,6 +236,9 @@ int						lexer(t_env *env);
 											zjmp
 */
 
+char					find_op(char *op);
+char					encoding_byte(char byte, unsigned int param, int type);
+
 char					get_lex_name_prop(t_env *env, t_token *tok);
 char					get_lex_comment_prop(t_env *env, t_token *tok);
 char					get_lex_label(t_env *env, t_token *tok);
@@ -277,7 +277,7 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 
 						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
 						TOK_REG, TOK_LNUMBER, 0,
-						T_REG, 0, 0}, //ldi
+						TOK_REG, 0, 0}, //ldi
 
 						{TOK_NUMBER, TOK_LNUMBER, 0,
 						TOK_REG, 0, 0,
@@ -296,7 +296,7 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 						TOK_REG, 0, 0}, // or
 
 						{TOK_REG, 0, 0,
-						TOK_LNUMBER, TOK_NUMBER, 0,
+						TOK_REG, TOK_NUMBER, 0,
 						0, 0, 0}, //st
 
 						{TOK_REG, 0, 0,
@@ -331,6 +331,10 @@ int						invalid_syntax_err(t_env *env, t_tokenizer *tok);
 int						undefined_label_err(t_env *env, t_tokenizer *tok);
 int						property_error(char *file, t_token *tok);
 int						expected_newline_err(t_token *tok);
+int						invalid_op_parameter(t_token *tok, int op);
+int						too_few_op_args(t_token *tok, int op);
+int						unknown_properity(char *stream);
+int						not_eno_args(t_token *tok, int op);
 
 
 

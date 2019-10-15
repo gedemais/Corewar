@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 21:17:18 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/14 20:04:32 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,32 @@ static inline int	load_lexeme(t_env *env, unsigned int lex, char type, t_token *
 		(*tok) = (*tok)->next;
 		depth--;
 	}
-	return (depth > 0 ? -1 : 0);
+	return (0);
+}
+
+static inline void	print_op_args(t_lexem lex)
+{
+	printf("Args :\n");
+	if (lex.encoding & 128 && lex.encoding & 64)
+		printf("indirect number (%lld)\n", lex.args[0].nb);
+	if ((lex.encoding & 128) && !(lex.encoding & 64))
+		printf("direct number (%lld)\n", lex.args[0].nb);
+	if (!(lex.encoding & 128) && (lex.encoding & 64))
+		printf("register (r%d)\n", lex.args[0].reg);
+
+	if (lex.encoding & 32 && lex.encoding & 16)
+		printf("indirect number (%lld)\n", lex.args[1].nb);
+	if ((lex.encoding & 32) && !(lex.encoding & 16))
+		printf("direct number (%lld)\n", lex.args[1].nb);
+	if (!(lex.encoding & 32) && (lex.encoding & 16))
+		printf("register (r%d)\n", lex.args[1].reg);
+	
+	if (lex.encoding & 8 && lex.encoding & 4)
+		printf("indirect number (%lld)\n", lex.args[2].nb);
+	if ((lex.encoding & 8) && !(lex.encoding & 4))
+		printf("direct number (%lld)\n", lex.args[2].nb);
+	if (!(lex.encoding & 8) && (lex.encoding & 4))
+		printf("register (r%d)\n", lex.args[1].reg);
 }
 
 static inline void	print_lexem(t_lexem lex)
@@ -63,16 +88,18 @@ static inline void	print_lexem(t_lexem lex)
 	switch (lex.type)
 	{
 		case LEX_NAME_PROP:
-			printf("NAME_PROP\n");
+			printf("NAME_PROP (%s)\n", lex.args[0].str);
 			break;
 		case LEX_COMMENT_PROP:
-			printf("COMMENT_PROP\n");
+			printf("COMMENT_PROP (%s)\n", lex.args[0].str);
 			break;
 		case LEX_LABEL:
 			printf("LABEL\n");
 			break;
-		case LEX_OPCODE:
-			printf("OPCODE\n");
+		case LEX_OP:
+			printf("OPCODE (%s)\n", g_opnames[(int)lex.opcode]);
+			print_op_args(lex);
+	//		print_byte_as_bits(lex.encoding);
 			break;
 	}
 }
@@ -88,20 +115,16 @@ int		lexer(t_env *env)
 	if (!(env->lexemes = (t_lexem*)malloc(sizeof(t_lexem) * env->nb_tokens)))
 		return (-1);
 	ft_memset(env->lexemes, 0, sizeof(t_lexem) * env->nb_tokens);
-	while (tmp)
+	while (tmp && tmp->next)
 	{
-		sleep(1);
 		if ((ret = get_lexeme_type(env, tmp)) <= LEX_NONE)
-		{
-			printf("Unexpected Token\n");
-			fflush(stdout);
-			// unex token
 			return (-1);
-		}
 		if (load_lexeme(env, lex, ret, &tmp) != 0)
 			return (-1);
-		print_lexem(env->lexemes[lex]);
 		lex++;
 	}
+	env->nb_lex = lex;
+	for (unsigned int i = 0; i < lex ; i++)
+		print_lexem(env->lexemes[i]);
 	return (0);
 }

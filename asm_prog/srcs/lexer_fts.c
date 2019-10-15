@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:40:45 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 21:21:30 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/14 20:09:06 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 char	get_lex_name_prop(t_env *env, t_token *tok)
 {
 	static bool		done = false;
-	printf("get_lex_name_prop\n");
 	if (!tok || tok->type != TOK_P_NAME)
 		return (0);
 	if ((!tok->next || tok->next->type != TOK_STRING)
@@ -35,7 +34,6 @@ char	get_lex_name_prop(t_env *env, t_token *tok)
 char	get_lex_comment_prop(t_env *env, t_token *tok)
 {
 	static bool		done = false;
-	printf("get_lex_comment_prop\n");
 
 	if (!tok || tok->type != TOK_P_COM)
 		return (0);
@@ -56,7 +54,6 @@ char	get_lex_comment_prop(t_env *env, t_token *tok)
 char	get_lex_label(t_env *env, t_token *tok)
 {
 	(void)env;
-	printf("get_lex_label_prop\n");
 	if (!tok || tok->type != TOK_LABEL)
 		return (0);
 	if (!tok->next
@@ -80,7 +77,7 @@ static inline size_t	arg_len(char *s)
 	return (ret);
 }
 
-static inline char	find_op(char *op)
+char					find_op(char *op)
 {
 	unsigned int	i;
 	size_t			size;
@@ -91,7 +88,7 @@ static inline char	find_op(char *op)
 	while (i < NB_OPS)
 	{
 		size = ft_strlen(g_opnames[i]);
-		if (!ft_strncmp(op, g_opnames[i], size))
+		if (size == op_size && ft_strncmp(op, g_opnames[i], op_size) == 0)
 			return ((char)i);
 		i++;
 	}
@@ -100,6 +97,45 @@ static inline char	find_op(char *op)
 
 static inline int	check_opcode_params(t_token *tok, int op, int nb_params)
 {
+	unsigned int	i;
+	unsigned int	j;
+
+	i = 0;
+	while (i < 9 && tok && nb_params > 0)
+	{
+//		printf("Looking for %d\n", tok->type);
+		j = 0;
+		while (j < 3 && g_op_args[op][i + j])
+		{
+			//printf("--->%d\n", g_op_args[op][i + j]);
+			if (tok->type == g_op_args[op][i + j])
+			{
+				nb_params--;
+				break ;
+			}
+			j++;
+		}
+		if (!g_op_args[op][i + j] && invalid_op_parameter(tok, op))
+			return (-1);
+		tok = tok->next;
+		if (nb_params > 0 && tok->type != TOK_SEPARATOR)
+			return (-1);
+		tok = nb_params ? tok->next : tok;
+		if (nb_params > 0 && tok->type == TOK_NEWLINE && not_eno_args(tok, op))
+			return (-1);
+		i += 3;
+	}
+	if (tok->type != TOK_NEWLINE)
+	{
+		if (tok->type == TOK_SEPARATOR && (tok->next->type == TOK_REG || tok->next->type == TOK_LNUMBER || tok->next->type == TOK_NUMBER))
+		{
+			too_few_op_args(tok, op);
+			return (-1);
+		}
+		expected_newline_err(tok);
+		return (-1);
+	}
+	return (0);
 }
 
 char	get_lex_opcode(t_env *env, t_token *tok)
@@ -116,6 +152,7 @@ char	get_lex_opcode(t_env *env, t_token *tok)
 		tok->ptr++;
 	if ((op = find_op(tok->ptr)) == -1)
 		return (-1);
+	tok = tok->next;
 	nb_params = 0;
 	while (g_op_args[op][i] != 0)
 	{
@@ -124,5 +161,5 @@ char	get_lex_opcode(t_env *env, t_token *tok)
 	}
 	if (check_opcode_params(tok, op, nb_params) != 0)
 		return (-1);
-	return (LEX_OPCODE);
+	return (LEX_OP);
 }

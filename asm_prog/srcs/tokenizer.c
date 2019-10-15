@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 17:04:09 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/14 20:05:08 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ void	cross_whitespaces(char *stream, unsigned int *i)
 		*i += 1;
 	}
 }
-
+/*
 static inline void	print_token(int tok)
 {
 	switch (tok)
@@ -143,7 +143,7 @@ static inline void	print_tokens(t_token *lst)
 		tmp = tmp->next;
 	}
 }
-
+*/
 int		tokenizer(t_env *env, t_tokenizer tok)
 {
 	int		ret;
@@ -152,7 +152,7 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 	if (init_labels(env) != 0)
 		return (-1);
 	if (DEBUG_MODE)
-		DBPRINT("Tokenizer...")
+		DBPRINT("Tokenizer...\n")
 	while (env->file[tok.i])
 	{
 		cross_whitespaces(env->file, &tok.i);
@@ -166,14 +166,12 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 		tok.index++;
 	}
 	env->nb_tokens = tok.index;
-	print_tokens(env->tokens);
-	printf("\n");
 	if (crush_tokens(env) != 0)
 		return (-1);
-	print_tokens(env->tokens);
+//	print_tokens(env->tokens);
 	if (DEBUG_MODE)
 	{
-		printf("%u tokens...", env->nb_tokens);
+		printf("%u tokens found...", env->nb_tokens);
 		DBPRINT("Fine !\n\n")
 	}
 	return (0);

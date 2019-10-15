@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 12:45:22 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/14 20:15:39 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,10 @@
 
 # define NAME_LENGTH_ERR "Program name length exceed "
 # define COMMENT_LENGTH_ERR "Comment length exceed "
+
+# define INVALID_OP_PARAM "Invalid operation parameter "
+# define TOO_FEW_ARGS "Too few arguments for operation "
+# define NOT_ENO_ARGS "Not enough arguments for operation "
+# define UNKNOWN_PROPERITY "Unknown properity "
 
 #endif

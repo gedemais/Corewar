@@ -29,6 +29,7 @@ char	get_tok_p_com(t_env *env, char *stream, unsigned int *i)
 		*i += prop_len;
 		return (TOK_P_COM);
 	}
+	unknown_properity(stream);
 	return (0);
 }
 
@@ -51,6 +52,7 @@ char	get_tok_string(t_env *env, char *stream, unsigned int *i)
 char	get_tok_reg(t_env *env, char *stream, unsigned int *i)
 {
 	unsigned int	j;
+	long long int	id;
 
 	(void)env;
 	j = 1;
@@ -58,8 +60,12 @@ char	get_tok_reg(t_env *env, char *stream, unsigned int *i)
 		return (0);
 	while (stream[j] && ft_isdigit(stream[j]))
 		j++;
-	if (j == 1 || j > 3 || ft_atoi(&stream[1]) > REG_NUMBER)
+	id = ft_atoi(&stream[1]);
+	if ((j == 1 || j > 3 || id > REG_NUMBER))
+	{
+		ft_putendl_fd("Wrong register index", 2);
 		return (0);
+	}
 	*i += j;
 	return (TOK_REG);
 }
@@ -88,6 +94,8 @@ char	get_tok_lnumber(t_env *env, char *stream, unsigned int *i)
 	j = 1;
 	if (FCHAR != '%')
 		return (0);
+	if (stream[j] == '-' || stream[j] == '+')
+		j++;
 	while (stream[j] && ft_isdigit(stream[j]))
 		j++;
 	if (j == 1)
