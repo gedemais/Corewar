@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/13 17:04:09 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/16 10:56:28 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,22 @@
 static inline int	crush_tokens(t_env *env)
 {
 	t_token	*t;
+	int		tmp;
 
 	t = env->tokens;
 	while (t)
 	{
-		if ((t->type == TOK_NEWLINE && t->next && t->next->type == TOK_NEWLINE)
-			|| (t->type == TOK_COMMENT && t->next && t->next->type == TOK_NEWLINE))
+		if (t->type == TOK_DLABA || t->type == TOK_INDLABA)
 		{
-			t->prev->next = t->next;
-			t->next->prev = t->prev;
-			free(t);
+			if ((tmp = find_label_index(env->labels, t, env->nb_labels)) == -1)
+				return (-1);
+			t->label = (unsigned int)tmp;
+			t->type = (t->type == TOK_DLABA) ? TOK_LNUMBER : TOK_NUMBER;
+		}
+		if ((t->type == TOK_NEWLINE && t->next && t->next->type == TOK_NEWLINE)
+			|| t->type == TOK_COMMENT || (t == env->tokens && t->type == TOK_NEWLINE))
+		{
+			token_snap_node(&env->tokens, t);
 			env->nb_tokens--;
 			t = env->tokens;
 			continue ;
@@ -82,7 +88,7 @@ void	cross_whitespaces(char *stream, unsigned int *i)
 		*i += 1;
 	}
 }
-
+/*
 static inline void	print_token(int tok)
 {
 	switch (tok)
@@ -132,6 +138,7 @@ static inline void	print_token(int tok)
 	}
 	fflush(stdout);
 }
+
 static inline void	print_tokens(t_token *lst)
 {
 	t_token	*tmp;
@@ -142,7 +149,7 @@ static inline void	print_tokens(t_token *lst)
 		print_token(tmp->type);
 		tmp = tmp->next;
 	}
-}
+}*/
 
 int		tokenizer(t_env *env, t_tokenizer tok)
 {
@@ -151,8 +158,6 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 	ft_memset(&tok, 0, sizeof(t_tokenizer));
 	if (init_labels(env) != 0)
 		return (-1);
-	if (DEBUG_MODE)
-		DBPRINT("Tokenizer...")
 	while (env->file[tok.i])
 	{
 		cross_whitespaces(env->file, &tok.i);
@@ -166,15 +171,8 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 		tok.index++;
 	}
 	env->nb_tokens = tok.index;
-	print_tokens(env->tokens);
-	printf("\n");
 	if (crush_tokens(env) != 0)
 		return (-1);
-	print_tokens(env->tokens);
-	if (DEBUG_MODE)
-	{
-		printf("%u tokens...", env->nb_tokens);
-		DBPRINT("Fine !\n\n")
-	}
+//	print_tokens(env->tokens);
 	return (0);
 }

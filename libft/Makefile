@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/05 17:34:45 by gedemais          #+#    #+#              #
-#    Updated: 2019/09/21 17:15:10 by gedemais         ###   ########.fr        #
+#    Updated: 2019/10/13 18:46:08 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,6 +105,7 @@ SRCS  =	ft_atoi.c \
 		ft_quicksort.c \
 		ft_constrain.c \
 		ft_to_degrees.c \
+		ft_strwlen.c\
 		ft_to_radians.c
 
 OBJS=$(SRCS:.c=.o)
