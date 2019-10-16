@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/16 10:56:28 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/16 11:16:13 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,8 +149,8 @@ static inline void	print_tokens(t_token *lst)
 		print_token(tmp->type);
 		tmp = tmp->next;
 	}
-}*/
-
+}
+*/
 int		tokenizer(t_env *env, t_tokenizer tok)
 {
 	int		ret;
@@ -173,6 +173,6 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 	env->nb_tokens = tok.index;
 	if (crush_tokens(env) != 0)
 		return (-1);
-//	print_tokens(env->tokens);
+	//print_tokens(env->tokens);
 	return (0);
 }
