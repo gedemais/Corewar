@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/13 17:57:13 by gedemais         ###   ########.fr        #
+#    Updated: 2019/10/16 11:12:27 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,10 @@ SRCS_NAME=	main.c\
 			loader.c\
 			check.c\
 			get_name_len.c\
+			cw_loop.c\
+			convert_instruction.c\
+			lst.c\
+			aff.c\
 			merge_args.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))

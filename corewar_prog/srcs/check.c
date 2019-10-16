@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/13 17:42:09 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/14 10:29:28 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ static inline int	get_id(t_env *env, char *arg, unsigned int *j)
 		i++;
 	if ((env->player[env->nb_players].id = ft_atoi(&arg[i])) < 0
 			|| env->player[env->nb_players].id > INT_MAX)
-	{
-		ft_putendl_fd(BAD_NUMBER, STDERR_FILENO);
-		return (1);
-	}
+		return (error(BAD_NUMBER, NULL));
 	while (arg[i] && ft_isdigit(arg[i]))
 		i++;
 	if (arg[i] && !ft_is_whitespace(arg[i]))
@@ -59,10 +56,7 @@ static inline int	get_dump(t_env *env, char *arg, unsigned int *j)
 		i++;
 	if (env->dump != 0 || (env->dump = ft_atoi(&arg[i])) < 1
 			|| env->dump > INT_MAX)
-	{
-		ft_putendl_fd(BAD_NUMBER, STDERR_FILENO);
-		return (1);	
-	}
+		return (error(BAD_NUMBER, NULL));
 	while (arg[i] && !ft_is_whitespace(arg[i]))
 		i++;
 	*j = i;
@@ -97,7 +91,7 @@ static inline int	check_champion(t_env *env, char *arg, unsigned int *j)
 	i = *j;
 	len = get_name_len(&arg[i]); // limiter la taille du nom si besoin
 	if (arg[i + len - 1] != 'r' || ft_strncmp(&arg[i + len - 4], EXT, 4)
-			|| loader(env, &arg[i], (int)len))
+			|| loader(env, &player[env->nb_players], &arg[i], (int)len))
 		return (1);
 	*j = i + len;
 	return (0);
@@ -106,18 +100,20 @@ static inline int	check_champion(t_env *env, char *arg, unsigned int *j)
 int					get_opt_champ(t_env *env, char *arg)
 {
 	unsigned int	i;
+	unsigned int	len;
 
 	i = 0;
 	while (arg[i])
 	{
 		while (arg[i] && ft_is_whitespace(arg[i]))
 			i++;
-		if (arg[i] == '-')
+		if (arg[i] == '-' && (len = get_name_len(&arg[i])) > 4
+			&& ft_strncmp(&arg[i + len - 4], EXT, 4))
 		{
 			if (check_option(env, arg, &i))
 				return (1);
 		}
-		if (ft_isalnum(arg[i]))
+		else if(ft_isascii(arg[i]))
 			if (check_champion(env, arg, &i))
 				return (1);
 	}
