@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 18:40:39 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/16 10:56:28 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,8 +158,6 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 	ft_memset(&tok, 0, sizeof(t_tokenizer));
 	if (init_labels(env) != 0)
 		return (-1);
-	if (DEBUG_MODE)
-		DBPRINT("Tokenizer...\n")
 	while (env->file[tok.i])
 	{
 		cross_whitespaces(env->file, &tok.i);
@@ -176,10 +174,5 @@ int		tokenizer(t_env *env, t_tokenizer tok)
 	if (crush_tokens(env) != 0)
 		return (-1);
 //	print_tokens(env->tokens);
-	if (DEBUG_MODE)
-	{
-		printf("%u tokens found...", env->nb_tokens);
-		DBPRINT("Fine !\n\n")
-	}
 	return (0);
 }
