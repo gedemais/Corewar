@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:15:53 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 15:42:25 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/16 21:45:21 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,10 @@ int		load_lex_opcode(t_env *env, t_lexem *lex, t_token **tok)
 		if (tmp->type == TOK_REG)
 			lex->args[param].reg = (int)ft_atoi(&tmp->ptr[1]);
 		else if (tmp->label > 0 && (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER))
+		{
 			lex->args[param].stick = tmp->label;
+			lex->args[param].label = true;
+		}
 		else if (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER)
 			lex->args[param].nb = ft_atoi(tmp->type == TOK_NUMBER ? tmp->ptr : &tmp->ptr[1]);
 		lex->encoding = encoding_byte(lex->encoding, param, tmp->type);

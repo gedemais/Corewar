@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/16 11:16:13 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/16 11:55:16 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ static inline int	get_token_type(t_env *env, t_tokenizer *tok)
 	{
 		if ((tok->ret = g_token_fts[i](env, &env->file[tok->i], &tok->i)))
 		{
-			if (tok->ret == -1 && !undefined_label_err(env, tok))
+			if (tok->ret == -1)
 				return (-1);
 			update_tok(env->file, tok, tmp);
 			break ;
@@ -151,26 +151,26 @@ static inline void	print_tokens(t_token *lst)
 	}
 }
 */
-int		tokenizer(t_env *env, t_tokenizer tok)
+int		tokenizer(t_env *env)
 {
 	int		ret;
 
-	ft_memset(&tok, 0, sizeof(t_tokenizer));
+	ft_memset(&env->tok, 0, sizeof(t_tokenizer));
 	if (init_labels(env) != 0)
 		return (-1);
-	while (env->file[tok.i])
+	while (env->file[env->tok.i])
 	{
-		cross_whitespaces(env->file, &tok.i);
-		ret = get_token_type(env, &tok);
+		cross_whitespaces(env->file, &env->tok.i);
+		ret = get_token_type(env, &env->tok);
 		if (ret == -1)
 			return (-1);
-		if (tok.ret == TOK_NONE && invalid_syntax_err(env, &tok) == 0)
+		if (env->tok.ret == TOK_NONE && invalid_syntax_err(env, &env->tok) == 0)
 			return (-1);
-		if (token_pushfront(&env->tokens, token_lstnew(env, &tok)) != 0)
+		if (token_pushfront(&env->tokens, token_lstnew(env, &env->tok)) != 0)
 			return (-1);
-		tok.index++;
+		env->tok.index++;
 	}
-	env->nb_tokens = tok.index;
+	env->nb_tokens = env->tok.index;
 	if (crush_tokens(env) != 0)
 		return (-1);
 	//print_tokens(env->tokens);

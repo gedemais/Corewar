@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 17:42:13 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/16 12:56:31 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,52 +63,6 @@ static inline int	load_lexeme(t_env *env, unsigned int lex, char type, t_token *
 	return (0);
 }
 
-static inline void	print_op_args(t_lexem lex)
-{
-	printf("Args :\n");
-	if (lex.encoding & 128 && lex.encoding & 64)
-		printf("indirect number (%lld)\n", lex.args[0].nb);
-	if ((lex.encoding & 128) && !(lex.encoding & 64))
-		printf("direct number (%lld)\n", lex.args[0].nb);
-	if (!(lex.encoding & 128) && (lex.encoding & 64))
-		printf("register (r%d)\n", lex.args[0].reg);
-
-	if (lex.encoding & 32 && lex.encoding & 16)
-		printf("indirect number (%lld)\n", lex.args[1].nb);
-	if ((lex.encoding & 32) && !(lex.encoding & 16))
-		printf("direct number (%lld)\n", lex.args[1].nb);
-	if (!(lex.encoding & 32) && (lex.encoding & 16))
-		printf("register (r%d)\n", lex.args[1].reg);
-	
-	if (lex.encoding & 8 && lex.encoding & 4)
-		printf("indirect number (%lld)\n", lex.args[2].nb);
-	if ((lex.encoding & 8) && !(lex.encoding & 4))
-		printf("direct number (%lld)\n", lex.args[2].nb);
-	if (!(lex.encoding & 8) && (lex.encoding & 4))
-		printf("register (r%d)\n", lex.args[1].reg);
-}
-
-static inline void	print_lexem(t_lexem lex)
-{
-	switch (lex.type)
-	{
-		case LEX_NAME_PROP:
-			printf("NAME_PROP (%s)\n", lex.args[0].str);
-			break;
-		case LEX_COMMENT_PROP:
-			printf("COMMENT_PROP (%s)\n", lex.args[0].str);
-			break;
-		case LEX_LABEL:
-			printf("LABEL\n");
-			break;
-		case LEX_OP:
-			printf("OPCODE (%s)\n", g_opnames[(int)lex.opcode]);
-			print_op_args(lex);
-	//		print_byte_as_bits(lex.encoding);
-			break;
-	}
-}
-
 static inline int	check_properitys(t_token *tok)
 {
 	bool	name;
@@ -135,10 +89,8 @@ static inline int	check_properitys(t_token *tok)
 int		lexer(t_env *env)
 {
 	t_token			*tmp;
-	unsigned int	lex;
 	char			ret;
 
-	lex = 0;
 	tmp = env->tokens;
 	if (!(env->lexemes = (t_lexem*)malloc(sizeof(t_lexem) * env->nb_tokens)))
 		return (-1);
@@ -149,12 +101,9 @@ int		lexer(t_env *env)
 	{
 		if ((ret = get_lexeme_type(env, tmp)) <= LEX_NONE)
 			return (-1);
-		if (load_lexeme(env, lex, ret, &tmp) != 0)
+		if (load_lexeme(env, env->nb_lex, ret, &tmp) != 0)
 			return (-1);
-		lex++;
+		env->nb_lex++;
 	}
-	env->nb_lex = lex;
-	for (unsigned int i = 0; i < lex ; i++)
-		print_lexem(env->lexemes[i]);
 	return (0);
 }

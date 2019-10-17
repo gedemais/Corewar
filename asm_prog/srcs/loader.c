@@ -6,11 +6,25 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/12 21:07:17 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/16 16:28:05 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
+
+static inline bool	check_ext(char *file_name)
+{
+	unsigned int		i;
+
+	i = 0;
+	if (ft_strlen(file_name) <= 2)
+		return (false);
+	while (file_name[i])
+		i++;
+	if (file_name[i - 1] != 's' || file_name[i - 2] != '.')
+		return (false);
+	return (true);
+}
 
 static inline char	*strrealloc(char *s, unsigned int size)
 {
@@ -70,6 +84,15 @@ static inline char	*read_file(int fd)
 
 int		loader(t_env *env, char *file_name)
 {
+	if (!check_ext(file_name))
+	{
+		ft_putendl_fd(FILE_EXT_ERR, 2);
+		return (-1);
+	}
+	if (!(env->file_name = ft_strnew(ft_strlen(file_name + 2))))
+		return (-1);
+	ft_strncat(env->file_name, file_name, ft_strlen(file_name) - 2);
+	ft_strcat(env->file_name, ".cor");
 	if (!(env->file = read_file(open(file_name, O_RDONLY)))
 		|| !env->file[0])
 		return (-1);

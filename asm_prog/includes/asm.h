@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/15 17:34:23 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/17 15:22:29 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,14 @@
 # define FILE_ERR_MSG "Invalid file or file name :"
 
 # define BUFF_READ 65536
+# define BUFF_WRITE 4096
+
+# define FILE_SIZE 4096
 
 # define LEX_COMB 32
 # define LEX_DEPTH 4
+
+# define HEADER_SIZE 2180
 
 # define NB_OPS 16
 # define NB_TOKENS_FUNCS 13
@@ -42,7 +47,11 @@
 # define NB_LEX_LOAD_FUNCS 4
 # define FCHAR stream[0]
 
+# define PADDING_VALUE 0x42
+
 # define MAX_TYPE_SIZE 32
+
+# define LBE_BUFFER 4
 
 # define MAX_PARAM_NB 3
 
@@ -103,6 +112,7 @@ typedef union		u_args
 	int				reg;
 	unsigned int	stick;
 	long long int	nb;
+	bool			label;
 }					t_args;
 
 typedef struct			s_lexem
@@ -155,7 +165,9 @@ typedef	struct			s_env
 	t_tokenizer			tok;
 	char				pad[4];
 	char				*file;
-	char				*dest;
+	char				*file_name;
+	char				*p_name;
+	char				*p_comment;
 	t_token				*tokens;
 	t_lexem				*lexemes;
 	t_label				*labels;
@@ -163,6 +175,8 @@ typedef	struct			s_env
 	unsigned int		nb_tokens;
 	unsigned int		nb_labels;
 	unsigned int		nb_lex;
+	int					file_size;
+	char				_pad[4];
 }						t_env;
 
 /*
@@ -175,7 +189,7 @@ int						loader(t_env *env, char *file_name);
 /*
 ** Tokenizer
 */
-int						tokenizer(t_env *env, t_tokenizer tok);
+int						tokenizer(t_env *env);
 void					cross_whitespaces(char *stream, unsigned int *i);
 
 int						init_labels(t_env *env);
@@ -249,6 +263,7 @@ char					get_lex_comment_prop(t_env *env, t_token *tok);
 char					get_lex_label(t_env *env, t_token *tok);
 char					get_lex_opcode(t_env *env, t_token *tok);
 
+bool					check_after(t_token *tok);
 int						load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok);
 int						load_lex_comment_prop(t_env *env, t_lexem *lex, t_token **tok);
 int						load_lex_label(t_env *env, t_lexem *lex, t_token **tok);
@@ -321,26 +336,30 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 						0, 0, 0}//zjmp
 };
 
+/*
+** Bytecode translating
+*/
+void					reverse_bits(char buff[LBE_BUFFER], int n);
+
+int						write_bytecode(t_env *env);
+int						write_header(t_env *env, int fd);
 
 
 /*
 ** Errors reporting
 */
 int						invalid_syntax_err(t_env *env, t_tokenizer *tok);
-int						undefined_label_err(t_env *env, t_tokenizer *tok);
-int						property_error(char *file, t_token *tok);
 int						expected_newline_err(t_token *tok);
 int						invalid_op_parameter(t_token *tok, int op);
 int						too_few_op_args(t_token *tok, int op);
-int						unknown_properity(char *stream);
 int						not_eno_args(t_token *tok, int op);
 int						invalid_label_err(t_token *tok);
-int						dup_label_err(char *label);
+int						undefined_label_err(t_env *env);
+int						dup_label_err(char *label, unsigned int i, unsigned int first);
+int						unknown_properity(char *stream);
+int						property_error(char *file, t_token *tok);
 int						missing_properity(bool name, bool comment);
-
-
-bool					check_after(t_token *tok);
-
+int						dup_properity_err(char *file, unsigned int i);
 
 int						free_env(t_env *env);
 

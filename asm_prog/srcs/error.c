@@ -78,20 +78,20 @@ int					property_error(char *file, t_token *tok)
 	return (0);
 }
 
-int					undefined_label_err(t_env *env, t_tokenizer *tok)
+int					undefined_label_err(t_env *env)
 {
 	unsigned int	i;
 
 	i = 0;
 	print_err_name(UNDEFINED_LABEL);
-	print_line_n_col(tok->line, tok->col);
-	while (&env->file[tok->line_start + i] && env->file[tok->line_start + i] != '\n')
+	print_line_n_col(env->tok.line, env->tok.col);
+	while (&env->file[env->tok.line_start + i] && env->file[env->tok.line_start + i] != '\n')
 	{
-		ft_putchar_fd(env->file[tok->line_start + i], 2);
+		ft_putchar_fd(env->file[env->tok.line_start + i], 2);
 		i++;
 	}
 	ft_putchar_fd('\n', 2);
-	print_cursor(&env->file[tok->line_start], tok->col);
+	print_cursor(&env->file[env->tok.line_start], env->tok.col);
 	return (0);
 }
 
@@ -244,12 +244,18 @@ int		invalid_label_err(t_token *tok)
 	return (1);
 }
 
-int		dup_label_err(char *label)
+int		dup_label_err(char *label, unsigned int i, unsigned int first)
 {
-	unsigned int	i;
+	unsigned int	j;
 
-	i = 0;
+	j = 0;
 	print_err_name(DUP_LABEL);
+	ft_putchar_fd('\n', 2);
+	while (label[first] && label[first] != '\n')
+	{
+		ft_putchar_fd(label[first], 2);
+		first++;
+	}
 	ft_putchar_fd('\n', 2);
 	while (label[i] && label[i] != '\n')
 	{
@@ -274,6 +280,18 @@ int		missing_properity(bool name, bool comment)
 	ft_putstr_fd(L_RED, 2);
 	ft_putendl_fd(MISSING_PROPERITY, 2);
 	ft_putstr_fd(STOP, 2);
+	return (1);
+}
+
+int		dup_properity_err(char *file, unsigned int i)
+{
+	print_err_name(DUP_PROPERITY);
+	while (file[i] && file[i] != '\n')
+	{
+		ft_putchar_fd(file[i], 2);
+		i++;
+	}
+	ft_putchar_fd('\n', 2);
 	return (1);
 }
 

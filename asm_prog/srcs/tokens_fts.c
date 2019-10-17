@@ -2,7 +2,8 @@
 
 char	get_tok_p_name(t_env *env, char *stream, unsigned int *i)
 {
-	size_t	prop_len;
+	static bool	done = false;
+	size_t		prop_len;
 
 	(void)env;
 	prop_len = ft_strlen(NAME_CMD_STRING);
@@ -10,6 +11,9 @@ char	get_tok_p_name(t_env *env, char *stream, unsigned int *i)
 		return (0);
 	if (!ft_strncmp(NAME_CMD_STRING, stream, prop_len))
 	{
+		if (done && dup_properity_err(env->file, *i))
+			return (-1);
+		done = true;
 		*i += prop_len;
 		return (TOK_P_NAME);
 	}
@@ -18,6 +22,7 @@ char	get_tok_p_name(t_env *env, char *stream, unsigned int *i)
 
 char	get_tok_p_com(t_env *env, char *stream, unsigned int *i)
 {
+	static bool	done = false;
 	size_t	prop_len;
 
 	(void)env;
@@ -26,11 +31,14 @@ char	get_tok_p_com(t_env *env, char *stream, unsigned int *i)
 		return (0);
 	if (!ft_strncmp(COMMENT_CMD_STRING, stream, prop_len))
 	{
+		if (done && dup_properity_err(env->file, *i))
+			return (-1);
+		done = true;
 		*i += prop_len;
 		return (TOK_P_COM);
 	}
 	unknown_properity(stream);
-	return (0);
+	return (-1);
 }
 
 char	get_tok_string(t_env *env, char *stream, unsigned int *i)
@@ -113,7 +121,7 @@ char	get_tok_dlaba(t_env *env, char *stream, unsigned int *i)
 		return (0);
 	while (stream[size] && (ft_isalnum(stream[size]) || stream[size] == '_'))
 		size++;
-	if (!is_label(env, &stream[2]))
+	if (!is_label(env, &stream[2]) && !undefined_label_err(env))
 		return (-1);
 	*i += size;
 	return (TOK_DLABA);
@@ -130,7 +138,7 @@ char	get_tok_indlaba(t_env *env, char *stream, unsigned int *i)
 		size++;
 	if (size == 1)
 		return (0);
-	if (!is_label(env, &stream[1]))
+	if (!is_label(env, &stream[1]) && !undefined_label_err(env))
 		return (-1);
 	*i += size;
 	return (TOK_INDLABA);

@@ -19,7 +19,7 @@ bool						is_label(t_env *env, char *label)
 	return (false);
 }
 
-static inline bool	check_presence(t_label *labels, unsigned int n, char *try)
+static inline bool	check_presence(t_label *labels, unsigned int n, char *try, unsigned int *stick)
 {
 	unsigned int		i;
 	size_t				len;
@@ -36,7 +36,10 @@ static inline bool	check_presence(t_label *labels, unsigned int n, char *try)
 			&& (labels[i].ptr[len] == '_' || ft_isalnum(labels[i].ptr[len])))
 			len++;
 		if (len == try_len && !ft_strncmp(labels[i].ptr, try, len))
+		{
+			*stick = labels[i].stick;
 			return (true);
+		}
 		i++;
 	}
 	return (false);
@@ -52,8 +55,8 @@ int							add_label(t_env *env, unsigned int i)
 		&& env->file[i] != '\n' && i > 0)
 		i--;
 	i++;
-	if (check_presence(env->labels, env->nb_labels, &env->file[i])
-		&& dup_label_err(&env->file[i]))
+	if (check_presence(env->labels, env->nb_labels, &env->file[i], &len)
+		&& dup_label_err(env->file, i, len))
 		return (-1);
 	env->labels[env->lab_i].ptr = &env->file[i];
 	env->labels[env->lab_i].stick = i;

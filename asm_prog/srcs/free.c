@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:38:04 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/10 14:05:13 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/10/16 12:41:39 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,11 @@ int		free_env(t_env *env)
 	{
 		free(env->file);
 		env->file = NULL;
+	}
+	if (env->tokens)
+	{
+		free(env->tokens);
+		env->tokens = NULL;
 	}
 	return (0);
 }
