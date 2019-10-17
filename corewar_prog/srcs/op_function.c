@@ -6,89 +6,88 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:16:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 12:03:48 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 20:09:05 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int	live(int direct)
+int				live(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	ld(int indirect, int direct_reg)
+int				ld(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	st(int reg, int indirect_reg)
+int				st(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	add(int reg, int reg2, int reg3)
+int				add(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	sub(int reg, int reg2, int reg3)
+int				sub(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	and(int reg_in_direct, int reg2_in_direct, int reg3)
+int				and(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	xor(int reg_in_direct, int reg2_in_direct, int reg3)
+int				xor(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	or(int reg_in_direct, int reg2_in_direct, int reg3)
+int				or(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	zjmp(int direct)
+int				zjmp(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	ldi(int reg_in_direct, int in_direct, int reg)
+int				ldi(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	sti(int reg, int reg_in_direct, int reg_direct)
+int				sti(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	fork(int direct)
+int				forky(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	lld(int in_direct, int reg)
+int				lld(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	lldi(int reg_in_direct, int reg_direct, int reg)
+int				lldi(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	lfork(int direct)
+int				lfork(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
 
-int	aff(int reg)
+int				aff(t_env *env, t_type arg[3], char encoding_byte)
 {
 	return (0);
 }
-

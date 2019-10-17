@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 11:07:38 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 21:12:08 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,16 @@ void	init_arena(t_env *env)
 	}
 }
 
-int		process_cycle(t_env *env)
+int		cycle_run(t_env *env, int curr_cycle)
 {
-	unsigned int		nb_pl;
+	unsigned int		i;
 
-	nb_pl = env->nb_players;
-	while (nb_pl >= 1 && !env->player[nb_pl - 1].dead)
+	i = 0;
+	while (i < env->nb-players && !env->player[i].dead)
 	{
-		nb_pl--;
+		check_cycle(env, &env->player[i], curr_cycle);
+		add_instruction(env, i);
+		i++;
 	}
 	return (0);
 }
@@ -96,11 +98,13 @@ int		cw_loop(t_env *env)
 
 	curr_cycle = 0;
 	init_arena(env);
+	if (create_first_process(env))
+		return (1);
 	while (curr_cycle <= env->cycle_to_die && curr_cycle <= MAX_CYCLE)
 	{
 		while (curr_cycle < env->cycle_to_die && curr_cycle <= MAX_CYCLE)
 		{
-			if (process_cycle(env))
+			if (cycle_run(env, curr_cycle))
 				return (1);
 			curr_cycle++;
 		}

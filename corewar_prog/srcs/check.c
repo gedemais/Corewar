@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 21:35:48 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 17:22:46 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ static inline int	get_id(t_env *env, char *arg, unsigned int *j)
 	while (arg[i] && !ft_is_whitespace(arg[i]))
 		i++;
 	*j = (unsigned int)(i + 1);
-	if (id[env->player[env->nb_players].id] == 0)
-		id[env->player[env->nb_players].id] = 1;
+	if (id[env->player[env->nb_players].id - 1] == 0)
+		id[env->player[env->nb_players].id - 1] = 1;
 	else 
 		return (1);
 	i = -1;
@@ -53,7 +53,7 @@ static inline int	get_id(t_env *env, char *arg, unsigned int *j)
 		if (env->player[i].id == env->player[env->nb_players].id)
 		{
 			env->player[i].id = 0;
-			env->player[i].id = find_id(env);
+			env->player[i].id = find_id(env, env->nb_players + 1);
 		}
 	return (0);
 }

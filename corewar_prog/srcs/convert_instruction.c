@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 11:21:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 12:05:32 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 19:52:39 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,9 +49,9 @@ bool	encoding_byte(char c)
 
 int		*convert_instruction(char c)
 {
-	static int		(*cw_func[NB_FUNC])(t_env*) = {&live, &ld, &st, &add,
-			&sub, &and, &or, &xor, &zjmp, &ldi, &sti, &fork, &lld, &lldi,
-			&lfork, &aff};
+	static int		(*cw_func[NB_FUNC])(t_env *env, t_type arg[3],
+			char encoding_byte) = {&live, &ld, &st, &add, &sub, &and, &or,
+		&xor, &zjmp, &ldi, &sti, &fork, &lld, &lldi, &lfork, &aff};
 
 	return (&cw_func[c - 1]);
 }

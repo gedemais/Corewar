@@ -6,13 +6,13 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:08:31 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 13:17:27 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 20:53:24 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-t_process	*new_lst(t_env *env, unsigned int num_pl, uint16_t pc)
+t_process	*new_lst(t_env *env, int id, uint16_t pc)
 {
 	t_process	*new;
 
@@ -24,18 +24,17 @@ t_process	*new_lst(t_env *env, unsigned int num_pl, uint16_t pc)
 		free(new);
 		return (NULL);
 	}
-	new->r[0] = (int)env->player[num_pl].id;
+	new->r[0] = id;
 	new->pc = pc;
 	return (new);
 }
 
-t_process	*push_lst(t_env *env, t_process *process, unsigned int num_pl,
-		uint16_t pc)
+t_process	*push_lst(t_env *env, t_process *process, int id, uint16_t pc)
 {	
 	t_process	*new;
 	t_process	*tmp;
 
-	if (!(new = new_lst(env, num_pl, pc)))
+	if (!(new = new_lst(env, id, pc)))
 		return (NULL);
 	process->prev = new;
 	tmp = process;

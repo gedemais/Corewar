@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/17 15:28:15 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 21:22:36 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,38 @@
 
 //STRUCTURES
 
+typedef union u_type		t_type;
+
+union			u_type
+{
+	int			direct;
+	short		direct2;
+	short		indirect;
+	char		registre;
+};
+
 typedef struct s_process	t_process;
 
 struct			s_process
 {
 	t_process	*prev;
 	t_process	*next;
-	int			*r; // REG_NUMBER malloc a REG_SIZE
-	uint16_t	pc : 12;
-	uint32_t	_pad : 20;
+	int			*r;
+	int			wait_cycle;
 	int			carry;
+	uint32_t	_pad : 20;
+	uint16_t	pc : 12;
+};
+
+typedef struct s_instruct	t_instruc;
+
+struct			s_instruct
+{
+	t_instruct	*prev;
+	t_instruct	*next;
+	t_process	*process;
+	t_type		arg[3];
+	char		op_code;
 };
 
 typedef struct		s_player
@@ -39,28 +61,26 @@ typedef struct		s_player
 	char			comment[COMMENT_LENGTH + 1];
 	char			champ[CHAMP_MAX_SIZE];
 	char			prog_name[PROG_NAME_LENGTH + 1];
-	char			siz_rev[4];
+	long long int	id;
+	unsigned int	first_pc;
 	uint32_t		pad;
 	uint32_t		magic;
 	uint32_t		siz;
-	long long int	id;
-	unsigned int	cycle_to_process;
-	unsigned int	first_pc;
+	char			_pad[6];
 	bool			dead;
-	char			_pad[7];
 }					t_player;
 
 typedef struct		s_env
 {
 	t_process		*process;
-	t_process		*queue_process;
+	t_instruct		*instruct;
 	t_player		player[MAX_PLAYERS];
-	char			arena[MEM_SIZE];
 	unsigned int	nb_lives[MAX_PLAYERS];
+	char			arena[MEM_SIZE];
 	long long int	dump;
-	unsigned int	nb_players;
-	unsigned int	live_tot;
 	int				cycle_to_die;
+	unsigned int	live_tot;
+	unsigned int	nb_players;
 	char			_pad[4];
 }					t_env;
 
@@ -74,20 +94,26 @@ char			*merge_args(int ac, char **av);
 int				error(char *error_msg, char *file);
 int				check_live(t_env *env);
 int				check_id(t_env *env);
-long long int	find_id(t_env *env);
+int				check_cycle(t_env *env, t_process *process, int cur_cycle);
+int				add_instruction(t_env *env, int num_player);
+long long int	find_id(t_env *env, unsigned int nb_p);
 void			init_arena(t_env *env);
-int				process_cycle(t_env *env);
+int				cycle_run(t_env *env, curr_cycle);
 int				cw_loop(t_env *env);
-t_process		*new_lst(t_env *env, unsigned int num_pl, uint16_t pc);
-t_process		*push_lst(t_env *env, t_process *process, unsigned int num_pl,
-		uint16_t pc);
+int				create_first_process(t_env *env);
+t_process		*new_lst(t_env *env, int id, uint16_t pc);
+t_process		*push_lst(t_env *env, t_process *process, int id, uint16_t pc);
 t_process		*pop_lst(t_process *process, t_process *tmp,t_process *tmp2);
-int				reverse_bytes(t_player *player);
-void			*convert_instruction(char c);
+t_instruct		*pop_instruct(t_instruct *instruct, t_instruct *tmp, t_instruct *tmp2);
+t_instruct		*push_instruct(t_env *env, t_instruct *instruct,
+		unsigned int num_pl, uint16_t pc);
+t_instruct		*new_instruct(t_env *env, t_process *process, t_type *arg);
+int				*convert_instruction(char c);
 bool			encoding_byte(char c);
 bool			carry_flag(char c);
 int				nb_arg(char c);
 int				hex_convert(char a, char b, char c, char d);
+int				rev_bits(int num);
 
 //TESTS PROTO
 
@@ -103,21 +129,21 @@ void			test_system(void);
 
 //OP_FONCTION
 
-int				live(int direct);
-int				ld(int indirect, int direct_reg);
-int				st(int reg, int indirect_reg);
-int				add(int reg, int reg2, int reg3);
-int				sub(int reg, int reg2, int reg3);
-int				and(int reg_in_direct, int reg2_in_direct, int reg3);
-int				xor(int reg_in_direct, int reg2_in_direct, int reg3);
-int				or(int reg_in_direct, int reg2_in_direct, int reg3);
-int				zjmp(int direct);
-int				ldi(int reg_in_direct, int in_direct, int reg);
-int				sti(int reg, int reg_in_direct, int reg_direct);
-int				forky(int direct);
-int				lld(int in_direct, int reg);
-int				lldi(int reg_in_direct, int reg_direct, int reg);
-int				lfork(int direct);
-int				aff(int reg);
+int				live(t_env *env, t_type arg[3], char encoding_byte);
+int				ld(t_env *env, t_type arg[3], char encoding_byte);
+int				st(t_env *env, t_type arg[3], char encoding_byte);
+int				add(t_env *env, t_type arg[3], char encoding_byte);
+int				sub(t_env *env, t_type arg[3], char encoding_byte);
+int				and(t_env *env, t_type arg[3], char encoding_byte);
+int				xor(t_env *env, t_type arg[3], char encoding_byte);
+int				or(t_env *env, t_type arg[3], char encoding_byte);
+int				zjmp(t_env *env, t_type arg[3], char encoding_byte);
+int				ldi(t_env *env, t_type arg[3], char encoding_byte);
+int				sti(t_env *env, t_type arg[3], char encoding_byte);
+int				forky(t_env *env, t_type arg[3], char encoding_byte);
+int				lld(t_env *env, t_type arg[3], char encoding_byte);
+int				lldi(t_env *env, t_type arg[3], char encoding_byte);
+int				lfork(t_env *env, t_type arg[3], char encoding_byte);
+int				aff(t_env *env, t_type arg[3], char encoding_byte);
 
 #endif

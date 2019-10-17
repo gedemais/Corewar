@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 15:48:02 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 17:18:30 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,17 @@ int				error(char *error_msg, char *file)
 		ft_strdel(&file);
 	ft_putendl_fd(error_msg, STDERR_FILENO);
 	return (1);
+}
+
+int				rev_bits(int num)
+{
+	int		swapped;
+
+	swapped = ((num >> 24) & 0xff) |
+		((num << 8) & 0xff0000) |
+		(int)((num >> 8) & 0xff00) |
+		(int)((num << 24) & (int)0xff000000);
+	return (swapped);
 }
 
 int				check_id(t_env *env)
@@ -36,10 +47,10 @@ int				check_id(t_env *env)
 		i++;
 	}
 	i = 0;
-	while (tab[i] && i < 4)
+	while (i < env->nb_players)
 	{
 		j = i + 1;
-		while (tab[j] && j < 4)
+		while (j < env->nb_players)
 		{
 			if (tab[i] == tab[j] && tab[i] != 0)
 				return (1);
@@ -50,20 +61,14 @@ int				check_id(t_env *env)
 	return (0);
 }
 
-int				reverse_bytes(t_player *player)
-{
-	(void)player;
-	return (0);
-}
-
-long long int	find_id(t_env *env)
+long long int	find_id(t_env *env, unsigned int nb_p)
 {
 	unsigned int	i;
 	long long int	ret;
 
 	i = 0;
 	ret = 1;
-	while (i < env->nb_players)
+	while (i < nb_p)
 	{
 		if (ret == env->player[i].id)
 		{
@@ -87,26 +92,25 @@ int				loader(t_env *env, t_player *player, char *arg,
 		return (error(MALLOC_ERR, NULL));
 	if ((fd = open(file_name, O_RDONLY)) < 1)
 		return (error(FILE_ERR_MSG, file_name));
-	if ((ret = read(fd, (void*)&player->magic, 4)) < 1 || player->magic != 0xf383ea00)
+	if ((ret = read(fd, (void*)&player->magic, 4)) < 1
+			|| player->magic != 0xf383ea00)
 		return (error(FILE_ERR_MSG, file_name));
+	player->magic = (uint32_t)rev_bits((int)player->magic);
 	if ((ret = read(fd, &player->prog_name[0], PROG_NAME_LENGTH)) < 1
 		|| (ret = read(fd, &player->pad, 4)) < 1 || player->pad != 0)
 		return (error(FILE_ERR_MSG, file_name));
-	if ((ret = read(fd, &player->siz_rev[0], 4)) < 1 
-			&& (ft_strrev(&player->siz_rev[0])) && 
+	if (((ret = read(fd, &player->siz, 4)) < 1)) 
 		return (error(FILE_ERR_MSG, file_name));
-//	reverse_bytes(player);
+	if ((player->siz = (uint32_t)rev_bits((int)player->siz)) > CHAMP_MAX_SIZE)
+		return (error(FILE_ERR_MSG, file_name));
 	if ((ret = read(fd, &player->comment[0], COMMENT_LENGTH)) < 1
 			|| (ret = read(fd, &player->pad, 4)) < 1 || player->pad != 0
 			|| (ret = read(fd, &player->champ[0], player->siz)) < 1)
-	{
-		ft_putnbr((int)ret);
 		return (error(FILE_ERR_MSG, file_name));
-	}
 	ft_strdel(&file_name);
-	if (player->id == 0)
-		player->id = find_id(env);
-	check_id(env);
 	env->nb_players++;
+	if (player->id == 0)
+		player->id = find_id(env, env->nb_players);
+	check_id(env);
 	return (0);
 }

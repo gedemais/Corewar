@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 10:07:09 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 19:10:11 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 16:40:38 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	test_get_opt_champ_loader(char *arg)
 	if (arg)
 		get_opt_champ(&env, arg);
 	else
-		get_opt_champ(&env, "-dump 154 toto.cor -n 2 helltrain.cor -n 1 ex.cor turtle.cor");
+		get_opt_champ(&env, "-dump 154 toto.cor -n 4 helltrain.cor -n 1 ex.cor turtle.cor");
 	aff_env(&env, 1);
 }
 /*
