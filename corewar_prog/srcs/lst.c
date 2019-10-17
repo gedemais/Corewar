@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:08:31 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/15 17:17:04 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/16 13:17:27 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,13 @@ t_process	*new_lst(t_env *env, unsigned int num_pl, uint16_t pc)
 		free(new);
 		return (NULL);
 	}
-	new->r[0] = env->player[num_pl].id;
+	new->r[0] = (int)env->player[num_pl].id;
 	new->pc = pc;
 	return (new);
 }
 
 t_process	*push_lst(t_env *env, t_process *process, unsigned int num_pl,
-		unsigned int pc)
+		uint16_t pc)
 {	
 	t_process	*new;
 	t_process	*tmp;
@@ -43,30 +43,31 @@ t_process	*push_lst(t_env *env, t_process *process, unsigned int num_pl,
 	return (new);
 }
 
-t_process	*pop_lst(t_process *process)
+t_process	*pop_lst(t_process *process, t_process *tmp, t_process *tmp2)
 {
-	t_process	*tmp;
-	t_process	*tmp2;
-
-	if (process->prev)
+	if (process->prev || process->next)
 	{
-		tmp = process->prev;
-		if (process->next)
+		if (process->prev && process->next)
 		{
-			tmp2 = process->next;
-			tmp->next = tmp2;
-			tmp2->prev = tmp;
+			process = process->next;
+			tmp2 = tmp->prev;
+			process->prev = tmp2;
+			tmp2->next = process;
 		}
-		else
-			tmp->next = NULL;
-		ft_memdel(&process);
-		return (tmp2);
+		else if (process->prev && !process->next)
+		{
+			process = process->prev;
+			process->next = NULL;
+
+		}
+		else if (!process->prev && process->next)
+		{
+			process = process->next;
+			process->prev = NULL;
+		}
+		ft_memdel((void**)&tmp);
+		return (process);
 	}
-	else if (process->next)
-	{
-		tmp = process->next;
-		tmp->prev = NULL;
-	}
-	ft_memdel(&process);
+	ft_memdel((void**)&process);
 	return (NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:16:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 11:00:13 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/16 12:03:48 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	lld(int in_direct, int reg)
 	return (0);
 }
 
-int	lldl(int reg_in_direct, int reg_direct, int reg)
+int	lldi(int reg_in_direct, int reg_direct, int reg)
 {
 	return (0);
 }

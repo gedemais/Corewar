@@ -1,4 +1,4 @@
-i/* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,7 +6,7 @@ i/* ************************************************************************** *
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 11:02:03 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/16 12:26:55 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,15 +20,15 @@ static inline void	free_queue(t_env *env)
 	{
 		while (env->queue_process->next)
 		{
-			tmp = queue_process;
-			queue_process = queue_process->next;
+			tmp = env->queue_process;
+			env->queue_process = env->queue_process->next;
 			if (tmp->r)
-				ft_memdel(&tmp->r);
-			ft_memdel(&tmp);
+				ft_memdel((void**)&tmp->r);
+			ft_memdel((void**)&tmp);
 		}
-		if (queue_process->r)
-			ft_memdel(&queue_process->r);
-			ft_memdel(&queue_process);
+		if (env->queue_process->r)
+			ft_memdel((void**)&env->queue_process->r);
+			ft_memdel((void**)&env->queue_process);
 	}
 }
 
@@ -36,19 +36,20 @@ void				free_env(t_env *env)
 {
 	t_process	*tmp;
 
+	tmp = NULL;
 	if (env->process)
 	{
 		while (env->process->next)
 		{
-			tmp = process;
-			process = process->next;
+			tmp = env->process;
+			env->process = env->process->next;
 			if (tmp->r)
-				ft_memdel(&tmp->r);
-			ft_memdel(&tmp);
+				ft_memdel((void**)&tmp->r);
+			ft_memdel((void**)&tmp);
 		}
-		if (process->r)
-			ft_memdel(&process->r);
-			ft_memdel(&process);
+		if (env->process->r)
+			ft_memdel((void**)&env->process->r);
+			ft_memdel((void**)&env->process);
 	}
 	free_queue(env);
 }
@@ -76,44 +77,19 @@ int					main(int ac, char **av)
 	if (ac > MAX_ARGS || ac < 3)
 	{
 		ft_putendl_fd(TOO_MANY_ARGS, STDERR_FILENO);
-		return (error(USAGE, arg));	
+		return (error(USAGE, NULL));	
 	}
 	ft_memset(&env, 0, sizeof(t_env));
 	if (!(arg = merge_args(ac, av)))
 	{
 		ft_putendl_fd(BAD_ARGS, STDERR_FILENO);
-		return (error(USAGE, arg));	
+		return (error(USAGE, NULL));	
 	}
 	if (vm(&env, arg))
 	{
 		free_env(&env);
 		return (1);
 	}
-	print_test(&env);
 	free_env(&env);
 	return (0);
-}
-
-void				print_test(t_env *env)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < env->nb_players)
-	{
-		printf("magic = %d\n", env->player[i].magic);
-		printf("id = %lld\n", env->player[i].id);
-		i++;
-	}
-	i = 0;
-	while (i < env->nb_players)
-	{
-		printf("file %u\n%s\n", i, env->files[i]);
-		i++;
-	}
-//	printf("Arena :%s\n\n", env->arena);
-	printf("nb_players : %u\n", env->nb_players);
-	printf("dump : %lld\n", env->dump);
-	printf("cycle_to_die : %u\n", env->cycle_to_die);
-	printf("cycle_delta : %u\n", env->cycle_delta);
 }

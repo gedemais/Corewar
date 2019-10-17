@@ -6,11 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 10:07:09 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/15 15:38:29 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/16 19:10:11 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "corewar.c"
+#include "corewar.h"
 #include <stdio.h>
 
 void	test_lst(void)
@@ -21,56 +21,68 @@ void	test_lst(void)
 	t_process	*process2;
 	
 	ft_memset(&env, 0, sizeof(t_env));
-	env->player[0].id = 53;
-	env->player[1].id = 4;
-	env->player[2].id = 58967;
-	env->player[3].id = 147258369;
+	env.player[0].id = 53;
+	env.player[1].id = 4;
+	env.player[2].id = 58967;
+	env.player[3].id = 147258369;
 	beginning = new_lst(&env, 4, 3072);
 	process2 = beginning;
 	printf("********NEW_PROCESS********\n\n");
 	aff_process(beginning);
-	beginning = push_lst(env, beginning, 3, 2048);
+	beginning = push_lst(&env, beginning, 3, 2048);
 	printf("********ONE_PUSH********\n\n");
 	aff_process(beginning);
-	process = push_lst(env, beginning, 1, 0);
+	process = push_lst(&env, beginning, 1, 0);
 	beginning = process;
-	beginning = push_lst(env, beginning, 2, 1024);
+	beginning = push_lst(&env, beginning, 2, 1024);
 	printf("********THREE_PUSH********\n\n");
 	aff_process(beginning);
-	pop_lst(process);
+	pop_lst(process, process, NULL);
 	printf("********ONE_POP********\n\n");
 	aff_process(beginning);
-	pop_lst(process2);
+	pop_lst(process2, process2, NULL);
 	printf("********TWO_POP********\n\n");
 	aff_process(beginning);
 	while (beginning->next)
 	{
 		process = beginning;
 		beginning = beginning->next;
-		free(process->r);
-		process->r = NULL;
-		free(process);
+		if (process)
+		{
+			if (process->r)
+			{
+				free(process->r);
+				process->r = NULL;
+			}
+			free(process);
+			process = NULL;
+		}
 	}
-	free(beginning->r);
-	beginning->r = NULL;
-	free(beginning);
-	process = NULL;
+	if (beginning)
+	{
+		if (beginning->r)
+		{
+			free(beginning->r);
+			beginning->r = NULL;	
+		}
+		beginning = NULL;
+		free(beginning);
+	}
 	process2 = NULL;
-	beginning = NULL;
 }
 
 void	test_get_opt_champ_loader(char *arg)
 {
 	t_env	env;
 
-	ft_memset(env, 0, sizeof(t_env));
+	ft_memset(&env, 0, sizeof(t_env));
 	if (arg)
-		get_opt_champ(env, arg);
+		get_opt_champ(&env, arg);
 	else
-		get_
-	aff_env(env, 1);
+		get_opt_champ(&env, "-dump 154 toto.cor -n 2 helltrain.cor -n 1 ex.cor turtle.cor");
+	aff_env(&env, 1);
 }
-
+/*
 void	test_convert_instruction(void)
 {
 	int		ret;
@@ -97,8 +109,8 @@ void	test_convert_instruction(void)
 	printf("ENCODING_BYTE 1 = %d\n\n", ret);
 	ret = encoding_byte(15);
 	printf("ENCODING_BYTE 1 = %d\n\n", ret);
-	p = convert_instrucion(0);
-	printf("ADRESSE DE LA FONCTION LIVE = %p\n\n", &live);
+	p = convert_instruction(0);
+	printf("ADRESSE DE LA FONCTION LIVE = %p\n\n", (void*)&live);
 	printf("TAB_INSTRUCTION[0] = %p\n\n", p);
 
 }
@@ -110,7 +122,7 @@ void	test_cw_loop(void)
 void	test_system(void)
 {
 }
-
+*/
 int		main(int ac, char **av)
 {
 	if (ac == 1)
@@ -118,7 +130,7 @@ int		main(int ac, char **av)
 		(void)av;
 		test_lst();
 		test_get_opt_champ_loader(NULL);
-		test_convert_instruction();
+//		test_convert_instruction();
 //		test_cw_loop();
 //		test_system();
 	

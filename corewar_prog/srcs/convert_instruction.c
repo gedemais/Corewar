@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 11:21:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/15 17:30:37 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/16 12:05:32 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int		hex_convert(char a, char b, char c, char d)
 	tab[1] = b;
 	tab[2] = c;
 	tab[3] = d;
-	return ((int)tab);
+	return ((int)tab[0]);
 }
 
 int		nb_arg(char c)
@@ -47,11 +47,11 @@ bool	encoding_byte(char c)
 	return (encoding_tab[c - 1]);
 }
 
-void	*convert_instruction(char c, t_env *env)
+int		*convert_instruction(char c)
 {
-	static void		(*cw_func[NB_FUNC])(t_env*) = {&live, &ld, &st, &add,
+	static int		(*cw_func[NB_FUNC])(t_env*) = {&live, &ld, &st, &add,
 			&sub, &and, &or, &xor, &zjmp, &ldi, &sti, &fork, &lld, &lldi,
 			&lfork, &aff};
 
-	return (&cw_func_[c - 1](env));
+	return (&cw_func[c - 1]);
 }
