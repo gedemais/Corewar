@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 12:15:41 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/15 17:49:29 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/16 16:53:04 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ void	aff_player(t_player *player)
 	printf("********CHAMPION*******\n\n");
 	printf("%s\n\n", player->champ);
 	printf("*********INFO**********\n\n");
-	printf("MAGIC = %X\n", player->magic);
+	printf("MAGIC = %x\n", player->magic);
 	printf("SIZE = %u\n", player->siz);
 	printf("FIRST_PC = %u\n", player->first_pc);
 	printf("WAIT_CYCLE = %d\n", player->cycle_to_process);
@@ -78,6 +78,7 @@ void	aff_process(t_process *process)
 		printf("carry = %d\n", tmp->carry);
 		printf("prev = %p\n", (void*)tmp->prev);
 		printf("next = %p\n\n", (void*)tmp->next);
+		printf("R[0] = id = %d\n\n", tmp->r[0]);
 		tmp = tmp->next;
 		i++;
 	}
@@ -87,4 +88,5 @@ void	aff_process(t_process *process)
 	printf("carry = %d\n", tmp->carry);
 	printf("prev = %p\n", (void*)tmp->prev);
 	printf("next = %p\n\n", (void*)tmp->next);
+	printf("R[0] = id = %d\n\n", tmp->r[0]);
 }

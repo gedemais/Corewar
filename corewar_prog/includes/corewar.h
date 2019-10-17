@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/15 17:56:17 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/17 15:28:15 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct		s_player
 	char			comment[COMMENT_LENGTH + 1];
 	char			champ[CHAMP_MAX_SIZE];
 	char			prog_name[PROG_NAME_LENGTH + 1];
+	char			siz_rev[4];
 	uint32_t		pad;
 	uint32_t		magic;
 	uint32_t		siz;
@@ -70,18 +71,19 @@ int				get_opt_champ(t_env *env, char *arg);
 unsigned int	get_name_len(char *name);
 int				loader(t_env *env, t_player *player, char *arg, int len);
 char			*merge_args(int ac, char **av);
-void			print_test(t_env *env);
 int				error(char *error_msg, char *file);
 int				check_live(t_env *env);
+int				check_id(t_env *env);
+long long int	find_id(t_env *env);
 void			init_arena(t_env *env);
 int				process_cycle(t_env *env);
 int				cw_loop(t_env *env);
 t_process		*new_lst(t_env *env, unsigned int num_pl, uint16_t pc);
 t_process		*push_lst(t_env *env, t_process *process, unsigned int num_pl,
 		uint16_t pc);
-t_process		*pop_lst(t_process *process);
+t_process		*pop_lst(t_process *process, t_process *tmp,t_process *tmp2);
 int				reverse_bytes(t_player *player);
-void			*convert_instruction(char c, t_env *env);
+void			*convert_instruction(char c);
 bool			encoding_byte(char c);
 bool			carry_flag(char c);
 int				nb_arg(char c);
@@ -94,7 +96,7 @@ void			aff_player(t_player *player);
 void			aff_process(t_process *process);
 void			test_lst(void);
 void			test_loader(void);
-void			test_get_opt_champ(void);
+void			test_get_opt_champ_loader(char *arg);
 void			test_convert_instruction(void);
 void			test_cw_loop(void);
 void			test_system(void);
@@ -114,7 +116,7 @@ int				ldi(int reg_in_direct, int in_direct, int reg);
 int				sti(int reg, int reg_in_direct, int reg_direct);
 int				forky(int direct);
 int				lld(int in_direct, int reg);
-int				lldl(int reg_in_direct, int reg_direct, int reg);
+int				lldi(int reg_in_direct, int reg_direct, int reg);
 int				lfork(int direct);
 int				aff(int reg);
 

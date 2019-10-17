@@ -1,0 +1,226 @@
+********NEW_PROCESS********
+
+******************LAST_PROCESS OR ONLY_PROCESS******************
+
+Process 0
+
+PC = 3072
+carry = 0
+prev = 0x0
+next = 0x0
+
+R[0] = id = 0
+
+********ONE_PUSH********
+
+******************PROCESS******************
+
+Process 0
+
+PC = 2048
+carry = 0
+prev = 0x0
+next = 0x7ffaa3400620
+
+R[0] = id = 147258369
+
+******************LAST_PROCESS OR ONLY_PROCESS******************
+
+Process 1
+
+PC = 3072
+carry = 0
+prev = 0x7ffaa3400670
+next = 0x0
+
+R[0] = id = 0
+
+********THREE_PUSH********
+
+******************PROCESS******************
+
+Process 0
+
+PC = 1024
+carry = 0
+prev = 0x0
+next = 0x7ffaa3402b00
+
+R[0] = id = 58967
+
+******************PROCESS******************
+
+Process 1
+
+PC = 0
+carry = 0
+prev = 0x7ffaa3402b60
+next = 0x7ffaa3400670
+
+R[0] = id = 4
+
+******************PROCESS******************
+
+Process 2
+
+PC = 2048
+carry = 0
+prev = 0x7ffaa3402b00
+next = 0x7ffaa3400620
+
+R[0] = id = 147258369
+
+******************LAST_PROCESS OR ONLY_PROCESS******************
+
+Process 3
+
+PC = 3072
+carry = 0
+prev = 0x7ffaa3400670
+next = 0x0
+
+R[0] = id = 0
+
+********ONE_POP********
+
+******************PROCESS******************
+
+Process 0
+
+PC = 1024
+carry = 0
+prev = 0x0
+next = 0x7ffaa3400670
+
+R[0] = id = 58967
+
+******************PROCESS******************
+
+Process 1
+
+PC = 2048
+carry = 0
+prev = 0x7ffaa3402b60
+next = 0x7ffaa3400620
+
+R[0] = id = 147258369
+
+******************LAST_PROCESS OR ONLY_PROCESS******************
+
+Process 2
+
+PC = 3072
+carry = 0
+prev = 0x7ffaa3400670
+next = 0x0
+
+R[0] = id = 0
+
+********TWO_POP********
+
+******************PROCESS******************
+
+Process 0
+
+PC = 1024
+carry = 0
+prev = 0x0
+next = 0x7ffaa3400670
+
+R[0] = id = 58967
+
+******************LAST_PROCESS OR ONLY_PROCESS******************
+
+Process 1
+
+PC = 2048
+carry = 0
+prev = 0x7ffaa3402b60
+next = 0x0
+
+R[0] = id = 147258369
+
+*******************ENV********************
+
+*******************PLAYER*****************
+
+ID = 1
+********COMMENT********
+
+Jour J
+
+*******PROG_NAME*******
+
+Celebration Funebre v0.99pl42
+
+********CHAMPION*******
+
+ê
+
+*********INFO**********
+
+MAGIC = f383ea00
+SIZE = 1157693440
+FIRST_PC = 0
+WAIT_CYCLE = 0
+DEAD = NO
+*******************PLAYER*****************
+
+ID = 2
+********COMMENT********
+
+choo-choo, motherf*****s !
+
+*******PROG_NAME*******
+
+helltrain
+
+********CHAMPION*******
+
+há
+
+*********INFO**********
+
+MAGIC = f383ea00
+SIZE = 1761738752
+FIRST_PC = 0
+WAIT_CYCLE = 0
+DEAD = NO
+*******************PLAYER*****************
+
+ID = 1
+********COMMENT********
+
+just a basic living prog
+
+*******PROG_NAME*******
+
+zork
+
+********CHAMPION*******
+
+h
+
+*********INFO**********
+
+MAGIC = f383ea00
+SIZE = 385875968
+FIRST_PC = 0
+WAIT_CYCLE = 0
+DEAD = NO
+*********INFO**********
+
+DUMP = 154
+NB_PLAYER = 3
+LIVE TOTAL = 0
+
+LIVE PLAYER 0 = 0
+LIVE PLAYER 1 = 0
+LIVE PLAYER 2 = 0
+
+CYCLE_TO_DIE = 0
+
+*******************ARENA*****************
+
+
+

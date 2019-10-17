@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:14:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/15 17:20:45 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/16 16:18:06 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,10 @@
 # define TOO_MANY_ARGS "Too many arguments, only 4 champions can fight in the area at once..."
 # define BAD_ARGS "Bad option or file."
 # define FILE_ERR_MSG "Can't Open or Read one of the file."
-# define BAD_NUMBER "Dump or number are not integers or are below 1."
+# define BAD_NUMBER "Dump isn't between 1 and INT_MAX."
+# define BAD_ID "ID is not between 1 and number_player."
 # define VM_ERR "Virtual machine error."
+# define MALLOC_ERR "Malloc error."
 
 //PARSING
 
@@ -32,7 +34,7 @@
 
 //NAME
 
-# define DUMP "dump"
+# define DUMP "-dump "
 # define EXT ".cor"
 # define BAD_FILE "File Error."
 

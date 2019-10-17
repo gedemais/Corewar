@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/16 11:12:27 by moguy            ###   ########.fr        #
+#    Updated: 2019/10/17 15:18:26 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ WHI = \033[37m
 ORG = \033[1;31m
 
 NAME=corewar
+INSPECTION=glaoui
 
 CC=gcc
 CFLAGS= -Weverything -Wall -Werror -Wextra
@@ -49,28 +50,52 @@ SRCS_NAME=	main.c\
 			loader.c\
 			check.c\
 			get_name_len.c\
-			cw_loop.c\
-			convert_instruction.c\
 			lst.c\
 			aff.c\
 			merge_args.c
 
+SRCS_TEST= loader.c\
+		   main_test.c\
+		   check.c\
+		   get_name_len.c\
+		   lst.c\
+		   aff.c\
+		   merge_args.c
+
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
+S_TEST=$(addprefix $(SRCS_PATH), $(SRCS_TEST))
 
 OBJS_PATH=objs/
 OBJS_NAME=$(SRCS_NAME:.c=.o)
 
-OBJS=$(addprefix $(OBJS_PATH), $(OBJS_NAME))
+OBJS_PATH_TEST=objstest/
+OBJS_TEST=$(SRCS_TEST:.c=.o)
 
-all: $(LIB) $(NAME)
+OBJS=$(addprefix $(OBJS_PATH), $(OBJS_NAME))
+O_TEST=$(addprefix $(OBJS_PATH_TEST), $(OBJS_TEST))
+
+all: $(LIB) $(INSPECTION) 
+
+inspection: $(LIB) $(INSPECTION)
 
 $(LIB):
 	@make -C $(LIB_PATH)
+
+$(INSPECTION) : $(O_TEST)
+	@$(CC) $(CFLAGS) -o $(INSPECTION) -I $(INC_PATH) $(O_TEST)  $(LIB)
+	@cp $(INSPECTION) ../
+	@echo "$(GRE)Done !$(DEF)"
 
 $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS)  $(LIB)
 	@cp $(NAME) ../
 	@echo "$(GRE)Done !$(DEF)"
+
+$(OBJS_PATH_TEST)%.o : $(SRCS_PATH)%.c $(INC)
+	@echo "Making $(RED)Inspection du travail$(DEF)..."
+	@mkdir -p $(OBJS_PATH_TEST)
+	@$(CC) $(CFLAGS) -c $(S_TEST) -I $(INC_PATH)
+	@mv $(OBJS_TEST) $(OBJS_PATH_TEST)
 
 $(OBJS_PATH)%.o : $(SRCS_PATH)%.c $(INC)
 	@echo "Making $(RED)COREWAR virtual machine$(DEF)..."
@@ -80,10 +105,12 @@ $(OBJS_PATH)%.o : $(SRCS_PATH)%.c $(INC)
 
 clean:
 	@rm -rf $(OBJS_PATH)
+	@rm -rf $(OBJS_PATH_TEST)
 	@make -C $(LIB_PATH) clean
 
 fclean: clean
 	@rm -rf $(NAME)
+	@rm -rf $(INSPECTION)
 	@make -C $(LIB_PATH) fclean
 
 
