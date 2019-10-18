@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 11:21:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/18 13:44:28 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/18 15:57:44 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int		wait_cycle(char c)
 
 int		*convert_instruction(char c)
 {
-	static int		(*cw_func[NB_FUNC])(t_env *env, t_type arg[3],
-			char encoding_byte) = {&live, &ld, &st, &add, &sub, &and, &or,
-		&xor, &zjmp, &ldi, &sti, &fork, &lld, &lldi, &lfork, &aff};
+	static int		(*cw_func[NB_FUNC])(t_env*, t_instruct*) = {&live, &ld, &st,
+		&add, &sub, &and, &or, &xor, &zjmp, &ldi, &sti, &fork, &lld,
+		&lldi, &lfork, &aff};
 
 	return (&cw_func[c - 1]);
 }

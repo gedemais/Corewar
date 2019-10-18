@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/18 13:54:21 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/18 16:26:47 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,16 @@
 
 //STRUCTURES ET UNION
 
+enum						e_arg_type
+{
+	TYPE_NONE,
+	TYPE_DIR4,
+	TYPE_DIR2,
+	TYPE_IND,
+	TYPE_REG,
+	TYPE_MAX
+};
+
 typedef union u_type		t_type;
 
 union			u_type
@@ -29,7 +39,7 @@ union			u_type
 	int			direct;
 	short		direct2;
 	short		indirect;
-	char		registre;
+	int			registre;
 };
 
 typedef struct s_process	t_process;
@@ -39,9 +49,6 @@ struct			s_process
 	t_process	*prev;
 	t_process	*next;
 	int			*r;
-	t_type		arg[MAX_ARG_FUNC];
-	char		type[MAX_ARG_FUNC];
-	int			instruct_len;
 	int			wait_cycle;
 	int			carry;
 	uint32_t	padding : 20;
@@ -49,13 +56,15 @@ struct			s_process
 	char		op_code;
 };
 
-typedef struct s_instruct	t_instruc;
+typedef struct s_instruct	t_instruct;
 
 struct			s_instruct
 {
 	t_instruct	*prev;
 	t_instruct	*next;
 	t_process	*process;
+	t_type		arg[MAX_ARG_FUNC];
+	char		type[MAX_ARG_FUNC];
 	char		op_code;
 };
 
@@ -71,6 +80,7 @@ typedef struct		s_player
 	uint32_t		siz;
 	char			padding[6];
 	bool			dead;
+	char			pad2[4];
 }					t_player;
 
 typedef struct		s_env
@@ -110,12 +120,12 @@ int				loader(t_env *env, t_player *player, char *arg, int len);
 int				add_instruction(t_env *env, int num_player);
 int				check_instruct(t_env *env, t_process *process);
 int				check_live(t_env *env);
-int				check_op(t_env *env, t_process *process)
+int				check_op(t_env *env, t_process *process);
 int				create_first_process(t_env *env);
 int				cw_loop(t_env *env);
 int				cycle_run(t_env *env, curr_cycle);
 void			init_arena(t_env *env);
-int				load_op(t_env *env, t_process *process)
+int				load_op(t_env *env, t_process *process);
 
 //Tableau de statique
 
@@ -149,21 +159,21 @@ void			test_system(void);
 
 //OP_FONCTION
 
-int				live(t_env *env, t_type arg[3], char encoding_byte);
-int				ld(t_env *env, t_type arg[3], char encoding_byte);
-int				st(t_env *env, t_type arg[3], char encoding_byte);
-int				add(t_env *env, t_type arg[3], char encoding_byte);
-int				sub(t_env *env, t_type arg[3], char encoding_byte);
-int				and(t_env *env, t_type arg[3], char encoding_byte);
-int				xor(t_env *env, t_type arg[3], char encoding_byte);
-int				or(t_env *env, t_type arg[3], char encoding_byte);
-int				zjmp(t_env *env, t_type arg[3], char encoding_byte);
-int				ldi(t_env *env, t_type arg[3], char encoding_byte);
-int				sti(t_env *env, t_type arg[3], char encoding_byte);
-int				forky(t_env *env, t_type arg[3], char encoding_byte);
-int				lld(t_env *env, t_type arg[3], char encoding_byte);
-int				lldi(t_env *env, t_type arg[3], char encoding_byte);
-int				lfork(t_env *env, t_type arg[3], char encoding_byte);
-int				aff(t_env *env, t_type arg[3], char encoding_byte);
+int				live(t_env *env, t_instruct *inst);
+int				ld(t_env *env, t_instruct *inst);
+int				st(t_env *env, t_instruct *inst);
+int				add(t_env *env, t_instruct *inst);
+int				sub(t_env *env, t_instruct *inst);
+int				and(t_env *env, t_instruct *inst);
+int				xor(t_env *env, t_instruct *inst);
+int				or(t_env *env, t_instruct *inst);
+int				zjmp(t_env *env, t_instruct *inst);
+int				ldi(t_env *env, t_instruct *inst);
+int				sti(t_env *env, t_instruct *inst);
+int				forky(t_env *env, t_instruct *inst);
+int				lld(t_env *env, t_instruct *inst);
+int				lldi(t_env *env, t_instruct *inst);
+int				lfork(t_env *env, t_instruct *inst);
+int				aff(t_env *env, t_instruct *inst);
 
 #endif
