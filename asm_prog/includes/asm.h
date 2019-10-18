@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 18:27:04 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/18 13:48:09 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,8 +123,8 @@ typedef struct			s_lexem
 	unsigned int		start;
 	char				opcode;
 	char				type;
-	char				encoding;
-	char				pad;
+	unsigned char		encoding;
+	char				dir_size;
 	t_args				args[MAX_ARGS_NUMBER];
 }						t_lexem;
 
@@ -186,7 +186,7 @@ typedef	struct			s_env
 ** Mains
 */
 void					print_lst(t_token *lst);
-void print_byte_as_bits(char val);
+void					print_byte_as_bits(unsigned char val);
 int						loader(t_env *env, char *file_name);
 
 /*
@@ -259,7 +259,7 @@ int						lexer(t_env *env);
 */
 
 char					find_op(char *op);
-char					encoding_byte(char byte, unsigned int param, int type);
+unsigned char			encoding_byte(unsigned char byte, unsigned int param, int type);
 bool					encoding_byte_pres(char type);
 
 char					get_lex_name_prop(t_env *env, t_token *tok);
@@ -344,7 +344,7 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 ** Bytecode translating
 */
 void					reverse_bits(char buff[LBE_BUFFER], int n);
-char					rev_bits(char byte);
+unsigned char			rev_bits(unsigned char b, bool shift);
 
 int						write_bytecode(t_env *env);
 int						write_header(t_env *env, int fd);

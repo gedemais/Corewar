@@ -6,17 +6,18 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 14:15:23 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 18:29:50 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/18 13:10:07 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-void print_byte_as_bits(char val) {
+void print_byte_as_bits(unsigned char val) {
   for (int i = 7; 0 <= i; i--) {
     printf("%c ", (val & (1 << i)) ? '1' : '0');
   }
   printf("\n");
+  fflush(stdout);
 }
 
 bool	encoding_byte_pres(char type)
@@ -26,7 +27,7 @@ bool	encoding_byte_pres(char type)
 	return (bytes[(int)type]);
 }
 
-char	encoding_byte(char byte, unsigned int param, int type)
+unsigned char	encoding_byte(unsigned char byte, unsigned int param, int type)
 {
 	static int		pow[6] = {128, 64, 32, 16, 8, 4};
 

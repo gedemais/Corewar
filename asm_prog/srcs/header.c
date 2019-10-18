@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 18:31:45 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/18 13:26:03 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,15 @@ void	reverse_bits(char buff[LBE_BUFFER], int num)
 	ft_memcpy(&buff[0], &swapped, sizeof(int));
 }
 
-char rev_bits(char b)
+unsigned char rev_bits(unsigned char b, bool shift)
 {
-	print_byte_as_bits(b);
-	b = (char)((b & 0xF0) >> 4 | (b & 0x0F) << 4);
-	b = (char)((b & 0xCC) >> 2 | (b & 0x33) << 2);
-	b = (char)((b & 0xAA) >> 1 | (b & 0x55) << 1);
-	print_byte_as_bits(b);
-	return b;
+	b = (unsigned char)((b & 0xF0) >> 4 | (b & 0x0F) << 4);
+	b = (unsigned char)((b & 0xCC) >> 2 | (b & 0x33) << 2);
+	b = (unsigned char)((b & 0xAA) >> 1 | (b & 0x55) << 1);
+	(void)shift;
+	if (shift)
+		b = (unsigned char)(b << 2);
+	return (b);
 }
 
 static inline int	get_op_size(t_lexem *lex)

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 12:52:20 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 19:04:37 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/18 15:31:03 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,48 @@ static inline void	print_lexem(t_lexem lex)
 			break;
 	}
 }
-/*
+
+static inline int	set_dir_size(t_env *env)
+{
+	static char		sizes[NB_OPS] = {4, 4, 4, 2, 2, 4, 2, 4, 2, 4, 4, 4, 2, 4, 4, 2};
+	unsigned int	i;
+
+	i = 0;
+	while (i < env->nb_lex)
+	{
+		env->lexemes[i].dir_size = (char)sizes[(int)env->lexemes[i].type];
+		i++;
+	}
+	return (0);
+}
+
+
+static inline void	write_indirect_number(int fd, t_lexem lex)
+{
+	
+}
+
+static inline void	write_direct_number()
+{
+		
+}
+
+static inline void	write_register()
+{
+		
+}
+
 static inline void	write_params(t_lexem lex, int fd)
 {
-	write(fd, &lex.opcode, sizeof(char));
+	(void)fd;
 	if (lex.encoding & 128 && lex.encoding & 64)
-	{
-		write(fd, )
+		write_indirect_number(fd, lex);
 		printf("indirect number (%lld)\n", lex.args[0].nb);
-	}
 	if ((lex.encoding & 128) && !(lex.encoding & 64))
+		write_direct_number(fd, lex);
 		printf("direct number (%lld)\n", lex.args[0].nb);
 	if (!(lex.encoding & 128) && (lex.encoding & 64))
+		write_register(fd, lex);
 		printf("register (r%d)\n", lex.args[0].reg);
 
 	if (lex.encoding & 32 && lex.encoding & 16)
@@ -84,7 +114,14 @@ static inline void	write_params(t_lexem lex, int fd)
 		printf("direct number (%lld)\n", lex.args[2].nb);
 	if (!(lex.encoding & 8) && (lex.encoding & 4))
 		printf("register (r%d)\n", lex.args[1].reg);
-}*/
+}
+
+static inline void	write_encoding(unsigned char byte, int fd)
+{
+	print_byte_as_bits(byte);
+//	byte = rev_bits(byte, true);
+	write(fd, &byte, sizeof(char));
+}
 
 int					write_bytecode(t_env *env)
 {
@@ -94,7 +131,7 @@ int					write_bytecode(t_env *env)
 
 	i = 0;
 	if ((fd = open(env->file_name, O_CREAT|O_WRONLY, 0666)) < 0
-		|| write_header(env, fd) != 0)
+		|| write_header(env, fd) != 0 || set_dir_size(env) != 0)
 		return (-1);
 	while (i < env->nb_lex)
 	{
@@ -102,7 +139,9 @@ int					write_bytecode(t_env *env)
 		{
 			tmp = g_opcodes[(int)env->lexemes[i].opcode];
 			write(fd, &tmp, sizeof(char));
-//			write_params(env->lexemes[i], fd);
+			if (encoding_byte_pres(env->lexemes[i].opcode))
+				write_encoding(env->lexemes[i].encoding, fd);
+			write_params(env->lexemes[i], fd);
 		}
 		print_lexem(env->lexemes[i]);
 		i++;
