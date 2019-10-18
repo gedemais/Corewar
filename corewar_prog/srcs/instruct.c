@@ -6,13 +6,13 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/17 18:46:33 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/17 20:50:30 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/18 12:20:50 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-t_instruct	*new_instruct(t_process *process, t_type *arg)
+t_instruct	*new_instruct(t_process *process)
 {
 	t_instruct	*new;
 
@@ -20,19 +20,16 @@ t_instruct	*new_instruct(t_process *process, t_type *arg)
 		return (NULL);
 	ft_memset(new, 0, sizeof(t_instruct));
 	new->process = process;
-	new->arg[0] = arg[0];
-	new->arg[1] = arg[1];
-	new->arg[2] = arg[2];
+	new->op_code = process->op_code;
 	return (new);
 }
 
-t_instruct	*push_instruct(t_process *process, t_instruct *instruct,
-		unsigned int num_pl, uint16_t pc)
+t_instruct	*push_instruct(t_process *process, t_instruct *instruct)
 {	
 	t_instruct	*new;
 	t_instruct	*tmp;
 
-	if (!(new = new_instruct(env, process, pc)))
+	if (!(new = new_instruct(env, process)))
 		return (NULL);
 	instruct->prev = new;
 	tmp = instruct;

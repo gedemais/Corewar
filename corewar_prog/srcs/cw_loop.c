@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/17 21:12:08 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/18 12:04:53 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,9 @@ int		cycle_run(t_env *env, int curr_cycle)
 	i = 0;
 	while (i < env->nb-players && !env->player[i].dead)
 	{
-		check_cycle(env, &env->player[i], curr_cycle);
-		add_instruction(env, i);
+		if (add_instruction(env, env->process, curr_cycle))
+			return (1);
+		check_instruct(env);
 		i++;
 	}
 	return (0);

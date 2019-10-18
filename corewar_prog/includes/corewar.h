@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/17 21:22:36 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/18 13:54:21 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <string.h>
 # include <sys/types.h>
 
-//STRUCTURES
+//STRUCTURES ET UNION
 
 typedef union u_type		t_type;
 
@@ -39,10 +39,14 @@ struct			s_process
 	t_process	*prev;
 	t_process	*next;
 	int			*r;
+	t_type		arg[MAX_ARG_FUNC];
+	char		type[MAX_ARG_FUNC];
+	int			instruct_len;
 	int			wait_cycle;
 	int			carry;
-	uint32_t	_pad : 20;
+	uint32_t	padding : 20;
 	uint16_t	pc : 12;
+	char		op_code;
 };
 
 typedef struct s_instruct	t_instruc;
@@ -52,7 +56,6 @@ struct			s_instruct
 	t_instruct	*prev;
 	t_instruct	*next;
 	t_process	*process;
-	t_type		arg[3];
 	char		op_code;
 };
 
@@ -66,7 +69,7 @@ typedef struct		s_player
 	uint32_t		pad;
 	uint32_t		magic;
 	uint32_t		siz;
-	char			_pad[6];
+	char			padding[6];
 	bool			dead;
 }					t_player;
 
@@ -84,47 +87,64 @@ typedef struct		s_env
 	char			_pad[4];
 }					t_env;
 
-//PROTOTYPES
+/////////////////////PROTOTYPES/////////////////////
 
+//Ajouter a la lib
+
+unsigned int	get_name_len(char *name);
+int				hex_convert(char a, char b, char c, char d);
+char			*merge_args(int ac, char **av);
+int				rev_bits(int num);
+
+//Parsing et utils
+
+int				check_id(t_env *env);
+int				error(char *error_msg, char *file);
+long long int	find_id(t_env *env, unsigned int nb_p);
 void			free_env(t_env *env);
 int				get_opt_champ(t_env *env, char *arg);
-unsigned int	get_name_len(char *name);
 int				loader(t_env *env, t_player *player, char *arg, int len);
-char			*merge_args(int ac, char **av);
-int				error(char *error_msg, char *file);
-int				check_live(t_env *env);
-int				check_id(t_env *env);
-int				check_cycle(t_env *env, t_process *process, int cur_cycle);
+
+//Corewar loop
+
 int				add_instruction(t_env *env, int num_player);
-long long int	find_id(t_env *env, unsigned int nb_p);
-void			init_arena(t_env *env);
-int				cycle_run(t_env *env, curr_cycle);
-int				cw_loop(t_env *env);
+int				check_instruct(t_env *env, t_process *process);
+int				check_live(t_env *env);
+int				check_op(t_env *env, t_process *process)
 int				create_first_process(t_env *env);
-t_process		*new_lst(t_env *env, int id, uint16_t pc);
-t_process		*push_lst(t_env *env, t_process *process, int id, uint16_t pc);
-t_process		*pop_lst(t_process *process, t_process *tmp,t_process *tmp2);
-t_instruct		*pop_instruct(t_instruct *instruct, t_instruct *tmp, t_instruct *tmp2);
-t_instruct		*push_instruct(t_env *env, t_instruct *instruct,
-		unsigned int num_pl, uint16_t pc);
-t_instruct		*new_instruct(t_env *env, t_process *process, t_type *arg);
-int				*convert_instruction(char c);
-bool			encoding_byte(char c);
+int				cw_loop(t_env *env);
+int				cycle_run(t_env *env, curr_cycle);
+void			init_arena(t_env *env);
+int				load_op(t_env *env, t_process *process)
+
+//Tableau de statique
+
 bool			carry_flag(char c);
+int				*convert_instruction(char c);
+bool			direct_size(char c);
+bool			encoding_byte(char c);
 int				nb_arg(char c);
-int				hex_convert(char a, char b, char c, char d);
-int				rev_bits(int num);
+int				wait_cycle(char c);
+
+//Gestion des queues
+
+t_instruct		*new_instruct(t_env *env, t_process *process);
+t_process		*new_lst(t_env *env, int id, uint16_t pc);
+t_instruct		*push_instruct(t_env *env, t_instruct *instruct);
+t_process		*push_lst(t_env *env, t_process *process, int id, uint16_t pc);
+t_instruct		*pop_instruct(t_instruct *instruct, t_instruct *tmp, t_instruct *tmp2);
+t_process		*pop_lst(t_process *process, t_process *tmp,t_process *tmp2);
 
 //TESTS PROTO
 
 void			aff_env(t_env *env, bool all);
 void			aff_player(t_player *player);
 void			aff_process(t_process *process);
-void			test_lst(void);
-void			test_loader(void);
-void			test_get_opt_champ_loader(char *arg);
 void			test_convert_instruction(void);
 void			test_cw_loop(void);
+void			test_get_opt_champ_loader(char *arg);
+void			test_loader(void);
+void			test_lst(void);
 void			test_system(void);
 
 //OP_FONCTION

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:14:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 16:18:06 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/18 13:45:47 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@
 # define BAD_ID "ID is not between 1 and number_player."
 # define VM_ERR "Virtual machine error."
 # define MALLOC_ERR "Malloc error."
-
 //PARSING
 
 //LIMITE
 
 # define MAX_ARGS 32
+# define MAX_ARG_FUNC 3
 # define MAX_CYCLE 1000000
 # define NB_FUNC 16
 
