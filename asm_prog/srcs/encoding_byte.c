@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 14:15:23 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/16 15:34:21 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/17 18:29:50 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@ void print_byte_as_bits(char val) {
     printf("%c ", (val & (1 << i)) ? '1' : '0');
   }
   printf("\n");
+}
+
+bool	encoding_byte_pres(char type)
+{
+	static bool bytes[NB_OPS] = {1, 1, 1, 0, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0};
+
+	return (bytes[(int)type]);
 }
 
 char	encoding_byte(char byte, unsigned int param, int type)

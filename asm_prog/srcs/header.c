@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 15:46:44 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/17 18:31:45 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,16 @@ void	reverse_bits(char buff[LBE_BUFFER], int num)
 		(int)((num >> 8) & 0xff00) |
 		(int)((num << 24) & (int)0xff000000);
 	ft_memcpy(&buff[0], &swapped, sizeof(int));
+}
+
+char rev_bits(char b)
+{
+	print_byte_as_bits(b);
+	b = (char)((b & 0xF0) >> 4 | (b & 0x0F) << 4);
+	b = (char)((b & 0xCC) >> 2 | (b & 0x33) << 2);
+	b = (char)((b & 0xAA) >> 1 | (b & 0x55) << 1);
+	print_byte_as_bits(b);
+	return b;
 }
 
 static inline int	get_op_size(t_lexem *lex)
@@ -61,13 +71,11 @@ static inline int	compute_size(t_env *env)
 		if (env->lexemes[i].type == LEX_OP)
 		{
 			ret += get_op_size(&env->lexemes[i]);
-			if (env->lexemes[i].encoding == 0)
-				ret++;
-			ret++;
+			ret += 2;
 		}
 		i++;
 	}
-	return (ret);
+	return (ret + 1);
 }
 
 static inline char	*get_lex_string(t_env *env, char id)

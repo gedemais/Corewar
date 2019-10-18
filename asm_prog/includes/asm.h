@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 15:22:29 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/17 18:27:04 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@
 # define NB_LEX_LOAD_FUNCS 4
 # define FCHAR stream[0]
 
-# define PADDING_VALUE 0x42
+# define PADDING_VALUE 0
 
 # define MAX_TYPE_SIZE 32
 
@@ -76,6 +76,9 @@ static char				*g_opnames[NB_OPS] = {"add",
 											"sub",
 											"xor",
 											"zjmp"};
+
+static char						g_opcodes[NB_OPS] = {4, 16, 6, 12, 15, 2, 10, 13, 14, 1, 7, 3, 11, 5, 8, 9};
+
 
 typedef enum			e_token_type
 {
@@ -257,6 +260,7 @@ int						lexer(t_env *env);
 
 char					find_op(char *op);
 char					encoding_byte(char byte, unsigned int param, int type);
+bool					encoding_byte_pres(char type);
 
 char					get_lex_name_prop(t_env *env, t_token *tok);
 char					get_lex_comment_prop(t_env *env, t_token *tok);
@@ -340,6 +344,7 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 ** Bytecode translating
 */
 void					reverse_bits(char buff[LBE_BUFFER], int n);
+char					rev_bits(char byte);
 
 int						write_bytecode(t_env *env);
 int						write_header(t_env *env, int fd);

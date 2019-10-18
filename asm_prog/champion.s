@@ -6,4 +6,3 @@ label1:	lld %1, r1
 		zjmp %:label1
 
 label12: zjmp %:label1
-

@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 12:37:04 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/17 15:48:54 by gedemais         ###   ########.fr        #
+#    Updated: 2019/10/18 09:28:17 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,5 +47,7 @@ clean:
 
 fclean:
 	@make -C $(LIB_PATH) fclean
+	@rm -rf $(COR_NAME)
+	@rm -rf $(ASM_NAME)
 	@make -C $(COR_PATH) fclean
 	@make -C $(ASM_PATH) fclean
