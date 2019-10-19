@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:15:53 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/18 12:05:08 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/19 22:08:38 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,18 +88,17 @@ int		load_lex_opcode(t_env *env, t_lexem *lex, t_token **tok)
 	lex->start = (unsigned int)(tmp->ptr - env->file);
 	lex->opcode = find_op(tmp->ptr);
 	tmp = tmp->next;
+	ft_memset(&lex->label, -1, sizeof(int) * MAX_ARGS_NUMBER);
 	while (tmp && tmp->type != TOK_NEWLINE)
 	{
 		if (tmp->type == TOK_REG)
 			lex->args[param].reg = (int)ft_atoi(&tmp->ptr[1]);
-		else if (tmp->label > 0 && (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER))
-		{
-			lex->args[param].stick = tmp->label;
-			lex->args[param].label = true;
-		}
+		else if (tmp->label >= 0 && (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER))
+			lex->label[param] = tmp->label;
 		else if (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER)
 			lex->args[param].nb = ft_atoi(tmp->type == TOK_NUMBER ? tmp->ptr : &tmp->ptr[1]);
 		lex->encoding = encoding_byte(lex->encoding, param, tmp->type);
+		lex->code = encoding_byte_pres(lex->opcode);
 		tmp = (tmp->next->type == TOK_SEPARATOR) ? tmp->next->next : tmp->next;
 		param++;
 		ret += 2;

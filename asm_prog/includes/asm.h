@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/18 13:48:09 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/19 23:42:05 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,6 @@
 
 # define MAX_PARAM_NB 3
 
-# define DEBUG_MODE false
-# define DBPRINT(str) if (DEBUG_MODE)\
-						printf(str);\
-						fflush(stdout);
-
 static char				*g_opnames[NB_OPS] = {"add",
 											"aff",
 											"and",
@@ -79,6 +74,7 @@ static char				*g_opnames[NB_OPS] = {"add",
 
 static char						g_opcodes[NB_OPS] = {4, 16, 6, 12, 15, 2, 10, 13, 14, 1, 7, 3, 11, 5, 8, 9};
 
+static int						g_direct_size[NB_OPS] = {4, 4, 4, 2, 2, 4, 2, 4, 2, 4, 4, 4, 2, 4, 4, 2};
 
 typedef enum			e_token_type
 {
@@ -121,10 +117,14 @@ typedef union		u_args
 typedef struct			s_lexem
 {
 	unsigned int		start;
+	unsigned int		start_byte;
 	char				opcode;
 	char				type;
 	unsigned char		encoding;
 	char				dir_size;
+	bool				code;
+	char				pad[3];
+	int					label[MAX_ARGS_NUMBER];
 	t_args				args[MAX_ARGS_NUMBER];
 }						t_lexem;
 
@@ -139,7 +139,7 @@ struct					s_token
 	unsigned int		col;
 	unsigned int		len;
 	unsigned int		index;
-	unsigned int		label;
+	int					label;
 	char				type;
 	char				pad[3];
 };
@@ -196,7 +196,6 @@ int						tokenizer(t_env *env);
 void					cross_whitespaces(char *stream, unsigned int *i);
 
 int						init_labels(t_env *env);
-int						add_label(t_env *env, unsigned int i);
 bool					is_label(t_env *env, char *label);
 int						find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels);
 
@@ -368,4 +367,14 @@ int						dup_properity_err(char *file, unsigned int i);
 
 int						free_env(t_env *env);
 
+/*
+** Utils
+*/
+void					cross_whitespaces(char *stream, unsigned int *i);
+void					cross_whitespace(char *stream, unsigned int *i);
+void					cross_names(char *stream, unsigned int *i);
+void					swap_bytes(char *a, char *b);
+
+void					print_op_args(t_lexem lex);
+void					print_lexem(t_lexem lex);
 #endif

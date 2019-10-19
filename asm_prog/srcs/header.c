@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/18 13:26:03 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/19 23:36:57 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,41 +42,54 @@ static inline int	get_op_size(t_lexem *lex)
 	if (lex->encoding & 128 && lex->encoding & 64)
 		ret += IND_SIZE;
 	if ((lex->encoding & 128) && !(lex->encoding & 64))
-		ret += lex->args[0].label ? 2 : 4;
+		ret += g_direct_size[(int)lex->opcode];
 	if (!(lex->encoding & 128) && (lex->encoding & 64))
 		ret++;
+
 	if (lex->encoding & 32 && lex->encoding & 16)
 		ret += IND_SIZE;
 	if ((lex->encoding & 32) && !(lex->encoding & 16))
-		ret += lex->args[1].label ? 2 : 4;
+		ret += g_direct_size[(int)lex->opcode];
 	if (!(lex->encoding & 32) && (lex->encoding & 16))
 		ret++;
+
 	if (lex->encoding & 8 && lex->encoding & 4)
 		ret += IND_SIZE;
 	if ((lex->encoding & 8) && !(lex->encoding & 4))
-		ret += lex->args[2].label ? 2 : 4;
+		ret += g_direct_size[(int)lex->opcode];
 	if (!(lex->encoding & 8) && (lex->encoding & 4))
 		ret++;
+
 	return (ret);
 }
 
-static inline int	compute_size(t_env *env)
+static inline int	compute_bytecode_size(t_env *env)
 {
-	unsigned int	i;
-	int				ret;
+	unsigned int		i;
+	int		ret;
 
 	i = 0;
 	ret = 0;
 	while (i < env->nb_lex)
 	{
-		if (env->lexemes[i].type == LEX_OP)
+		if (env->lexemes[i].type == LEX_LABEL)
 		{
-			ret += get_op_size(&env->lexemes[i]);
-			ret += 2;
+			env->lexemes[i].start_byte = (unsigned int)ret;
+			printf("label start : %u\n", env->lexemes[i].start_byte);
+		}
+		else if (env->lexemes[i].type == LEX_OP)
+		{
+			print_lexem(env->lexemes[i]);
+		env->lexemes[i].start_byte = (unsigned int)ret;
+			ret++; // byte de l'opcode
+			if (env->lexemes[i].code) // byte d'encoding
+				ret++;
+			ret += get_op_size(&env->lexemes[i]); // Taille des arguments
+			printf("ret = %d\n", ret);
 		}
 		i++;
 	}
-	return (ret + 1);
+	return (ret);
 }
 
 static inline char	*get_lex_string(t_env *env, char id)
@@ -99,9 +112,9 @@ int		write_header(t_env *env, int fd)
 	char	lbe_buff[LBE_BUFFER];
 
 	if (!(env->p_name = get_lex_string(env, LEX_NAME_PROP))
-			|| !(env->p_comment = get_lex_string(env, LEX_COMMENT_PROP))
-			|| (env->file_size = compute_size(env)) <= 0)
+			|| !(env->p_comment = get_lex_string(env, LEX_COMMENT_PROP)))
 		return (-1);
+	env->file_size = compute_bytecode_size(env);
 	printf("Bytecode size : %d\n", env->file_size);
 	reverse_bits(lbe_buff, COREWAR_EXEC_MAGIC);
 	write(fd, lbe_buff, LBE_BUFFER);//magic number

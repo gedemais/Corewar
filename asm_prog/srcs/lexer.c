@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/16 12:56:31 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/19 20:13:55 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static inline int	check_properitys(t_token *tok)
 
 	name = true;
 	comment = true;
+	printf("Check properitys : ");
 	while (tok)
 	{
 		if (tok->type == TOK_P_NAME)
@@ -83,6 +84,7 @@ static inline int	check_properitys(t_token *tok)
 		missing_properity(name, comment);
 		return (-1);
 	}
+	printf("OK\n---------------------\n");
 	return (0);
 }
 
@@ -92,6 +94,7 @@ int		lexer(t_env *env)
 	char			ret;
 
 	tmp = env->tokens;
+	printf("------------------------------------------------------------------\nLEXER :\n------------------------------------------------------------------\n");
 	if (!(env->lexemes = (t_lexem*)malloc(sizeof(t_lexem) * env->nb_tokens)))
 		return (-1);
 	ft_memset(env->lexemes, 0, sizeof(t_lexem) * env->nb_tokens);
@@ -103,6 +106,7 @@ int		lexer(t_env *env)
 			return (-1);
 		if (load_lexeme(env, env->nb_lex, ret, &tmp) != 0)
 			return (-1);
+		print_lexem(env->lexemes[env->nb_lex]);
 		env->nb_lex++;
 	}
 	return (0);

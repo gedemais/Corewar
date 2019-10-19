@@ -59,9 +59,10 @@ t_token	*token_lstnew(t_env *env, t_tokenizer *tok)
 		return (NULL);
 	new->type = tok->ret;
 	new->ptr = &env->file[tok->i - tok->len];
-	while (ft_is_whitespace(*new->ptr))
+	new->next = NULL;
+	while (*new->ptr && ft_is_whitespace(*new->ptr))
 		new->ptr++;
-	new->label = 0;
+	new->label = -1;
 	new->len = tok->len;
 	new->index = tok->i;
 	new->line = tok->line;

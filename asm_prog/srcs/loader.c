@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/16 16:28:05 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/19 18:28:43 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,8 +91,8 @@ int		loader(t_env *env, char *file_name)
 	}
 	if (!(env->file_name = ft_strnew(ft_strlen(file_name + 2))))
 		return (-1);
-	ft_strncat(env->file_name, file_name, ft_strlen(file_name) - 2);
-	ft_strcat(env->file_name, ".cor");
+	ft_strncat(env->file_name, file_name, ft_strlen(file_name) - 1);
+	ft_strcat(env->file_name, "cor");
 	if (!(env->file = read_file(open(file_name, O_RDONLY)))
 		|| !env->file[0])
 		return (-1);

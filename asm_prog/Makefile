@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/17 13:37:16 by gedemais         ###   ########.fr        #
+#    Updated: 2019/10/19 19:14:55 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,6 +58,7 @@ SRCS_NAME=	main.c\
 			lexer_loader.c\
 			error.c\
 			header.c\
+			utils.c\
 			free.c
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

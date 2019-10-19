@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:38:28 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/16 16:24:28 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/19 20:02:06 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int					main(int argc, char **argv)
 {
 	t_env	env;
 
+	ft_memset(&env, 0, sizeof(t_env));
 	if (argc != 2)
 	{
 		ft_putendl_fd(USAGE, 2);
@@ -35,10 +36,8 @@ int					main(int argc, char **argv)
 	else if (asm_compiler(&env, argv[1]) != 0)
 	{
 		free_env(&env);
-//		system("leaks asm");
 		return (1);
 	}
 	free_env(&env);
-//	system("leaks asm");
 	return (0);
 }
