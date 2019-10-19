@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/17 17:22:46 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/19 14:24:10 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,28 @@ erreur.*/
 static inline int	get_id(t_env *env, char *arg, unsigned int *j)
 {
 	static bool		id[4] = {0, 0, 0, 0};
-	int				i;
+	unsigned int	i;
 
-	i = (int)*j + 1;
-	while (arg[i] && ft_is_whitespace(arg[i]))
-		i++;
+	i = after_space(arg, *j + 1);
 	if (!ft_is_whitespace(arg[i + 1])
 			|| (env->player[env->nb_players].id = ft_atoi(&arg[i])) < 1
 			|| env->player[env->nb_players].id > 4)
 		return (error(BAD_ID, NULL));
-	while (arg[i] && !ft_is_whitespace(arg[i]))
-		i++;
-	*j = (unsigned int)(i + 1);
+	*j = after_word(arg, i) + 1;
 	if (id[env->player[env->nb_players].id - 1] == 0)
 		id[env->player[env->nb_players].id - 1] = 1;
 	else 
 		return (1);
-	i = -1;
-	while (++i < (int)env->nb_players)
+	i = 0;
+	while (i < (int)env->nb_players)
+	{
 		if (env->player[i].id == env->player[env->nb_players].id)
 		{
 			env->player[i].id = 0;
 			env->player[i].id = find_id(env, env->nb_players + 1);
 		}
+		i++;
+	}
 	return (0);
 }
 
@@ -63,13 +62,11 @@ static inline int	get_dump(t_env *env, char *arg, unsigned int *j)
 	unsigned int	i;
 
 	i = *j + 6;
-	while (arg[i] && ft_is_whitespace(arg[i]))
-		i++;
+	i = after_space(arg, i);
 	if ((env->dump = ft_atoi(&arg[i])) < 1
 			|| env->dump > INT_MAX)
 		return (error(BAD_NUMBER, NULL));
-	while (arg[i] && !ft_is_whitespace(arg[i]))
-		i++;
+	i = after_word(arg, i);
 	*j = i;
 	return (0);
 }
@@ -80,7 +77,7 @@ static inline int	check_option(t_env *env, char *arg, unsigned int *j)
 
 	i = *j + 1;
 
-	if (arg[i] != 'n' || !ft_is_whitespace(arg[i +1]))
+	if (arg[i] != 'n' || !ft_is_whitespace(arg[i + 1]))
 		return (1);
 	if (get_id(env, arg, &i))
 		return (1);
@@ -108,15 +105,13 @@ int					get_opt_champ(t_env *env, char *arg)
 	unsigned int	len;
 
 	i = 0;
-	while (arg[i] && ft_is_whitespace(arg[i]))
-		i++;
+	i = after_space(arg, i);
 	if (ft_strncmp(&arg[i], DUMP, 6) == 0)
 		if (get_dump(env, arg, &i))
 			return (1);
 	while (arg[i])
 	{
-		while (arg[i] && ft_is_whitespace(arg[i]))
-			i++;
+		i = after_space(arg, i);
 		if (arg[i] == '-' && (len = get_name_len(&arg[i]))
 				&& ft_strncmp(&arg[i + len - 4], EXT, 4) != 0)
 		{

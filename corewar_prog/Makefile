@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/17 15:18:26 by moguy            ###   ########.fr        #
+#    Updated: 2019/10/19 17:09:18 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -47,12 +47,23 @@ INC=$(addprefix $(INC_PATH), $(INC_NAME))
 
 SRCS_PATH=srcs/
 SRCS_NAME=	main.c\
-			loader.c\
-			check.c\
-			get_name_len.c\
-			lst.c\
+			add_instruction.c\
 			aff.c\
-			merge_args.c
+			after_space.c\
+			after_word.c\
+			check.c\
+			check_type.c\
+			convert_instruction.c\
+			conv_table.c\
+			cw_loop.c\
+			get_name_len.c\
+			loader.c\
+			load_op.c\
+			lst.c\
+			merge_args.c\
+			op_function.c\
+			reverse_bits.c
+
 
 SRCS_TEST= loader.c\
 		   main_test.c\
@@ -74,7 +85,7 @@ OBJS_TEST=$(SRCS_TEST:.c=.o)
 OBJS=$(addprefix $(OBJS_PATH), $(OBJS_NAME))
 O_TEST=$(addprefix $(OBJS_PATH_TEST), $(OBJS_TEST))
 
-all: $(LIB) $(INSPECTION) 
+all: $(LIB) $(NAME) 
 
 inspection: $(LIB) $(INSPECTION)
 

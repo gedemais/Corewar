@@ -6,13 +6,22 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 11:21:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/18 15:57:44 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/10/19 17:08:00 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int		hex_convert(char a, char b, char c, char d)
+short	hex_conv2(char a, char b)
+{
+	char	tab[2];
+
+	tab[0] = a;
+	tab[1] = b;
+	return ((short)tab[0]);
+}
+
+int		hex_conv4(char a, char b, char c, char d)
 {
 	char	tab[4];
 
@@ -28,31 +37,7 @@ int		nb_arg(char c)
 	static int		arg_tab[NB_FUNC] = {1, 2, 2, 3, 3, 3, 3, 3, 1, 3, 3, 1,
 									2, 3, 1, 1};
 
-	return (arg_tab[c - 1]);
-}
-
-bool	carry_flag(char c)
-{
-	static bool		carry_tab[NB_FUNC] = {0, 1, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0,
-									1, 1, 0, 0};
-
-	return (carry_tab[c - 1]);
-}
-
-bool	direct_size(char c)
-{
-	static bool		direct_size[NB_FUNC] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
-									0, 1, 1, 0};
-
-	return (direct_size[c - 1]);
-}
-
-bool	encoding_byte(char c)
-{
-	static bool		encoding_tab[NB_FUNC] = {0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0,
-									1, 1, 0, 1};
-
-	return (encoding_tab[c - 1]);
+	return (arg_tab[(int)c - 1]);
 }
 
 int		wait_cycle(char c)
@@ -60,14 +45,15 @@ int		wait_cycle(char c)
 	static int		wait[NB_FUNC] = {10, 5, 5, 10, 10, 6, 6, 6, 20, 25, 25, 800,
 									10, 50, 1000, 2};
 
-	return (wait[c - 1]);
+	return (wait[(int)c - 1]);
 }
 
-int		*convert_instruction(char c)
+void	convert_instruction(t_env *env, t_process *process)
 {
-	static int		(*cw_func[NB_FUNC])(t_env*, t_instruct*) = {&live, &ld, &st,
-		&add, &sub, &and, &or, &xor, &zjmp, &ldi, &sti, &fork, &lld,
-		&lldi, &lfork, &aff};
+	static int		(*cw_func[NB_FUNC])(t_env*, t_process*) = {0};
+/*	static int		(*cw_func[NB_FUNC])(t_env*, t_process*) = {&live, &ld, &st,
+		&add, &sub, &and, &or, &xor, &zjmp, &ldi, &sti, &forky, &lld,
+		&lldi, &lfork, &aff};*/
 
-	return (&cw_func[c - 1]);
+	(cw_func[(int)process->instruct.op_code - 1])(env, process);
 }

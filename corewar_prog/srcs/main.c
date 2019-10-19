@@ -6,27 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/17 18:52:29 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/19 14:26:57 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-
-static inline void	free_instruct(t_env *env)
-{
-	t_instruct	*tmp;
-
-	if (env->instruct)
-	{
-		while (env->instruct->next)
-		{
-			tmp = env->instruct;
-			env->instruct = env->instruct->next;
-			ft_memdel((void**)&tmp);
-		}
-		ft_memdel((void**)&env->instruct);
-	}
-}
 
 void				free_env(t_env *env)
 {
@@ -39,20 +23,22 @@ void				free_env(t_env *env)
 		{
 			tmp = env->process;
 			env->process = env->process->next;
-			if (tmp->r)
-				ft_memdel((void**)&tmp->r);
 			ft_memdel((void**)&tmp);
 		}
-		if (env->process->r)
-			ft_memdel((void**)&env->process->r);
-			ft_memdel((void**)&env->process);
+		ft_memdel((void**)&env->process);
 	}
-	free_instruct(env);
+}
+
+int				error(char *error_msg, char *file)
+{
+	if (file)
+		ft_strdel(&file);
+	ft_putendl_fd(error_msg, STDERR_FILENO);
+	return (1);
 }
 
 static inline int	vm(t_env *env, char *arg)
 {
-	env->cycle_to_die = CYCLE_TO_DIE;
 	if (get_opt_champ(env, arg))
 	{	
 		ft_putendl_fd(BAD_ARGS, STDERR_FILENO);
@@ -64,17 +50,23 @@ static inline int	vm(t_env *env, char *arg)
 	return (0);
 }
 
+static inline void	init_env(t_env *env)
+{
+	ft_memset(env, 0, sizeof(t_env));
+	env->cycle_to_die = CYCLE_TO_DIE;
+}
+
 int					main(int ac, char **av)
 {
 	t_env			env;
 	char			*arg;
 
-	if (ac > MAX_ARGS || ac < 3)
+	if (ac > MAX_ARGS || ac < 2)
 	{
 		ft_putendl_fd(TOO_MANY_ARGS, STDERR_FILENO);
 		return (error(USAGE, NULL));	
 	}
-	ft_memset(&env, 0, sizeof(t_env));
+	init_env(&env);
 	if (!(arg = merge_args(ac, av)))
 	{
 		ft_putendl_fd(BAD_ARGS, STDERR_FILENO);

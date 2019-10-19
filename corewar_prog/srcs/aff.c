@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 12:15:41 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/16 16:53:04 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/18 18:46:26 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,11 @@ void	aff_env(t_env *env, bool all)
 				aff_player(&env->player[i]);
 		if (env->process)
 			aff_process(env->process);
-		if (env->queue_process)
-		{
-			printf("****************QUEUE_PROCESS**************\n\n");
-			aff_process(env->queue_process);
-		}
+	//	if (env->instruct)
+	//	{
+	//		printf("****************INSTRUCTION**************\n\n");
+	//		aff_instruct(env->instruct);
+	//	}
 	}
 	printf("*********INFO**********\n\n");
 	printf("DUMP = %lld\n", env->dump);
@@ -59,7 +59,6 @@ void	aff_player(t_player *player)
 	printf("MAGIC = %x\n", player->magic);
 	printf("SIZE = %u\n", player->siz);
 	printf("FIRST_PC = %u\n", player->first_pc);
-	printf("WAIT_CYCLE = %d\n", player->cycle_to_process);
 	printf("DEAD = %s\n", (!player->dead) ? "NO": "YES");
 }
 
