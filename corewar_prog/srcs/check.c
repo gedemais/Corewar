@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/19 14:24:10 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/22 16:42:34 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static inline int	get_id(t_env *env, char *arg, unsigned int *j)
 	else 
 		return (1);
 	i = 0;
-	while (i < (int)env->nb_players)
+	while (i < env->nb_players)
 	{
 		if (env->player[i].id == env->player[env->nb_players].id)
 		{

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:14:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/18 13:45:47 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/23 19:01:15 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,15 @@
 # define DUMP "-dump "
 # define EXT ".cor"
 # define BAD_FILE "File Error."
+
+//BINARY_MASK
+
+# define MASK_ENCO 0x03
+
+//PUISSANCE DE 16
+
+# define PUI 16
+# define PUI2 256
+# define PUI3 4096
 
 #endif

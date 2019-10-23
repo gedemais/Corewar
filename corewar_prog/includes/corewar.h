@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/19 17:24:07 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/23 21:35:35 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@
 enum						e_arg_type
 {
 	TYPE_NONE,
-	TYPE_DIR4,
 	TYPE_DIR2,
-	TYPE_IND,
 	TYPE_REG,
+	TYPE_DIR4,
+	TYPE_IND,
 	TYPE_MAX
 };
 
@@ -44,30 +44,30 @@ union			u_type
 
 typedef struct s_instruct	t_instruct;
 
-struct			s_instruct
+struct				s_instruct
 {
-	t_type		arg[MAX_ARG_FUNC];
-	char		type[MAX_ARG_FUNC];
-	char		padding;
-	int			wait_cycle;
-	char		op_code;
-	char		pad[3];
+	t_type			arg[MAX_ARG_FUNC];
+	unsigned char	type[MAX_ARG_FUNC];
+	char			padding;
+	int				wait_cycle;
+	char			op_code;
+	char			pad[3];
 };
 
 typedef struct s_process	t_process;
 
-struct			s_process
+struct				s_process
 {
-	t_process	*next;
-	t_instruct	instruct;
-	int			r[REG_NUMBER];
-	int			carry;
-	int			player;
-	uint16_t	pad : 4;
-	uint16_t	pc : 12;
-	uint16_t	pad2 : 4;
-	uint16_t	pci : 12;
-	int			padding;
+	t_process		*next;
+	t_instruct		instruct;
+	int				r[REG_NUMBER];
+	int				carry;
+	unsigned int	player;
+	uint16_t		pad : 4;
+	uint16_t		pc : 12;
+	uint16_t		pad2 : 4;
+	uint16_t		pci : 12;
+	int				padding;
 };
 
 typedef struct		s_player
@@ -77,13 +77,13 @@ typedef struct		s_player
 	char			prog_name[PROG_NAME_LENGTH + 1];
 	char			pad2[4];
 	long long int	id;
+	unsigned int	dead;
 	uint32_t		pad;
 	uint32_t		magic;
 	uint32_t		siz;
 	uint16_t		first_pc : 12;
 	uint16_t		pad_bits : 4;
-	bool			dead;
-	char			pad_bytes;
+	char			pad_bytes[6];
 }					t_player;
 
 typedef struct		s_env
@@ -125,7 +125,7 @@ int				loader(t_env *env, t_player *player, char *arg, int len);
 //Corewar loop
 
 int				add_instruction(t_env *env, t_process *process);
-int				check_op(t_env *env, t_process *process);
+int				check_dying_process(t_env *env);
 void			check_type(t_env *e, t_process *process);
 int				create_first_process(t_env *env);
 int				cw_loop(t_env *env);

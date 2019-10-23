@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/19 17:13:11 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/23 21:32:54 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 static inline int	check_delta(t_env *env, int victim)
 {
 	unsigned int		nb_pl = 0;
+	unsigned int		new_lives;
 
+	new_lives = 0;
 	if (victim == 1)
 		return (0);
 	while (nb_pl < env->nb_players)
@@ -34,30 +36,39 @@ static inline int	check_delta(t_env *env, int victim)
 static inline int	check_live(t_env *env)
 {
 	static unsigned int	prev_lives[4] = {0, 0, 0, 0};
-	static unsigned int	nb_pl = 0;
 	static unsigned int	count = 0;
+	unsigned int		nb_pl;
 	bool				victim;
 
 	victim = false;
 	nb_pl = env->nb_players;
 	while (nb_pl >= 1)
 	{
-
 		nb_pl--;
-		if (env->nb_lives[nb_pl] > prev_lives[nb_pl])
-			prev_lives[nb_pl] = env->nb_lives[nb_pl];
-		else if (env->nb_lives[nb_pl] <= prev_lives[nb_pl] && (victim = true))
-			env->player[nb_pl].dead = 1;
+		if (env->player[nb_pl].dead != 2)
+		{
+			if (env->nb_lives[nb_pl] > prev_lives[nb_pl])
+				prev_lives[nb_pl] = env->nb_lives[nb_pl];
+			else if (env->nb_lives[nb_pl] <= prev_lives[nb_pl])
+			{
+				victim = true;
+				env->player[nb_pl].dead = 1;
+			}
+		}
 	}
 	if (check_delta(env, victim))
 		count = 0;
 	else
 		count++;
-	if (count == MAX_CHECKS && (count = 0))
+	if (count == MAX_CHECKS)
+	{
+		count = 0;
 		env->cycle_to_die -=  CYCLE_DELTA;
+	}
 	env->cycle += env->curr_cycle;
 	env->curr_cycle = 0;
-	check_dying_process(env);
+	if (check_dying_process(env))
+		return (1);
 	return (0);
 }
 
@@ -93,7 +104,6 @@ static inline int	cycle_run(t_env *env)
 				return (1);
 			convert_instruction(env, env->process);
 		}
-
 		i++;
 	}
 	return (0);
@@ -116,5 +126,6 @@ int		cw_loop(t_env *env)
 		if (check_live(env))
 			return (1);
 	}
+	aff_env(env, 1);
 	return (0);
 }
