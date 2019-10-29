@@ -6,17 +6,19 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/19 14:26:57 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/26 22:43:24 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void				free_env(t_env *env)
+void				free_env(t_env *env, char *arg)
 {
 	t_process	*tmp;
 
 	tmp = NULL;
+	if (arg)
+		ft_strdel(&arg);
 	if (env->process)
 	{
 		while (env->process->next)
@@ -29,24 +31,24 @@ void				free_env(t_env *env)
 	}
 }
 
-int				error(char *error_msg, char *file)
+int				error(char *error_msg, char *err_msg, char *junk)
 {
-	if (file)
-		ft_strdel(&file);
-	ft_putendl_fd(error_msg, STDERR_FILENO);
+	if (junk)
+		ft_strdel(&junk);
+	if (error_msg)
+		ft_putendl_fd(error_msg, STDERR_FILENO);
+	if (err_msg)
+		ft_putendl_fd(err_msg, STDERR_FILENO);
 	return (1);
 }
 
 static inline int	vm(t_env *env, char *arg)
 {
-	if (get_opt_champ(env, arg))
-	{	
-		ft_putendl_fd(BAD_ARGS, STDERR_FILENO);
-		return (error(USAGE, arg));
-	}
+	if (get_data(env, arg))
+		return (1);
 	if (cw_loop(env))
-		return (error(VM_ERR, arg));
-	ft_strdel(&arg);
+		return (1);
+	free_env(env, arg);
 	return (0);
 }
 
@@ -62,21 +64,14 @@ int					main(int ac, char **av)
 	char			*arg;
 
 	if (ac > MAX_ARGS || ac < 2)
-	{
-		ft_putendl_fd(TOO_MANY_ARGS, STDERR_FILENO);
-		return (error(USAGE, NULL));	
-	}
-	init_env(&env);
+		return (error(TOO_MANY_ARGS, USAGE, NULL));	
 	if (!(arg = merge_args(ac, av)))
-	{
-		ft_putendl_fd(BAD_ARGS, STDERR_FILENO);
-		return (error(USAGE, NULL));	
-	}
+		return (error(BAD_ARGS, USAGE, NULL));	
+	init_env(&env);
 	if (vm(&env, arg))
 	{
-		free_env(&env);
+		free_env(&env, arg);
 		return (1);
 	}
-	free_env(&env);
 	return (0);
 }

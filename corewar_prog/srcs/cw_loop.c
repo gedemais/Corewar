@@ -6,104 +6,46 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/23 21:32:54 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/28 23:17:33 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static inline int	check_delta(t_env *env, int victim)
+static inline int	cycle_run(t_env *env, t_process *pro)
 {
-	unsigned int		nb_pl = 0;
-	unsigned int		new_lives;
+	t_process	*tmp;
 
-	new_lives = 0;
-	if (victim == 1)
-		return (0);
-	while (nb_pl < env->nb_players)
+	tmp = pro;
+	while (tmp)
 	{
-		new_lives += env->nb_lives[nb_pl];
-		nb_pl++;
-	}
-	if (new_lives >= NBR_LIVE)
-	{
-		env->cycle_to_die -=  CYCLE_DELTA;
-		return (1);
-	}
-	return (0);
-}
-
-static inline int	check_live(t_env *env)
-{
-	static unsigned int	prev_lives[4] = {0, 0, 0, 0};
-	static unsigned int	count = 0;
-	unsigned int		nb_pl;
-	bool				victim;
-
-	victim = false;
-	nb_pl = env->nb_players;
-	while (nb_pl >= 1)
-	{
-		nb_pl--;
-		if (env->player[nb_pl].dead != 2)
+		if ((tmp->cycle_to_exec -= 1) == 0)
 		{
-			if (env->nb_lives[nb_pl] > prev_lives[nb_pl])
-				prev_lives[nb_pl] = env->nb_lives[nb_pl];
-			else if (env->nb_lives[nb_pl] <= prev_lives[nb_pl])
-			{
-				victim = true;
-				env->player[nb_pl].dead = 1;
-			}
+			launch_instruct(env, tmp);
+			ft_memset(&tmp->instruct, 0, sizeof(t_instruct));
+			create_instruct(env, tmp);
 		}
+		if (tmp->next)
+			tmp = tmp->next;
+		else
+			tmp = NULL;
 	}
-	if (check_delta(env, victim))
-		count = 0;
-	else
-		count++;
-	if (count == MAX_CHECKS)
-	{
-		count = 0;
-		env->cycle_to_die -=  CYCLE_DELTA;
-	}
-	env->cycle += env->curr_cycle;
-	env->curr_cycle = 0;
-	if (check_dying_process(env))
-		return (1);
 	return (0);
 }
 
-static inline void	init_arena(t_env *env)
+static inline int	init_arena(t_env *env)
 {
-	unsigned int	offset;
-	unsigned int	num_pl;
 	unsigned int	i;
+	unsigned int	offset;
 
 	i = 0;
-	num_pl = env->nb_players;
-	offset = MEM_SIZE / num_pl;
-	while (num_pl >= 1)
+	offset = MEM_SIZE / env->nb_pl;
+	while (i < env->nb_pl)
 	{
-		num_pl--;
-		ft_memcpy(&env->arena[offset * i], env->player[num_pl].champ,
-				env->player[num_pl].siz);
-		env->player[num_pl].first_pc = (uint16_t)(offset * i);
-		i++;
-	}
-}
-
-static inline int	cycle_run(t_env *env)
-{
-	unsigned int		i;
-
-	i = 0;
-	while (i < env->nb_players)
-	{
-		if (!env->player[i].dead)
-		{
-			if (add_instruction(env, env->process))
-				return (1);
-			convert_instruction(env, env->process);
-		}
+		ft_memcpy(&env->arena[offset * i], env->player[i].champ,
+				env->player[i].size);
+		if (create_pro(env, i, offset * i))
+			return (1);
 		i++;
 	}
 	return (0);
@@ -111,21 +53,19 @@ static inline int	cycle_run(t_env *env)
 
 int		cw_loop(t_env *env)
 {
-	init_arena(env);
-	if (create_first_process(env))
+	if (init_arena(env))
 		return (1);
-	while (env->curr_cycle <= env->cycle_to_die && env->curr_cycle <= MAX_CYCLE)
+	while (env->cycle_curr <= env->cycle_to_die && env->cycle_tot <= MAX_CYCLE)
 	{
-		while (env->curr_cycle < env->cycle_to_die
-				&& env->curr_cycle <= MAX_CYCLE)
+		while (env->cycle_curr < env->cycle_to_die
+			&& env->cycle_tot <= MAX_CYCLE)
 		{
-			if (cycle_run(env))
+			if (cycle_run(env, env->process))
 				return (1);
-			env->curr_cycle++;
+			env->cycle_curr++;
 		}
 		if (check_live(env))
 			return (1);
 	}
-	aff_env(env, 1);
 	return (0);
 }

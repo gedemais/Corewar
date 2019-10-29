@@ -6,84 +6,60 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/19 14:39:35 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/29 17:15:58 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int				check_id(t_env *env)
+int				read_big_endian(t_env *env, int fd, bool magic)
 {
-	long long int	tab[4];
-	unsigned int	i;
-	unsigned int	j;
+	ssize_t		ret;
+	int			reverse;
 
-	i = 0;
-	ft_memset((void*)&tab[0], 0, 4);
-	while (i < env->nb_players)
+	if ((ret = read(fd, (void*)&reverse, 4)) < 1)
+		return (1);
+	reverse = rev_bits(reverse);
+	if (magic)
 	{
-		if (env->player[i].id > env->nb_players)
+		env->player[env->nb_pl].magic = (uint32_t)reverse;
+		if (env->player[env->nb_pl].magic != COREWAR_EXEC_MAGIC)
 			return (1);
-		tab[i] = env->player[i].id;
-		i++;
 	}
-	i = 0;
-	while (i < env->nb_players)
+	else
 	{
-		j = i;
-		while (++j < env->nb_players)
-			if (tab[i] == tab[j] && tab[i] != 0)
-				return (1);
-		i++;
+		env->player[env->nb_pl].size = (uint32_t)reverse;
+		if (env->player[env->nb_pl].size > CHAMP_MAX_SIZE)
+			return (1);
 	}
 	return (0);
 }
 
-long long int	find_id(t_env *env, unsigned int nb_player)
-{
-	unsigned int	i;
-	long long int	ret;
-
-	i = 0;
-	ret = 1;
-	while (i < nb_player)
-	{
-		if (ret == env->player[i].id)
-		{
-			i = 0;
-			ret++;
-		}
-		else
-			i++;
-	}
-	return (ret);
-}
-
-int				loader(t_env *env, t_player *player, char *arg, int len)
+int				loader(t_env *env, char *arg, unsigned int *j)
 {
 	char			*file_name;
 	int				fd;
-	long			ret;
+	ssize_t			ret;
 
-	if (!(file_name = ft_strndup(arg, len)))
-		return (error(MALLOC_ERR, NULL));
-	if ((fd = open(file_name, O_RDONLY)) < 1 || (ret = read(fd,
-					(void*)&player->magic, 4)) < 1
-			|| player->magic != 0xf383ea00)
-		return (error(FILE_ERR_MSG, file_name));
-	player->magic = (uint32_t)rev_bits((int)player->magic);
-	if ((ret = read(fd, &player->prog_name[0], PROG_NAME_LENGTH)) < 1
-		|| (ret = read(fd, &player->pad, 4)) < 1 || player->pad != 0
-		|| (ret = read(fd, &player->siz, 4)) < 1
-		|| (player->siz = (uint32_t)rev_bits((int)player->siz)) > CHAMP_MAX_SIZE
-		|| (ret = read(fd, &player->comment[0], COMMENT_LENGTH)) < 1
-		|| (ret = read(fd, &player->pad, 4)) < 1 || player->pad != 0
-		|| (ret = read(fd, &player->champ[0], player->siz)) < 1)
-		return (error(FILE_ERR_MSG, file_name));
+	if (!(file_name = ft_strndup(&arg[*j], (int)get_name_len(&arg[*j]))))
+		return (error(MALLOC_ERR, NULL, NULL));
+	if ((fd = open(file_name, O_RDONLY)) < 1)
+		return (error(BAD_FILE, USAGE, file_name));
 	ft_strdel(&file_name);
-	env->nb_players++;
-	if (player->id == 0)
-		player->id = find_id(env, env->nb_players);
-	check_id(env);
+	if (read_big_endian(env, fd, true))
+		return (error(BAD_FILE, USAGE, NULL));
+	if ((ret = read(fd, &env->player[env->nb_pl].name[0], PROG_NAME_LENGTH)) < 1
+		|| (ret = read(fd, &env->player[env->nb_pl].pad[0][0], 4)) < 1
+		|| env->player[env->nb_pl].pad[0] != 0)
+		return (error(BAD_FILE, USAGE, NULL));
+	if (read_big_endian(env, fd, false))
+		return (error(BAD_FILE, USAGE, NULL));
+	if ((ret = read(fd, &env->player[env->nb_pl].com[0], COMMENT_LENGTH)) < 1
+		|| (ret = read(fd, &env->player[env->nb_pl].pad[1][0], 4)) < 1
+		|| env->player[env->nb_pl].pad[1][0] != 0
+		|| (ret = read(fd, &env->player[env->nb_pl].champ[0],
+				env->player[env->nb_pl].size + 1)) < 1
+		|| ret != env->player[env->nb_pl].size)
+		return (error(BAD_FILE, USAGE, NULL));
 	return (0);
 }

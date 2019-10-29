@@ -6,13 +6,13 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 14:25:17 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/22 17:55:34 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/26 20:31:04 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int				rev_bits(int num)
+int		rev_bits(int num)
 {
 	int		swapped;
 

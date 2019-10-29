@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/22 13:47:29 by moguy            ###   ########.fr        #
+#    Updated: 2019/10/29 17:44:46 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ ORG = \033[1;31m
 NAME=corewar
 
 CC=gcc
-CFLAGS= -Weverything -Wall -Werror -Wextra
+CFLAGS= -Wall -Werror -Wextra
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
@@ -45,21 +45,22 @@ INC_NAME=	corewar.h\
 INC=$(addprefix $(INC_PATH), $(INC_NAME))
 
 SRCS_PATH=srcs/
-SRCS_NAME=	main.c\
-			add_instruction.c\
-			aff.c\
-			after_space.c\
+SRCS_NAME=	after_space.c\
 			after_word.c\
-			check.c\
-			check_type.c\
+			check_lives.c\
 			convert_instruction.c\
 			conv_table.c\
+			create_launch.c\
 			cw_loop.c\
+			get_data.c\
+			get_id.c\
 			get_name_len.c\
+			load_args.c\
 			loader.c\
-			load_op.c\
-			lst.c\
+			main.c\
 			merge_args.c\
+			opt.c\
+			lst.c\
 			op_function.c\
 			reverse_bits.c
 
