@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/29 17:44:46 by moguy            ###   ########.fr        #
+#    Updated: 2019/10/29 21:50:30 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -55,13 +55,14 @@ SRCS_NAME=	after_space.c\
 			get_data.c\
 			get_id.c\
 			get_name_len.c\
+			is_valid.c\
+			is_valid2.c\
 			load_args.c\
 			loader.c\
+			lst.c\
 			main.c\
 			merge_args.c\
 			opt.c\
-			lst.c\
-			op_function.c\
 			reverse_bits.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
@@ -77,7 +78,7 @@ $(LIB):
 	@make -C $(LIB_PATH)
 
 $(NAME) : $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS)  $(LIB)
+	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS) $(LIB)
 	@cp $(NAME) ../
 	@echo "$(GRE)Done !$(DEF)"
 

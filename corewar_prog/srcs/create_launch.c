@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 15:48:03 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 17:25:55 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/29 20:42:20 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 
 int		launch_instruct(t_env *env, t_process *p)
 {
+	(void)env;
 	if (p->instruct.op <= OP_NONE || p->instruct.op >= OP_MAX)
 		return (0);
 	else

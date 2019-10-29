@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 17:44:18 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 17:16:37 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/29 21:49:36 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,6 @@ void	load_args(t_env *env, t_process *p, bool enco, bool dir)
 	}
 	else
 		get_args(env, p, dir);
-	if (!is_op_arg_valid(p))
+	if (!is_op_arg_valid(p, p->instruct.op))
 		p->instruct.op = OP_NONE;
 }

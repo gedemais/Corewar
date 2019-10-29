@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 17:35:26 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/29 21:48:54 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,11 +74,6 @@ typedef enum		e_op_arg_type
 	ARG_MX
 }					t_op_arg_type;
 
-# define ARG_ANY	ARG_DIR | ARG_IND | ARG_REG
-# define ARG_DREG	ARG_DIR | ARG_REG
-# define ARG_IREG	ARG_IND | ARG_REG
-# define ARG_IDIR	ARG_IND | ARG_DIR
-
 typedef enum		e_reg_id
 {
 	REG_NONE,
@@ -123,26 +118,6 @@ typedef union		u_op_arg
 }					t_op_arg;
 
 /*
-** Sets arguments
-** 		args[0] = (t_op_arg){
-** 			.reg (t_op_arg_reg){
-** 				.type = ARG_REG,
-** 				.id = vm->arena[proc->pc] + pci++
-** 			}
-** 		};
-** 		args[1] = (t_op_arg){
-** 			.reg (t_op_arg_dir){
-** 				.type = ARG_DIR,
-** 				.arg = get_arena(proc, pci++)
-** 			}
-** 		};
-** 
-** Check if valid register
-** 		if (args[0].type == ARG_REG
-** 				&& args[0].reg.id && args[0].reg.id < REG_MAX)
-*/
-
-/*
 ** ==============================================================================
 ** 						PROCESS
 ** ==============================================================================
@@ -175,8 +150,6 @@ struct				s_process
 ** 						VM
 ** ==============================================================================
 */
-
-// pc & 0x1002;
 
 typedef struct		s_player
 {
@@ -245,9 +218,21 @@ bool			carry_flag(uint32_t c);
 void			convert_instruction(t_env *env, t_process *process);
 bool			direct_size(uint32_t c);
 bool			encod_byte(uint32_t c);
-bool			is_op_arg_valid(t_process *p);
 int				nb_arg(uint32_t c);
 int				wait_cycle(uint32_t c);
+
+//Checker
+
+bool			is_op_other2_valid(t_process *p);
+bool			is_op_other_valid(t_process *p);
+bool			is_l_ld_st_valid(t_process *p);
+bool			is_lldi_valid(t_process *p);
+bool			is_sti_valid(t_process *p);
+bool			is_ldi_valid(t_process *p);
+bool			is_xor_valid(t_process *p);
+bool			is_or_valid(t_process *p);
+bool			is_and_valid(t_process *p);
+bool			is_op_arg_valid(t_process *p, uint32_t op);
 
 //Gestion des queues
 
@@ -256,7 +241,7 @@ t_process		*push_lst(t_process *process, int32_t id, uint16_t pc);
 t_process		*pop_lst(t_process *process, t_process *prev);
 
 //TESTS PROTO
-
+/*
 void			aff_env(t_env *env, bool all);
 void			aff_player(t_player *player);
 void			aff_process(t_process *process);
@@ -266,12 +251,12 @@ void			test_get_opt_champ_loader(char *arg);
 void			test_loader(void);
 void			test_lst(void);
 void			test_system(void);
-
+*/
 //OP_FONCTION
-
+/*
 int				live(t_env *env, t_process *process);
 int				ld(t_env *env, t_process *process);
-/*int				st(t_env *env, t_process *process);
+int				st(t_env *env, t_process *process);
 int				add(t_env *env, t_process *process);
 int				sub(t_env *env, t_process *process);
 int				and(t_env *env, t_process *process);
