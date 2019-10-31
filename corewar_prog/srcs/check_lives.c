@@ -6,23 +6,33 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 21:08:32 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 00:01:09 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/31 18:39:49 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static inline void	check_alive(t_process *tmp)
+static inline void	kill_process(t_env *env, t_process *tmp, t_process *prev)
 {
+	if (env->verbose[2])
+		printf("A process with the id %u died following a pitiful agony.\n",
+				tmp->r[0]);
+	tmp = pop_lst(tmp, prev);
+}
+
+static inline void	check_alive(t_env *env)
+{
+	t_process			*tmp;
 	t_process			*prev;
 	
+	tmp = env->process;
 	prev = NULL;
 	while (tmp)
 	{
 		if (tmp->next)
 		{
 			if (!tmp->alive)
-				tmp = pop_lst(tmp, prev);
+				kill_process(env, tmp, prev);
 			else
 			{
 				prev = tmp;
@@ -30,18 +40,43 @@ static inline void	check_alive(t_process *tmp)
 			}
 		}
 		else
+		{
 			if (!tmp->alive)
-				tmp = pop_lst(tmp, prev);
+				kill_process(env, tmp, prev);
+			if (prev == NULL)
+				env->process = NULL;
+		}
 	}
 }
 
-int					check_live(t_env *env)
+static inline void	verbose(t_env *env, unsigned int count)
 {
-	t_process			*tmp;
+	unsigned int	i;
+	unsigned int	live_tot;
+
+	i = 0;
+	live_tot = 0;
+	if (env->verbose[0] && count == 0)
+		printf("Cycle to die is decremented by cycle delta, %d \
+			cycles before next cycle to die\n", env->cycle_to_die);
+	if (env->verbose[4])
+	{
+		while (i < env->nb_pl)
+		{
+			printf("le joueur %u(%s) est a %d lives\n",
+				env->player[i].id, env->player[i].name, env->live_pl[i]);
+			live_tot += env->live_pl[i];
+			i++;
+		}
+		printf("Pour un total de %d appels a la fonction live", live_tot);
+	}
+}
+
+void				check_live(t_env *env)
+{
 	static unsigned int	count = 0;
 
-	tmp = env->process;
-	check_alive(tmp);
+	check_alive(env);
 	if (env->curr_lives >= NBR_LIVE)
 	{
 		count = 0;
@@ -54,8 +89,8 @@ int					check_live(t_env *env)
 		count = 0;
 		env->cycle_to_die -= CYCLE_DELTA;
 	}
+	verbose(env, count);
 	env->cycle_tot += env->cycle_curr;
 	env->cycle_curr = 0;
 	env->curr_lives = 0;
-	return (0);
 }

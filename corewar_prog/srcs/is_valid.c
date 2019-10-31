@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 21:06:59 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 22:52:52 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/30 16:13:48 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,81 +14,81 @@
 
 bool	is_sti_valid(t_process *p)
 {
-	static bool		g_valid_op[ARG_MAX][ARG_MAX][ARG_MAX];
+	static bool		g_valid_sti[ARG_MX][ARG_MX][ARG_MX];
 
-	g_valid_op[ARG_REG][ARG_DIR][ARG_DIR] = true;
-	g_valid_op[ARG_REG][ARG_IND][ARG_DIR] = true;
-	g_valid_op[ARG_REG][ARG_REG][ARG_DIR] = true;
-	g_valid_op[ARG_REG][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_REG][ARG_REG] = true;
-	return (g_valid_op[p->instruct.args[0].type][
-			p->instruct.args[1].type][p->instruct.args[2].type]);
+	g_valid_sti[ARG_REG][ARG_DIR][ARG_DIR] = true;
+	g_valid_sti[ARG_REG][ARG_IND][ARG_DIR] = true;
+	g_valid_sti[ARG_REG][ARG_REG][ARG_DIR] = true;
+	g_valid_sti[ARG_REG][ARG_DIR][ARG_REG] = true;
+	g_valid_sti[ARG_REG][ARG_IND][ARG_REG] = true;
+	g_valid_sti[ARG_REG][ARG_REG][ARG_REG] = true;
+	return (g_valid_sti[p->instruct.args[0].type][p->instruct.args[1].type][
+			p->instruct.args[2].type]);
 }
 
 bool	is_ldi_valid(t_process *p)
 {
-	static bool		g_valid_op[ARG_MAX][ARG_MAX][ARG_MAX];
+	static bool		g_valid_ldi[ARG_MX][ARG_MX][ARG_MX];
 
-	g_valid_op[ARG_DIR][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_DIR][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_REG][ARG_REG] = true;
-	return (g_valid_op[p->instruct.args[0].type][
-			p->instruct.args[1].type][p->instruct.args[2].type]);
+	g_valid_ldi[ARG_DIR][ARG_DIR][ARG_REG] = true;
+	g_valid_ldi[ARG_IND][ARG_DIR][ARG_REG] = true;
+	g_valid_ldi[ARG_REG][ARG_DIR][ARG_REG] = true;
+	g_valid_ldi[ARG_DIR][ARG_REG][ARG_REG] = true;
+	g_valid_ldi[ARG_IND][ARG_REG][ARG_REG] = true;
+	g_valid_ldi[ARG_REG][ARG_REG][ARG_REG] = true;
+	return (g_valid_ldi[p->instruct.args[0].type][p->instruct.args[1].type][
+			p->instruct.args[2].type]);
 }
 
 bool	is_xor_valid(t_process *p)
 {
-	static bool		g_valid_op[ARG_MAX][ARG_MAX][ARG_MAX];
+	static bool		g_valid_xor[ARG_MX][ARG_MX][ARG_MX];
 
-	g_valid_op[ARG_DIR][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_DIR][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_DIR][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_REG][ARG_REG] = true;
-	return (g_valid_op[p->instruct.args[0].type][
-			p->instruct.args[1].type][p->instruct.args[2].type]);
+	g_valid_xor[ARG_DIR][ARG_DIR][ARG_REG] = true;
+	g_valid_xor[ARG_IND][ARG_DIR][ARG_REG] = true;
+	g_valid_xor[ARG_REG][ARG_DIR][ARG_REG] = true;
+	g_valid_xor[ARG_DIR][ARG_IND][ARG_REG] = true;
+	g_valid_xor[ARG_IND][ARG_IND][ARG_REG] = true;
+	g_valid_xor[ARG_REG][ARG_IND][ARG_REG] = true;
+	g_valid_xor[ARG_DIR][ARG_REG][ARG_REG] = true;
+	g_valid_xor[ARG_IND][ARG_REG][ARG_REG] = true;
+	g_valid_xor[ARG_REG][ARG_REG][ARG_REG] = true;
+	return (g_valid_xor[p->instruct.args[0].type][p->instruct.args[1].type][
+			p->instruct.args[2].type]);
 }
 
 bool	is_or_valid(t_process *p)
 {
-	static bool		g_valid_op[ARG_MAX][ARG_MAX][ARG_MAX];
+	static bool		g_valid_or[ARG_MX][ARG_MX][ARG_MX];
 
-	g_valid_op[ARG_DIR][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_DIR][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_DIR][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_REG][ARG_REG] = true;
-	return (g_valid_op[p->instruct.args[0].type][
-			p->instruct.args[1].type][p->instruct.args[2].type]);
+	g_valid_or[ARG_DIR][ARG_DIR][ARG_REG] = true;
+	g_valid_or[ARG_IND][ARG_DIR][ARG_REG] = true;
+	g_valid_or[ARG_REG][ARG_DIR][ARG_REG] = true;
+	g_valid_or[ARG_DIR][ARG_IND][ARG_REG] = true;
+	g_valid_or[ARG_IND][ARG_IND][ARG_REG] = true;
+	g_valid_or[ARG_REG][ARG_IND][ARG_REG] = true;
+	g_valid_or[ARG_DIR][ARG_REG][ARG_REG] = true;
+	g_valid_or[ARG_IND][ARG_REG][ARG_REG] = true;
+	g_valid_or[ARG_REG][ARG_REG][ARG_REG] = true;
+	return (g_valid_or[p->instruct.args[0].type][p->instruct.args[1].type][
+			p->instruct.args[2].type]);
 }
 
 bool	is_and_valid(t_process *p)
 {
-	static bool		g_valid_op[ARG_MAX][ARG_MAX][ARG_MAX];
+	static bool		g_valid_and[ARG_MX][ARG_MX][ARG_MX];
 
-	g_valid_op[ARG_DIR][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_DIR][ARG_REG] = true;
-	g_valid_op[ARG_DIR][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_IND][ARG_REG] = true;
-	g_valid_op[ARG_DIR][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_IND][ARG_REG][ARG_REG] = true;
-	g_valid_op[ARG_REG][ARG_REG][ARG_REG] = true;
-	return (g_valid_op[p->instruct.args[0].type][
-			p->instruct.args[1].type][p->instruct.args[2].type]);
+	g_valid_and[ARG_DIR][ARG_DIR][ARG_REG] = true;
+	g_valid_and[ARG_IND][ARG_DIR][ARG_REG] = true;
+	g_valid_and[ARG_REG][ARG_DIR][ARG_REG] = true;
+	g_valid_and[ARG_DIR][ARG_IND][ARG_REG] = true;
+	g_valid_and[ARG_IND][ARG_IND][ARG_REG] = true;
+	g_valid_and[ARG_REG][ARG_IND][ARG_REG] = true;
+	g_valid_and[ARG_DIR][ARG_REG][ARG_REG] = true;
+	g_valid_and[ARG_IND][ARG_REG][ARG_REG] = true;
+	g_valid_and[ARG_REG][ARG_REG][ARG_REG] = true;
+	return (g_valid_and[p->instruct.args[0].type][p->instruct.args[1].type][
+			p->instruct.args[2].type]);
 }
 
 bool	is_op_arg_valid(t_process *p, uint32_t op)

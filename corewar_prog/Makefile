@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/29 21:50:30 by moguy            ###   ########.fr        #
+#    Updated: 2019/10/31 17:45:09 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -38,32 +38,35 @@ LIB_PATH=../libft/
 LIB=$(LIB_PATH)libft.a
 
 INC_PATH=includes/
-INC_NAME=	corewar.h\
+INC_NAME=corewar.h\
 			op.h\
+			libft.h\
 			define.h
 
 INC=$(addprefix $(INC_PATH), $(INC_NAME))
 
 SRCS_PATH=srcs/
 SRCS_NAME=	after_space.c\
-			after_word.c\
-			check_lives.c\
-			convert_instruction.c\
-			conv_table.c\
-			create_launch.c\
-			cw_loop.c\
-			get_data.c\
-			get_id.c\
-			get_name_len.c\
-			is_valid.c\
-			is_valid2.c\
-			load_args.c\
-			loader.c\
-			lst.c\
-			main.c\
-			merge_args.c\
-			opt.c\
-			reverse_bits.c
+		after_word.c\
+		check_lives.c\
+		convert_instruction.c\
+		conv_table.c\
+		create_launch.c\
+		cw_loop.c\
+		get_data.c\
+		get_id.c\
+		get_name_len.c\
+		is_valid.c\
+		is_valid2.c\
+		load_args.c\
+		loader.c\
+		lst.c\
+		main.c\
+		merge_args.c\
+		opt.c\
+		opt_utils.c\
+		aff.c\
+		reverse_bits.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
 

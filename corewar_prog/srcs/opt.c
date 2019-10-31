@@ -5,43 +5,57 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/26 22:18:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/26 22:27:35 by moguy            ###   ########.fr       */
+/*   Created: 2019/10/30 20:01:11 by moguy             #+#    #+#             */
+/*   Updated: 2019/10/31 15:49:21 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-/*• La machine virtuelle se lance de la façon suivante :
-> ./corewar [-dump nbr_cycles] [[-n number] champion1.cor] ...
-• -dump nbr_cycles
-Au bout de nbr_cycles cycles d’exécution, 
-dump la mémoire sur la sortie standard, 
-puis quitte la partie. 
-La mémoire doit être dumpée au format hexadécimal,
-avec 32 octets par ligne.
-• -n number
-Fixe le numéro du prochain joueur. Si absent, 
-le joueur aura le prochain numéro
-libre dans l’ordre des paramètres. 
-Le dernier joueur aura le premier processus dans
-l’ordre d’exécution.
-• Les champions ne peuvent pas dépasser CHAMP_MAX_SIZE, sinon c’est une
-erreur.*/
-
-int		get_dump(char *arg, unsigned int *j)
+static inline char	hex_tab(uint8_t quartet)
 {
-	unsigned int	i;
-	long long int	dump;
+	static char			hex_value[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
+		'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-	i = *j + 6;
-	i = after_space(arg, i);
-	if (!ft_isdigit(arg[i]) || (dump = ft_atoi(&arg[i])) < 1 || dump > INT_MAX)
-		return (-1);
-	while (ft_isdigit(arg[i]))
+	return (hex_value[quartet]);
+}
+
+static inline void	print_octet(uint8_t hquartet, uint8_t lquartet, bool flush)
+{
+	static char			buffer[DUMP_LENGTH];
+	static unsigned int	i = 0;
+	static unsigned int	count = 0;
+
+	buffer[i++] = hex_tab(hquartet);
+	buffer[i++] = hex_tab(lquartet);
+	count++;
+	if (count == 32)
+	{
+		count = 0;
+		buffer[i++] = '\n';
+	}
+	else
+		buffer[i++] = ' ';
+	if (flush)
+	{
+		buffer[i] = '\n';
+		i = 0;
+		write(1, &buffer[0], DUMP_LENGTH);
+	}
+}
+
+void				dump(t_env *env)
+{
+	uint8_t				*arena;
+	unsigned int		i;
+
+	i = 0;
+	arena = &env->arena[0];
+	while (i < MEM_SIZE - 1)
+	{
+		print_octet((arena[i] >> 4) & 0xf, arena[i] & 0xf, false);
 		i++;
-	if (!ft_is_whitespace(arg[i]))
-		return (-1);
-	*j = i;
-	return ((int)dump);
+	}
+	print_octet((arena[i] >> 4) & 0xf, arena[i] & 0xf, true);
+	env->cycle_to_dump = env->opt[DMP];
 }

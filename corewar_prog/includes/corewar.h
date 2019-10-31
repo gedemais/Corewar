@@ -6,23 +6,24 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 21:48:54 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/31 19:09:56 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef COREWAR_H
 # define COREWAR_H
-# include "../../libft/libft.h"
+# include "libft.h"
 # include "define.h"
 # include "op.h"
 # include <limits.h>
 # include <stdbool.h>
 # include <string.h>
 # include <sys/types.h>
+# include <stdio.h>
 
 /*
 ** ==============================================================================
-** 						Options
+** 						OPTIONS
 ** ==============================================================================
 */
 
@@ -33,7 +34,7 @@ typedef enum		e_option
 
 /*
 ** ==============================================================================
-** 						Op_codes
+** 						OP_CODES
 ** ==============================================================================
 */
 
@@ -61,7 +62,7 @@ typedef enum		e_op_code
 
 /*
 ** ==============================================================================
-** 						Arguments
+** 						ARGUMENTS
 ** ==============================================================================
 */
 
@@ -73,6 +74,12 @@ typedef enum		e_op_arg_type
 	ARG_IND,
 	ARG_MX
 }					t_op_arg_type;
+
+/*
+** ==============================================================================
+** 						REGISTRES
+** ==============================================================================
+*/
 
 typedef enum		e_reg_id
 {
@@ -96,33 +103,18 @@ typedef enum		e_reg_id
 	REG_MAX
 }					t_reg_id;
 
-typedef struct		s_op_arg_reg
-{
-	t_op_arg_type	type;
-	t_reg_id		id;
-}					t_op_arg_reg;
-
-typedef struct		s_op_arg_dir
-{
-	t_op_arg_type	type;
-	uint32_t		arg;
-}					t_op_arg_dir;
-
-typedef union		u_op_arg
-{
-	struct {
-		t_op_arg_type	type;
-	};
-	t_op_arg_dir		dir;
-	t_op_arg_reg		reg;
-}					t_op_arg;
-
 /*
 ** ==============================================================================
 ** 						PROCESS
 ** ==============================================================================
 */
 
+typedef struct		s_op_arg
+{
+	t_op_arg_type	type;
+	t_reg_id		id;
+	uint32_t		arg;
+}					t_op_arg;
 
 typedef struct s_instruct	t_instruct;
 
@@ -141,13 +133,14 @@ struct				s_process
 	int32_t			r[REG_NUMBER];
 	int				cycle_to_exec;
 	uint16_t		pc : 12;
+	uint64_t		pad : 36;
 	bool			alive;
 	bool			carry;
 };
 
 /*
 ** ==============================================================================
-** 						VM
+** 						VM AND PLAYERS
 ** ==============================================================================
 */
 
@@ -157,7 +150,7 @@ typedef struct		s_player
 	char			champ[CHAMP_MAX_SIZE];
 	char			name[PROG_NAME_LENGTH + 1];
 	char			pad[2][PAD_LENGTH];
-	int32_t			id;
+	uint32_t		id;
 	uint32_t		magic;
 	uint32_t		size;
 }					t_player;
@@ -170,16 +163,25 @@ typedef struct		s_env
 	int				opt[OPT_MAX];
 	unsigned int	live_pl[MAX_PLAYERS];
 	bool			verbose[VERB_MAX];
+	char			pad[7];
+	int				cycle_to_dump;
 	int				cycle_to_die;
 	int				cycle_curr;
 	int				cycle_tot;
 	unsigned int	curr_lives;
 	unsigned int	nb_pl;
+	uint32_t		last_live;
 }					t_env;
 
-/////////////////////PROTOTYPES/////////////////////
+/*
+** ==============================================================================
+** 						PROTOTYPES
+** ==============================================================================
+*/
 
-//Ajouter a la lib
+/*
+** UTILS
+*/
 
 unsigned int	after_space(char *arg, unsigned int i);
 unsigned int	after_word(char *arg, unsigned int i);
@@ -187,11 +189,21 @@ unsigned int	get_name_len(char *name);
 char			*merge_args(int ac, char **av);
 int				rev_bits(int num);
 
-//Option
+/*
+** OPTIONS UTILS
+*/
 
 int				get_dump(char *arg, unsigned int *j);
 
-//Parsing et utils
+/*
+** OPTIONS
+*/
+
+void			dump(t_env *env);
+
+/*
+** UTILS AND PARSING
+*/
 
 int				error(char *error_msg, char *err_msg, char *junk);
 void			free_env(t_env *env, char *arg);
@@ -201,18 +213,22 @@ int				get_id(t_env *env, char *arg, unsigned int *j);
 int				loader(t_env *env, char *arg, unsigned int *j);
 int				read_big_endian(t_env *env, int fd, bool magic);
 
-//Corewar loop
+/*
+** FUNCTIONS OF THE COREWAR LOOP
+*/
 
 int				add_instruction(t_env *env, t_process *process);
-int				check_live(t_env *env);
-int				create_instruct(t_env *env, t_process *process);
+void			check_live(t_env *env);
+void			create_instruct(t_env *env, t_process *process);
 int				create_pro(t_env *env, unsigned int i, unsigned int offset);
 int				cw_loop(t_env *env);
 uint32_t		get_mem_cell(t_env *env, t_process *p, size_t siz, uint16_t add);
-int				launch_instruct(t_env *env, t_process *process);
+void			launch_instruct(t_env *env, t_process *process);
 void			load_args(t_env *env, t_process *p, bool enco, bool dir);
 
-//Tableau de statique
+/*
+** FUNCTIONS TO GET THE DATA OF THE OP_FUNCTIONS
+*/
 
 bool			carry_flag(uint32_t c);
 void			convert_instruction(t_env *env, t_process *process);
@@ -221,7 +237,9 @@ bool			encod_byte(uint32_t c);
 int				nb_arg(uint32_t c);
 int				wait_cycle(uint32_t c);
 
-//Checker
+/*
+** CHECK OF THE ARGUMENTS OF THE OP_FUNCTIONS
+*/
 
 bool			is_op_other2_valid(t_process *p);
 bool			is_op_other_valid(t_process *p);
@@ -234,28 +252,35 @@ bool			is_or_valid(t_process *p);
 bool			is_and_valid(t_process *p);
 bool			is_op_arg_valid(t_process *p, uint32_t op);
 
-//Gestion des queues
+/*
+** LISTS
+*/
 
-t_process		*new_lst(int32_t id, uint16_t pc);
-t_process		*push_lst(t_process *process, int32_t id, uint16_t pc);
+t_process		*new_lst(uint32_t id, uint16_t pc);
+t_process		*push_lst(t_process *process, uint32_t id, uint16_t pc);
 t_process		*pop_lst(t_process *process, t_process *prev);
 
-//TESTS PROTO
 /*
+** TESTS AND DISPLAY OF THE STRUCTURES
+*/
+
 void			aff_env(t_env *env, bool all);
 void			aff_player(t_player *player);
-void			aff_process(t_process *process);
-void			test_convert_instruction(void);
+void			aff_process(t_process *process, bool all);
+/*void			test_convert_instruction(void);
 void			test_cw_loop(void);
 void			test_get_opt_champ_loader(char *arg);
 void			test_loader(void);
 void			test_lst(void);
 void			test_system(void);
 */
-//OP_FONCTION
+
 /*
+** OP_FUNCTIONS
+*/
+
 int				live(t_env *env, t_process *process);
-int				ld(t_env *env, t_process *process);
+/*int				ld(t_env *env, t_process *process);
 int				st(t_env *env, t_process *process);
 int				add(t_env *env, t_process *process);
 int				sub(t_env *env, t_process *process);

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 14:21:28 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/19 17:24:09 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/30 14:16:23 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 unsigned int		after_space(char *arg, unsigned int i)
 {
+	if (!arg)
+		return (0);
 	while (arg[i] && ft_is_whitespace(arg[i]))
 		i++;
 	return (i);

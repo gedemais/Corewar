@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 17:44:18 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 21:49:36 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/30 18:57:27 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,21 +38,20 @@ static inline void	get_args(t_env *env, t_process *p, bool dir)
 
 	i = MAX_ARGS_NUMBER;
 	j = 0;
-	encoding = env->arena[p->pc];
-	p->pc += 1;
+	encoding = (uint8_t)get_mem_cell(env, p, 1, p->pc);
 	while (i-- > 0)
 	{
 		type = (encoding >> (2 * i)) & MASK_ENCO;
 		p->instruct.args[j].type = type;
 		if (type == ARG_DIR)
-			p->instruct.args[j].dir.arg = get_mem_cell(env, p,
-			(dir == 0) ? 2 : 4, p->pc);
+			p->instruct.args[j].arg = get_mem_cell(env, p,
+					(dir == 0) ? 4 : 2, p->pc);
 		else if (type == ARG_IND)
-			p->instruct.args[j].dir.arg = get_mem_cell(env, p, 2, p->pc);
+			p->instruct.args[j].arg = get_mem_cell(env, p, 2, p->pc);
 		else if (type == ARG_REG)
-			if ((p->instruct.args[j].reg.id = get_mem_cell(
-				env, p, 1, p->pc)) <= REG_NONE
-				|| p->instruct.args[j].reg.id >= REG_MAX)
+			if ((p->instruct.args[j].id = get_mem_cell(
+							env, p, 1, p->pc)) <= REG_NONE
+					|| p->instruct.args[j].id >= REG_MAX)
 				p->instruct.op = OP_NONE;
 		j++;
 	}
@@ -63,9 +62,9 @@ void	load_args(t_env *env, t_process *p, bool enco, bool dir)
 	if (enco == false)
 	{
 		p->instruct.args[0].type = ARG_DIR;
-		p->instruct.args[0].dir.arg = get_mem_cell(env, p,
-			(dir == 0) ? 2 : 4, p->pc);
-		p->pc += (dir == 0) ? 2 : 4;
+		p->instruct.args[0].arg = get_mem_cell(env, p,
+				(dir == 0) ? 4 : 2, p->pc);
+		p->pc += (dir == 0) ? 4 : 2;
 	}
 	else
 		get_args(env, p, dir);

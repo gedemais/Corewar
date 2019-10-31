@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/26 22:43:24 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/31 19:26:23 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,34 @@ int				error(char *error_msg, char *err_msg, char *junk)
 	return (1);
 }
 
+static inline void	introducing_champions(t_env *env)
+{
+	unsigned int	i;
+	
+	i = 1;
+	if (env->nb_pl == 1)
+		printf("The contestant is alone, he is %s with the id %u.\n",
+				env->player[0].name, env->player[0].id);
+	else
+		printf("The contestants are %u :-%s with the id %u.\n", env->nb_pl,
+				env->player[0].name, env->player[0].id);
+	while (i < env->nb_pl)
+	{
+		printf("                        -%s with the id %u\n.",
+				env->player[i].name, env->player[i].id);
+		i++;
+	}
+}
+
 static inline int	vm(t_env *env, char *arg)
 {
 	if (get_data(env, arg))
 		return (1);
+	introducing_champions(env);
 	if (cw_loop(env))
 		return (1);
 	free_env(env, arg);
 	return (0);
-}
-
-static inline void	init_env(t_env *env)
-{
-	ft_memset(env, 0, sizeof(t_env));
-	env->cycle_to_die = CYCLE_TO_DIE;
 }
 
 int					main(int ac, char **av)
@@ -67,7 +81,8 @@ int					main(int ac, char **av)
 		return (error(TOO_MANY_ARGS, USAGE, NULL));	
 	if (!(arg = merge_args(ac, av)))
 		return (error(BAD_ARGS, USAGE, NULL));	
-	init_env(&env);
+	ft_memset(&env, 0, sizeof(t_env));
+	env.cycle_to_die = CYCLE_TO_DIE;
 	if (vm(&env, arg))
 	{
 		free_env(&env, arg);

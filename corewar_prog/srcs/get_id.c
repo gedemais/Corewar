@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/29 17:04:12 by moguy            ###   ########.fr       */
+/*   Updated: 2019/10/31 18:45:58 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void				find_new_id(t_env *env, unsigned int j)
 {
 	unsigned int	i;
-	int32_t			ret;
+	uint32_t		ret;
 
 	i = 0;
 	ret = 1;
@@ -51,18 +51,18 @@ static inline void	check_id(t_env *env)
 int					get_id(t_env *env, char *arg, unsigned int *j)
 {
 	static bool		opt_n[4] = {false};
+	long long int	id;
 	unsigned int	i;
 
 	i = after_space(arg, *j + 3);
-	if (!ft_isdigit(arg[i])
-		|| (env->player[env->nb_pl].id = (int32_t)ft_atoi(&arg[i])) < 1
-		|| env->player[env->nb_pl].id > 4)
+	if (!ft_isdigit(arg[i]) || (id = ft_atoi(&arg[i])) < 1 || id > 4)
 		return (error(BAD_ID, USAGE, NULL));
+	env->player[env->nb_pl].id  = (uint32_t)id;
 	*j = i + 2;
 	if (opt_n[env->player[env->nb_pl].id - 1] == false)
 		opt_n[env->player[env->nb_pl].id - 1] = true;
 	else 
-		return (error(BAD_ID, USAGE, NULL));
+		return (error(SAME_ID, USAGE, NULL));
 	check_id(env);
 	return (0);
 }
