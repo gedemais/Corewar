@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/31 19:09:56 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/03 08:32:00 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,9 +133,12 @@ struct				s_process
 	int32_t			r[REG_NUMBER];
 	int				cycle_to_exec;
 	uint16_t		pc : 12;
-	uint64_t		pad : 36;
+	uint16_t		po : 12;
+	uint32_t		tpc : 12;
+	uint32_t		pad : 20;
 	bool			alive;
 	bool			carry;
+	char			padding[7];
 };
 
 /*
@@ -230,7 +233,6 @@ void			load_args(t_env *env, t_process *p, bool enco, bool dir);
 ** FUNCTIONS TO GET THE DATA OF THE OP_FUNCTIONS
 */
 
-bool			carry_flag(uint32_t c);
 void			convert_instruction(t_env *env, t_process *process);
 bool			direct_size(uint32_t c);
 bool			encod_byte(uint32_t c);
@@ -279,8 +281,9 @@ void			test_system(void);
 ** OP_FUNCTIONS
 */
 
+uint32_t		get_direct(t_env *env, t_process *p, t_op_arg args);
 int				live(t_env *env, t_process *process);
-/*int				ld(t_env *env, t_process *process);
+int				ld(t_env *env, t_process *process);
 int				st(t_env *env, t_process *process);
 int				add(t_env *env, t_process *process);
 int				sub(t_env *env, t_process *process);
@@ -295,5 +298,5 @@ int				lld(t_env *env, t_process *process);
 int				lldi(t_env *env, t_process *process);
 int				lfork(t_env *env, t_process *process);
 int				aff(t_env *env, t_process *process);
-*/
+
 #endif

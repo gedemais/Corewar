@@ -1,0 +1,1 @@
+zjump a des soucis avec les labels je pense, mieux gerer les adressages, surtout en cas de direct de size 2. byte negatif en ca de label SHRT_MAX - distance au label en arriere

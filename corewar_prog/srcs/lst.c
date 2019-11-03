@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:08:31 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/31 18:18:17 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/02 20:24:58 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ t_process	*pop_lst(t_process *process, t_process *prev)
 	tmp = process;
 	if (tmp->next)
 	{
-		tmp = tmp->next;
+		process = process->next;
 		if (prev)
-			prev->next = tmp;
-		ft_memdel((void**)&process);
-		return (tmp);
+			prev->next = process;
+		ft_memdel((void**)&tmp);
+		return (process);
 	}
-	ft_memdel((void**)&process);
+	ft_memdel((void**)&tmp);
 	if (prev)
 		prev->next = NULL;
 	return (NULL);

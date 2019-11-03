@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/31 17:45:09 by moguy            ###   ########.fr        #
+#    Updated: 2019/11/03 02:46:28 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,6 +63,7 @@ SRCS_NAME=	after_space.c\
 		lst.c\
 		main.c\
 		merge_args.c\
+		op_functions.c\
 		opt.c\
 		opt_utils.c\
 		aff.c\

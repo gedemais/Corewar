@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 11:21:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/30 17:37:53 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/03 03:26:04 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,9 @@ int		wait_cycle(uint32_t c)
 
 void	convert_instruction(t_env *env, t_process *process)
 {
-/*	static int		(*cw_func[NB_FUNC])(t_env*, t_process*) = {&live, &ld, &st,
-		&add, &sub, &and, &or, &xor, &zjmp, &ldi, &sti, &forky, &lld,
+	static int		(*cw_func[NB_FUNC])(t_env *env, t_process *p) = {&live, &ld,
+		&st, &add, &sub, &and, &or, &xor, &zjmp, &ldi, &sti, &forky, &lld,
 		&lldi, &lfork, &aff};
 
-	(cw_func[(int)process->instruct.op_code - 1])(env, process);*/
-	(void)env;
-	(void)process;
+	(*cw_func[process->instruct.op - 1])(env, process);
 }

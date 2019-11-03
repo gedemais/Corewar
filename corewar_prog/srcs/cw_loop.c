@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/31 18:30:49 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/03 08:11:10 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline void	cycle_run(t_env *env, t_process *pro)
 	while (tmp)
 	{
 		tmp->cycle_to_exec--;
-		if (tmp->cycle_to_exec == 0)
+		if (tmp->cycle_to_exec <= 0)
 		{
 			launch_instruct(env, tmp);
 			ft_memset(&tmp->instruct, 0, sizeof(t_instruct));
@@ -55,10 +55,22 @@ static inline int	init_arena(t_env *env)
 	return (0);
 }
 
-int		cw_loop(t_env *env)
+static inline void	print_winner(t_env *env)
 {
 	unsigned int	i;
-	
+
+	i = 0;
+	while (i < env->nb_pl && env->player[i].id != env->last_live)
+		i++;
+	if (i == env->nb_pl)
+		printf("Aucun joueur n'a emis de live...LOSERS!!\n");
+	else
+		printf("le joueur %u(%s) a gagne.\n",
+			env->player[i].id, env->player[i].name);
+}
+
+int		cw_loop(t_env *env)
+{
 	if (init_arena(env))
 		return (1);
 	//aff_env(env, 1);
@@ -75,10 +87,6 @@ int		cw_loop(t_env *env)
 		}
 		check_live(env);
 	}
-	i = 0;
-	while (i < env->nb_pl || env->player[i].id == env->last_live)
-		i++;
-	printf("le joueur %u(%s) a gagne\n",
-			env->player[i].id, env->player[i].name);
+	print_winner(env);
 	return (0);
 }

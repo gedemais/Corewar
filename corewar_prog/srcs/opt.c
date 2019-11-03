@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 20:01:11 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/31 15:49:21 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/02 23:05:05 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,21 +23,25 @@ static inline char	hex_tab(uint8_t quartet)
 static inline void	print_octet(uint8_t hquartet, uint8_t lquartet, bool flush)
 {
 	static char			buffer[DUMP_LENGTH];
-	static unsigned int	i = 0;
+	static int			i = 0;
 	static unsigned int	count = 0;
 
 	buffer[i++] = hex_tab(hquartet);
 	buffer[i++] = hex_tab(lquartet);
 	count++;
-	if (count == 32)
+	if (count == 64)
 	{
 		count = 0;
 		buffer[i++] = '\n';
 	}
 	else
+	{
 		buffer[i++] = ' ';
+		buffer[i++] = ' ';
+	}
 	if (flush)
 	{
+		buffer[i++] = '\n';
 		buffer[i] = '\n';
 		i = 0;
 		write(1, &buffer[0], DUMP_LENGTH);

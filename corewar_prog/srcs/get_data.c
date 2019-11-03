@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 17:55:04 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/31 19:52:23 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/03 07:24:45 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ static inline int	check_verbose(t_env *env, char *arg, unsigned int *j)
 	i = *j;
 	if (arg[i + 1] == 'v' && ft_is_whitespace(arg[i + 2])
 			&& ft_isdigit(arg[i + 3]) && ft_is_whitespace(arg[i + 4])
-			&& (arg[i + 3] + '0') < 6 && (arg[i + 3] + '0') > 0)
+			&& (arg[i + 3] - '0') < 6 && (arg[i + 3] - '0') > 0)
 	{
-		env->verbose[arg[i + 3] + '0'] = true;
+		env->verbose[arg[i + 3] - '0'] = true;
 		i += 4;
 		*j = i;
 		return (1);

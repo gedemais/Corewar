@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/31 18:45:58 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/02 23:15:04 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,20 @@ void				find_new_id(t_env *env, unsigned int j)
 			i++;
 	}
 	env->player[j].id = ret;
+}
+
+static inline int	check_too_high_id(t_env *env)
+{
+	unsigned int	i;
+	
+	i = 0;
+	while (i < env->nb_pl)
+	{
+		if (env->player[i].id > env->nb_pl || env->player[i].id < 1)
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 static inline void	check_id(t_env *env)
@@ -64,5 +78,7 @@ int					get_id(t_env *env, char *arg, unsigned int *j)
 	else 
 		return (error(SAME_ID, USAGE, NULL));
 	check_id(env);
+	if (check_too_high_id(env))
+		return (1);
 	return (0);
 }
