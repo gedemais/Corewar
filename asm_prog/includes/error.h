@@ -6,14 +6,26 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/16 16:20:21 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/07 21:36:09 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_H
 # define ERROR_H
 
+# define BLACK "\033[22;30m"
+# define BLUE "\033[1;36m"
+# define RED "\033[1;31m"
+# define L_RED "\033[1;31m"
+# define L_GREEN "\033[1;32m"
+# define GRA "\033[1m"
+# define STOP "\033[0m"
+
+
+# define USAGE "usage: ./asm [champion.s]"
+
 # define FILE_EXT_ERR "Invalid file_name / .s extension"
+# define EMPTY_OP_SECTION "Empty instruction section"
 
 # define COMMENT_CMD_ERR "Invalid parameter for comment property"
 # define NAME_CMD_ERR "Invalid parameter for name property"

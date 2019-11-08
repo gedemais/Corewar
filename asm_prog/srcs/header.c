@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/19 23:36:57 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/08 00:44:34 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,19 +73,14 @@ static inline int	compute_bytecode_size(t_env *env)
 	while (i < env->nb_lex)
 	{
 		if (env->lexemes[i].type == LEX_LABEL)
-		{
 			env->lexemes[i].start_byte = (unsigned int)ret;
-			printf("label start : %u\n", env->lexemes[i].start_byte);
-		}
 		else if (env->lexemes[i].type == LEX_OP)
 		{
-			print_lexem(env->lexemes[i]);
-		env->lexemes[i].start_byte = (unsigned int)ret;
+			env->lexemes[i].start_byte = (unsigned int)ret;
 			ret++; // byte de l'opcode
 			if (env->lexemes[i].code) // byte d'encoding
 				ret++;
 			ret += get_op_size(&env->lexemes[i]); // Taille des arguments
-			printf("ret = %d\n", ret);
 		}
 		i++;
 	}
@@ -100,40 +95,53 @@ static inline char	*get_lex_string(t_env *env, char id)
 	while (i < env->nb_lex)
 	{
 		if (env->lexemes[i].type == id)
-			return (ft_strdup(env->lexemes[i].args[0].str));
+			return (env->lexemes[i].args[0].str);
 		i++;
 	}
 	return (NULL);
 }
 
-int		write_header(t_env *env, int fd)
+int		write_header(t_env *env, int *fd)
 {
 	char	buff[HEADER_SIZE];
 	char	lbe_buff[LBE_BUFFER];
 
 	if (!(env->p_name = get_lex_string(env, LEX_NAME_PROP))
-			|| !(env->p_comment = get_lex_string(env, LEX_COMMENT_PROP)))
+		|| !(env->p_comment = get_lex_string(env, LEX_COMMENT_PROP)))
 		return (-1);
-	env->file_size = compute_bytecode_size(env);
-	printf("Bytecode size : %d\n", env->file_size);
+	if ((env->file_size = compute_bytecode_size(env)) <= 0)
+	{
+	free(env->p_name);
+	free(env->p_comment);
+		ft_putendl_fd(EMPTY_OP_SECTION, 2);
+		return (-1);
+	}
+	if ((*fd = open(env->bin_name, O_CREAT|O_WRONLY, 0666)) < 0)
+	{
+		free(env->p_name);
+		free(env->p_comment);
+		return (-1);
+	}
 	reverse_bits(lbe_buff, COREWAR_EXEC_MAGIC);
-	write(fd, lbe_buff, LBE_BUFFER);//magic number
+	write(*fd, lbe_buff, LBE_BUFFER);//magic number
 
 	ft_memset(buff, 0, sizeof(char) * HEADER_SIZE);
 	ft_strcpy(buff, env->p_name);
-	write(fd, buff, PROG_NAME_LENGTH);//name
+	write(*fd, buff, PROG_NAME_LENGTH);//name
 
 	ft_memset(lbe_buff, PADDING_VALUE, sizeof(char) * LBE_BUFFER);
-	write(fd, lbe_buff, LBE_BUFFER);//padding 1
+	write(*fd, lbe_buff, LBE_BUFFER);//padding 1
 
 	reverse_bits(lbe_buff, env->file_size);
-	write(fd, lbe_buff, LBE_BUFFER);//instruction section size
+	write(*fd, lbe_buff, LBE_BUFFER);//instruction section size
 
 	ft_memset(buff, 0, sizeof(char) * HEADER_SIZE);
 	ft_strcpy(buff, env->p_comment);
-	write(fd, buff, COMMENT_LENGTH);//comment
+	write(*fd, buff, COMMENT_LENGTH);//comment
 
 	ft_memset(lbe_buff, PADDING_VALUE, sizeof(char) * LBE_BUFFER);
-	write(fd, lbe_buff, LBE_BUFFER);//padding 2
+	write(*fd, lbe_buff, LBE_BUFFER);//padding 2
+	free(env->p_name);
+	free(env->p_comment);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/19 23:42:05 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/08 00:38:33 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,40 +20,24 @@
 # include <stdbool.h>
 # include <stdio.h>
 
-# define BLACK "\033[22;30m"
-# define BLUE "\033[1;36m"
-# define RED "\033[1;31m"
-# define L_RED "\033[1;31m"
-# define L_GREEN "\033[1;32m"
-# define GRA "\033[1m"
-# define STOP "\033[0m"
-
-# define USAGE "usage: ./asm [champion.s]"
-# define FILE_ERR_MSG "Invalid file or file name :"
-
 # define BUFF_READ 65536
 # define BUFF_WRITE 4096
 
 # define FILE_SIZE 4096
 
-# define LEX_COMB 32
-# define LEX_DEPTH 4
-
 # define HEADER_SIZE 2180
 
 # define NB_OPS 16
+# define MAX_TYPE_SIZE 32
+# define MAX_PARAM_NB 3
+
 # define NB_TOKENS_FUNCS 13
 # define NB_LEX_FUNCS 4
 # define NB_LEX_LOAD_FUNCS 4
+
 # define FCHAR stream[0]
-
-# define PADDING_VALUE 0
-
-# define MAX_TYPE_SIZE 32
-
 # define LBE_BUFFER 4
-
-# define MAX_PARAM_NB 3
+# define PADDING_VALUE 0
 
 static char				*g_opnames[NB_OPS] = {"add",
 											"aff",
@@ -168,6 +152,7 @@ typedef	struct			s_env
 	t_tokenizer			tok;
 	char				pad[4];
 	char				*file;
+	char				*bin_name;
 	char				*file_name;
 	char				*p_name;
 	char				*p_comment;
@@ -238,25 +223,6 @@ static char				(*g_token_fts[NB_TOKENS_FUNCS])(t_env*, char*, unsigned int*) = {
 ** Lexer
 */
 int						lexer(t_env *env);
-/*
-											"add",
-											"aff"
-											"and"
-											"fork"
-											"lfork"
-											"ld"
-											"ldi"
-											"lld"
-											"lldi"
-											"live"
-											"or"
-											"st"
-											"sti"
-											"sub"
-											xor
-											zjmp
-*/
-
 char					find_op(char *op);
 unsigned char			encoding_byte(unsigned char byte, unsigned int param, int type);
 bool					encoding_byte_pres(char type);
@@ -346,8 +312,7 @@ void					reverse_bits(char buff[LBE_BUFFER], int n);
 unsigned char			rev_bits(unsigned char b, bool shift);
 
 int						write_bytecode(t_env *env);
-int						write_header(t_env *env, int fd);
-
+int						write_header(t_env *env, int *fd);
 
 /*
 ** Errors reporting
