@@ -91,7 +91,7 @@ bool	is_and_valid(t_process *p)
 			p->instruct.args[2].type]);
 }
 
-bool	is_op_arg_valid(t_process *p, uint32_t op)
+bool	is_op_arg_valid(t_process *p, u_int32_t op)
 {
 	if (op == OP_ZJMP || op == OP_FORK || op == OP_LFORK || op == OP_AFF)
 		return (is_op_other2_valid(p));

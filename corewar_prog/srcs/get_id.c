@@ -6,79 +6,68 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/02 23:15:04 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/08 01:51:45 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void				find_new_id(t_env *env, unsigned int j)
+static inline void			give_id(t_env *env, unsigned int i, unsigned int j,
+		u_int8_t opt_n)
 {
-	unsigned int	i;
-	uint32_t		ret;
-
-	i = 0;
-	ret = 1;
-	while (i < env->nb_pl + 1)
-	{
-		if (ret == env->player[i].id)
-		{
-			i = 0;
-			ret++;
-		}
-		else
-			i++;
-	}
-	env->player[j].id = ret;
-}
-
-static inline int	check_too_high_id(t_env *env)
-{
-	unsigned int	i;
-	
-	i = 0;
 	while (i < env->nb_pl)
 	{
-		if (env->player[i].id > env->nb_pl || env->player[i].id < 1)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-static inline void	check_id(t_env *env)
-{
-	unsigned int	i;
-	
-	i = 0;
-	while (i < env->nb_pl)
-	{
-		if (env->player[i].id == env->player[env->nb_pl].id)
+		if (env->player[i].id == 0)
 		{
-			env->player[i].id = 0;
-			find_new_id(env, i);
+			while (j < 5)
+			{
+				if (!(opt_n & (1 << j)))
+				{
+					env->player[i].id = (u_int32_t)j;
+					j++;
+					break ;
+				}
+				j++;
+			}
 		}
 		i++;
 	}
 }
 
-int					get_id(t_env *env, char *arg, unsigned int *j)
+static inline u_int8_t			ft_power(u_int8_t nb, u_int8_t pow)
 {
-	static bool		opt_n[4] = {false};
+	u_int8_t	tmp;
+
+	tmp = nb;
+	if (pow < 1)
+		return (0);
+	while (pow > 1)
+	{
+		tmp *= nb;
+		pow--;
+	}
+	return (tmp);
+}
+
+int					get_id(t_env *env, char *arg, unsigned int *j, bool end)
+{
+	static u_int8_t	opt_n = 0;
 	long long int	id;
 	unsigned int	i;
 
+	if (end)
+	{
+		give_id(env, 0, 1, opt_n);
+		return (0);
+	}
 	i = after_space(arg, *j + 3);
 	if (!ft_isdigit(arg[i]) || (id = ft_atoi(&arg[i])) < 1 || id > 4)
 		return (error(BAD_ID, USAGE, NULL));
-	env->player[env->nb_pl].id  = (uint32_t)id;
+	env->player[env->nb_pl].id  = (u_int32_t)id;
 	*j = i + 2;
-	if (opt_n[env->player[env->nb_pl].id - 1] == false)
-		opt_n[env->player[env->nb_pl].id - 1] = true;
+	if (!(opt_n & (1 << env->player[env->nb_pl].id)))
+		opt_n |= ft_power(2, (u_int8_t)env->player[env->nb_pl].id);
 	else 
 		return (error(SAME_ID, USAGE, NULL));
-	check_id(env);
-	if (check_too_high_id(env))
-		return (1);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:16:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/03 08:33:46 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/08 04:08:51 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int				ld(t_env *env, t_process *p)
 		p->r[p->instruct.args[1].id - 1] = (int32_t)p->instruct.args[0].arg;
 	else
 	{
-		p->tpc = p->po + (p->instruct.args[0].arg % IDX_MOD);
+		p->tpc = p->pc + (p->instruct.args[0].arg % IDX_MOD);
 		ft_memcpy(&p->r[p->instruct.args[1].id - 1],
 			&env->arena[p->tpc], REG_SIZE);
 	}
@@ -44,7 +44,7 @@ int				st(t_env *env, t_process *p)
 {
 	if (p->instruct.args[1].type == ARG_IND)
 	{
-		p->tpc = p->po + (p->instruct.args[1].arg % IDX_MOD);
+		p->tpc = p->pc + (p->instruct.args[1].arg % IDX_MOD);
 		ft_memcpy(&env->arena[p->tpc], &p->r[p->instruct.args[0].id - 1],
 			REG_SIZE);
 	}
@@ -76,26 +76,26 @@ int				sub(t_env *env, t_process *p)
 	return (0);
 }
 
-uint32_t		get_direct(t_env *env, t_process *p, t_op_arg args)
+u_int32_t		get_direct(t_env *env, t_process *p, t_op_arg args)
 {
-	uint32_t	tmp;
+	u_int32_t	tmp;
 
 	if (args.type == ARG_DIR)
 		return (args.arg);
 	else if (args.type == ARG_IND)
 	{
-		ft_memcpy(&tmp, &env->arena[p->po + args.arg], REG_SIZE);
+		ft_memcpy(&tmp, &env->arena[p->pc + args.arg], REG_SIZE);
 		return (tmp);
 	}
 	else if (args.type == ARG_REG)
-		return ((uint32_t)p->r[args.id - 1]);
+		return ((u_int32_t)p->r[args.id - 1]);
 	return (0);
 }
 
 int				and(t_env *env, t_process *p)
 {
-	uint32_t	tmp;
-	uint32_t	tmp2;
+	u_int32_t	tmp;
+	u_int32_t	tmp2;
 
 	tmp = get_direct(env, p, p->instruct.args[0]);
 	tmp2 = get_direct(env, p, p->instruct.args[1]);
@@ -107,8 +107,8 @@ int				and(t_env *env, t_process *p)
 
 int				xor(t_env *env, t_process *p)
 {
-	uint32_t	tmp;
-	uint32_t	tmp2;
+	u_int32_t	tmp;
+	u_int32_t	tmp2;
 
 	tmp = get_direct(env, p, p->instruct.args[0]);
 	tmp2 = get_direct(env, p, p->instruct.args[1]);
@@ -120,8 +120,8 @@ int				xor(t_env *env, t_process *p)
 
 int				or(t_env *env, t_process *p)
 {
-	uint32_t	tmp;
-	uint32_t	tmp2;
+	u_int32_t	tmp;
+	u_int32_t	tmp2;
 
 	tmp = get_direct(env, p, p->instruct.args[0]);
 	tmp2 = get_direct(env, p, p->instruct.args[1]);
@@ -136,8 +136,7 @@ int				zjmp(t_env *env, t_process *p)
 	(void)env;
 	if (p->carry == false)
 		return (1);
-	p->po += (uint16_t)(p->instruct.args[0].arg % IDX_MOD);
-	p->pc = p->po;
+	p->pc += (u_int16_t)((u_int16_t)p->instruct.args[0].arg % IDX_MOD);
 	return (0);
 }
 
@@ -145,7 +144,7 @@ int				ldi(t_env *env, t_process *p)
 {
 	if (p->instruct.args[0].type == ARG_IND)
 	{
-		p->tpc = p->po + (p->instruct.args[0].arg % IDX_MOD);
+		p->tpc = p->pc + (p->instruct.args[0].arg % IDX_MOD);
 		if (p->instruct.args[1].type == ARG_REG)
 			p->tpc += p->instruct.args[1].id;
 		else
@@ -162,7 +161,7 @@ int				ldi(t_env *env, t_process *p)
 		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].id;
 	else
 		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].arg;
-	p->tpc = p->po + (p->tpc % IDX_MOD);
+	p->tpc = p->pc + (p->tpc % IDX_MOD);
 	ft_memcpy(&p->r[p->instruct.args[2].id - 1], &env->arena[p->tpc], REG_SIZE);
 	p->carry = true;
 	return (0);
@@ -178,8 +177,8 @@ int				sti(t_env *env, t_process *p)
 int				forky(t_env *env, t_process *p)
 {
 	(void)env;
-	p->tpc = p->po + (p->instruct.args[0].arg % IDX_MOD);
-	env->process = push_lst(env->process, (uint32_t)p->r[0], p->tpc);
+	p->tpc = p->pc + (p->instruct.args[0].arg % IDX_MOD);
+	env->process = push_lst(env->process, (u_int32_t)p->r[0], p->tpc);
 	return (0);
 }
 
@@ -189,7 +188,7 @@ int				lld(t_env *env, t_process *p)
 		p->r[p->instruct.args[1].id - 1] = (int32_t)p->instruct.args[0].arg;
 	else
 	{
-		p->tpc = p->po + p->instruct.args[0].arg;
+		p->tpc = p->pc + p->instruct.args[0].arg;
 		ft_memcpy(&p->r[p->instruct.args[1].id - 1],
 			&env->arena[p->tpc], REG_SIZE);
 	}
@@ -201,7 +200,7 @@ int				lldi(t_env *env, t_process *p)
 {
 	if (p->instruct.args[0].type == ARG_IND)
 	{
-		p->tpc = p->po + p->instruct.args[0].arg;
+		p->tpc = p->pc + p->instruct.args[0].arg;
 		if (p->instruct.args[1].type == ARG_REG)
 			p->tpc += p->instruct.args[1].id;
 		else
@@ -218,7 +217,7 @@ int				lldi(t_env *env, t_process *p)
 		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].id;
 	else
 		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].arg;
-	p->tpc = p->po + p->tpc;
+	p->tpc = p->pc + p->tpc;
 	ft_memcpy(&p->r[p->instruct.args[2].id - 1], &env->arena[p->tpc], REG_SIZE);
 	p->carry = true;
 	return (0);
@@ -227,8 +226,8 @@ int				lldi(t_env *env, t_process *p)
 int				lfork(t_env *env, t_process *p)
 {
 	(void)env;
-	p->tpc = p->po + p->instruct.args[0].arg;
-	env->process = push_lst(env->process, (uint32_t)p->r[0], p->tpc);
+	p->tpc = p->pc + p->instruct.args[0].arg;
+	env->process = push_lst(env->process, (u_int32_t)p->r[0], p->tpc);
 	return (0);
 }
 

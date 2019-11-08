@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/11/03 02:46:28 by moguy            ###   ########.fr        #
+#    Updated: 2019/11/07 03:30:53 by unknown          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ ORG = \033[1;31m
 NAME=corewar
 
 CC=gcc
-CFLAGS= -Wall -Werror -Wextra
+CFLAGS= -Wall -Wextra
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
@@ -39,9 +39,9 @@ LIB=$(LIB_PATH)libft.a
 
 INC_PATH=includes/
 INC_NAME=corewar.h\
-			op.h\
-			libft.h\
-			define.h
+	op.h\
+	libft.h\
+	define.h
 
 INC=$(addprefix $(INC_PATH), $(INC_NAME))
 

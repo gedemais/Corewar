@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 
-int		wait_cycle(uint32_t c)
+int		wait_cycle(u_int32_t c)
 {
 	static int		wait[NB_FUNC] = {10, 5, 5, 10, 10, 6, 6, 6, 20, 25, 25, 800,
 									10, 50, 1000, 2};

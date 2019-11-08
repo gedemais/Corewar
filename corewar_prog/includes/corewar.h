@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/03 08:32:00 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/08 04:10:42 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@
 
 typedef enum		e_option
 {
-	DMP
+	DMP,
+	D
 }					t_option;
 
 /*
@@ -113,7 +114,7 @@ typedef struct		s_op_arg
 {
 	t_op_arg_type	type;
 	t_reg_id		id;
-	uint32_t		arg;
+	u_int32_t		arg;
 }					t_op_arg;
 
 typedef struct s_instruct	t_instruct;
@@ -121,7 +122,7 @@ typedef struct s_instruct	t_instruct;
 struct				s_instruct
 {
 	t_op_arg		args[MAX_ARGS_NUMBER];
-	uint32_t		op;
+	u_int32_t		op;
 };
 
 typedef struct s_process	t_process;
@@ -132,10 +133,8 @@ struct				s_process
 	t_instruct		instruct;
 	int32_t			r[REG_NUMBER];
 	int				cycle_to_exec;
-	uint16_t		pc : 12;
-	uint16_t		po : 12;
-	uint32_t		tpc : 12;
-	uint32_t		pad : 20;
+	u_int16_t		pc : 12;
+	u_int32_t		tpc : 12;
 	bool			alive;
 	bool			carry;
 	char			padding[7];
@@ -153,19 +152,19 @@ typedef struct		s_player
 	char			champ[CHAMP_MAX_SIZE];
 	char			name[PROG_NAME_LENGTH + 1];
 	char			pad[2][PAD_LENGTH];
-	uint32_t		id;
-	uint32_t		magic;
-	uint32_t		size;
+	u_int32_t		id;
+	u_int32_t		magic;
+	u_int32_t		size;
 }					t_player;
 
 typedef struct		s_env
 {
 	t_process		*process;
 	t_player		player[MAX_PLAYERS];
-	uint8_t			arena[MEM_SIZE];
+	u_int8_t			arena[MEM_SIZE];
 	int				opt[OPT_MAX];
 	unsigned int	live_pl[MAX_PLAYERS];
-	bool			verbose[VERB_MAX];
+	unsigned int			verbose;
 	char			pad[7];
 	int				cycle_to_dump;
 	int				cycle_to_die;
@@ -173,7 +172,7 @@ typedef struct		s_env
 	int				cycle_tot;
 	unsigned int	curr_lives;
 	unsigned int	nb_pl;
-	uint32_t		last_live;
+	u_int32_t		last_live;
 }					t_env;
 
 /*
@@ -196,7 +195,8 @@ int				rev_bits(int num);
 ** OPTIONS UTILS
 */
 
-int				get_dump(char *arg, unsigned int *j);
+int				get_dump(char *arg, unsigned int *j,
+		unsigned int k);
 
 /*
 ** OPTIONS
@@ -210,9 +210,8 @@ void			dump(t_env *env);
 
 int				error(char *error_msg, char *err_msg, char *junk);
 void			free_env(t_env *env, char *arg);
-void			find_new_id(t_env *env, unsigned int j);
 int				get_data(t_env *env, char *arg);
-int				get_id(t_env *env, char *arg, unsigned int *j);
+int				get_id(t_env *env, char *arg, unsigned int *j, bool end);
 int				loader(t_env *env, char *arg, unsigned int *j);
 int				read_big_endian(t_env *env, int fd, bool magic);
 
@@ -225,7 +224,7 @@ void			check_live(t_env *env);
 void			create_instruct(t_env *env, t_process *process);
 int				create_pro(t_env *env, unsigned int i, unsigned int offset);
 int				cw_loop(t_env *env);
-uint32_t		get_mem_cell(t_env *env, t_process *p, size_t siz, uint16_t add);
+u_int32_t		get_mem_cell(t_env *env, t_process *p, size_t siz, u_int16_t add);
 void			launch_instruct(t_env *env, t_process *process);
 void			load_args(t_env *env, t_process *p, bool enco, bool dir);
 
@@ -234,10 +233,10 @@ void			load_args(t_env *env, t_process *p, bool enco, bool dir);
 */
 
 void			convert_instruction(t_env *env, t_process *process);
-bool			direct_size(uint32_t c);
-bool			encod_byte(uint32_t c);
-int				nb_arg(uint32_t c);
-int				wait_cycle(uint32_t c);
+bool			direct_size(u_int32_t c);
+bool			encod_byte(u_int32_t c);
+int				nb_arg(u_int32_t c);
+int				wait_cycle(u_int32_t c);
 
 /*
 ** CHECK OF THE ARGUMENTS OF THE OP_FUNCTIONS
@@ -252,14 +251,14 @@ bool			is_ldi_valid(t_process *p);
 bool			is_xor_valid(t_process *p);
 bool			is_or_valid(t_process *p);
 bool			is_and_valid(t_process *p);
-bool			is_op_arg_valid(t_process *p, uint32_t op);
+bool			is_op_arg_valid(t_process *p, u_int32_t op);
 
 /*
 ** LISTS
 */
 
-t_process		*new_lst(uint32_t id, uint16_t pc);
-t_process		*push_lst(t_process *process, uint32_t id, uint16_t pc);
+t_process		*new_lst(u_int32_t id, u_int16_t pc);
+t_process		*push_lst(t_process *process, u_int32_t id, u_int16_t pc);
 t_process		*pop_lst(t_process *process, t_process *prev);
 
 /*
@@ -281,7 +280,7 @@ void			test_system(void);
 ** OP_FUNCTIONS
 */
 
-uint32_t		get_direct(t_env *env, t_process *p, t_op_arg args);
+u_int32_t		get_direct(t_env *env, t_process *p, t_op_arg args);
 int				live(t_env *env, t_process *process);
 int				ld(t_env *env, t_process *process);
 int				st(t_env *env, t_process *process);

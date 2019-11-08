@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 22:18:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/26 22:27:35 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/07 01:25:32 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,12 @@ l’ordre d’exécution.
 • Les champions ne peuvent pas dépasser CHAMP_MAX_SIZE, sinon c’est une
 erreur.*/
 
-int		get_dump(char *arg, unsigned int *j)
+int		get_dump(char *arg, unsigned int *j, unsigned int k)
 {
 	unsigned int	i;
 	long long int	dump;
 
-	i = *j + 6;
+	i = *j + k;
 	i = after_space(arg, i);
 	if (!ft_isdigit(arg[i]) || (dump = ft_atoi(&arg[i])) < 1 || dump > INT_MAX)
 		return (-1);

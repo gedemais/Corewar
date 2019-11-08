@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/03 08:11:10 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/07 21:49:47 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static inline void	cycle_run(t_env *env, t_process *pro)
 	t_process	*tmp;
 
 	tmp = pro;
-	if (env->verbose[2])
+	if (env->verbose & (1 << 2))
 		printf("%d cycles have been done.\n", env->cycle_tot + env->cycle_curr);
 	while (tmp)
 	{
@@ -83,7 +83,11 @@ int		cw_loop(t_env *env)
 			env->cycle_curr++;
 			cycle_run(env, env->process);
 			if (env->opt[DMP] != 0 && (env->cycle_to_dump -= 1) == 0)
+			{
 				dump(env);
+				if (env->opt[D] == true)
+					return (0);
+			}
 		}
 		check_live(env);
 	}

@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 
-bool	direct_size(uint32_t c)
+bool	direct_size(u_int32_t c)
 {
 	static bool		direct_size[NB_FUNC] = {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1,
 									0, 1, 1, 0};
@@ -22,7 +22,7 @@ bool	direct_size(uint32_t c)
 	return (direct_size[c - 1]);
 }
 
-bool	encod_byte(uint32_t c)
+bool	encod_byte(u_int32_t c)
 {
 	static bool		encoding_tab[NB_FUNC] = {0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 0,
 									1, 1, 0, 1};

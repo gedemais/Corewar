@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/02 22:32:46 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/07 21:15:37 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,15 +48,16 @@ static inline void	introducing_champions(t_env *env)
 	
 	i = 1;
 	if (env->nb_pl == 1)
-		printf("The contestant is alone, he is %s with the id %u.\n\n\n",
-				env->player[0].name, env->player[0].id);
+		printf("The champion (%s) is lonely, his weight is %u and he ha\
+s the id %u.\n\n", env->player[0].name, env->player[0].size, env->player[0].id);
 	else
-		printf("The contestants are %u :-%s with the id %u.\n", env->nb_pl,
-				env->player[0].name, env->player[0].id);
+		printf("The champions are %u : (%s), his weight is %u and his \
+id is  %u.\n\n", env->nb_pl, env->player[0].name, env->player[0].size,
+			env->player[0].id);
 	while (i < env->nb_pl)
 	{
-		printf("                        -%s with the id %u.\n\n\n",
-				env->player[i].name, env->player[i].id);
+		printf("                      (%s), his weight is %u and his i\
+d is %u.\n\n", env->player[i].name, env->player[i].size, env->player[i].id);
 		i++;
 	}
 	fflush(stdout);

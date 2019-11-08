@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:14:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/03 07:21:31 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/07 03:55:46 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,8 +47,8 @@ the area at once, for at least one champion..."
 # define PAD_LENGTH 4
 # define NB_FUNC 16
 # define OPT_MAX 2
-# define VERB_MAX 5
-# define DUMP_LENGTH 16322
+# define VERB_MAX 64
+# define DUMP_LENGTH 12864
 
 //NAME
 

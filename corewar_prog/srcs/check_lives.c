@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 21:08:32 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/03 07:34:03 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/07 21:19:35 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static inline t_process	*kill_process(t_env *env, t_process *tmp, t_process *p)
 {
-	if (env->verbose[2])
+	if (env->verbose & (1 << 2))
 		printf("A process with the id %u died following a pitiful agony.\n",
 				tmp->r[0]);
 	tmp = pop_lst(tmp, p);
@@ -56,12 +56,12 @@ static inline void	verbose(t_env *env, unsigned int count)
 
 	i = 0;
 	live_tot = 0;
-	if (env->verbose[0] && count == 0)
+	if ((env->verbose & (1 << 0)) && count == 0)
 	{
 		printf("Cycle to die is decremented by cycle delta,");
 		printf(" %d cycles before next cycle to die\n", env->cycle_to_die);	
 	}
-	if (env->verbose[4])
+	if (env->verbose & (1 << 4))
 	{
 		while (i < env->nb_pl)
 		{
