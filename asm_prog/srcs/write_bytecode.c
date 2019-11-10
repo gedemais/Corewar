@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 12:52:20 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/08 04:49:18 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/11/09 00:57:08 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static inline int	label_pos(t_env *env, int label)
 	{
 		if (env->lexemes[i].type == LEX_LABEL)
 			j++;
-		if (j == label + 1)
+		if (j == label + 2)
 			return ((int)env->lexemes[i].start_byte);
 		i++;
 	}

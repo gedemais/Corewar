@@ -69,10 +69,12 @@ char	get_tok_reg(t_env *env, char *stream, unsigned int *i)
 	while (stream[j] && ft_isdigit(stream[j]))
 		j++;
 	id = ft_atoi(&stream[1]);
-	if ((j == 1 || j > 3 || id > REG_NUMBER))
+	if (j == 1 || j > 3 || id > REG_NUMBER || id <= 0)
 	{
-		ft_putendl_fd("Wrong register index", 2);
-		return (0);
+		ft_putstr_fd("Wrong register index ", 2);
+		ft_putnbr_fd((int)id, 2);
+		ft_putchar_fd('\n', 2);
+		return (-1);
 	}
 	*i += j;
 	return (TOK_REG);

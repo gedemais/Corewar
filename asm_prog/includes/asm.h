@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/08 00:38:33 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/11/09 18:07:39 by demaisonc        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ typedef enum			e_token_type
 	TOK_P_NAME,
 	TOK_P_COM,
 	TOK_STRING,
-	TOK_REG,
 	TOK_LABEL,
+	TOK_REG,
 	TOK_NUMBER,
 	TOK_LNUMBER,
 	TOK_DLABA,
