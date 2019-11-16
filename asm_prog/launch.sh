@@ -1,9 +1,9 @@
-rm champion.cor
-rm champion1.cor
-./asm champion.s
-mv champion.s champion1.s
-../ressources/asm champion1.s
-mv champion1.s champion.s
-hexdump champion1.cor
+rm test.cor
+rm test1.cor
+./asm test.s
+mv test.s test1.s
+../ressources/asm test1.s
+mv test1.s test.s
+hexdump test1.cor
 echo ------------------------------------
-hexdump champion.cor
+hexdump test.cor

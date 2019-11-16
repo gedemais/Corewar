@@ -1,0 +1,33 @@
+srcs/header.c:42:	if (lex->encoding & 128 && lex->encoding & 64)
+srcs/header.c:44:	if ((lex->encoding & 128) && !(lex->encoding & 64))
+srcs/header.c:45:		ret += g_direct_size[(int)lex->opcode];
+srcs/header.c:46:	if (!(lex->encoding & 128) && (lex->encoding & 64))
+srcs/header.c:49:	if (lex->encoding & 32 && lex->encoding & 16)
+srcs/header.c:51:	if ((lex->encoding & 32) && !(lex->encoding & 16))
+srcs/header.c:52:		ret += g_direct_size[(int)lex->opcode];
+srcs/header.c:53:	if (!(lex->encoding & 32) && (lex->encoding & 16))
+srcs/header.c:56:	if (lex->encoding & 8 && lex->encoding & 4)
+srcs/header.c:58:	if ((lex->encoding & 8) && !(lex->encoding & 4))
+srcs/header.c:59:		ret += g_direct_size[(int)lex->opcode];
+srcs/header.c:60:	if (!(lex->encoding & 8) && (lex->encoding & 4))
+srcs/lexer_loader.c:24:	if (!(lex->args[0].str = ft_strndup(&(*tok)->ptr[1], (int)(*tok)->len - 2)))
+srcs/lexer_loader.c:26:	if (ft_strlen(lex->args[0].str) >= PROG_NAME_LENGTH)
+srcs/lexer_loader.c:35:	lex->type = LEX_NAME_PROP;
+srcs/lexer_loader.c:36:	lex->start = (unsigned int)((*tok)->ptr - env->file);
+srcs/lexer_loader.c:49:	if (!(lex->args[0].str = ft_strndup(&(*tok)->ptr[1], (int)(*tok)->len - 2)))
+srcs/lexer_loader.c:51:	if (ft_strlen(lex->args[0].str) >= PROG_NAME_LENGTH)
+srcs/lexer_loader.c:60:	lex->type = LEX_COMMENT_PROP;
+srcs/lexer_loader.c:61:	lex->start = (unsigned int)((*tok)->ptr - env->file);
+srcs/lexer_loader.c:69:	lex->type = LEX_LABEL;
+srcs/lexer_loader.c:70:	lex->start = (unsigned int)((*tok)->ptr - env->file);
+srcs/lexer_loader.c:71:	lex->args[0].nb = lex->start;
+srcs/lexer_loader.c:72:	lex->encoding = encoding_byte(lex->encoding, 0, TOK_NUMBER);
+srcs/lexer_loader.c:87:	lex->type = LEX_OP;
+srcs/lexer_loader.c:88:	lex->start = (unsigned int)(tmp->ptr - env->file);
+srcs/lexer_loader.c:89:	lex->opcode = find_op(tmp->ptr);
+srcs/lexer_loader.c:91:	ft_memset(&lex->label, -1, sizeof(int) * MAX_ARGS_NUMBER);
+srcs/lexer_loader.c:95:			lex->args[param].reg = (int)ft_atoi(&tmp->ptr[1]);
+srcs/lexer_loader.c:97:			lex->label[param] = tmp->label;
+srcs/lexer_loader.c:99:			lex->args[param].nb = ft_atoi(tmp->type == TOK_NUMBER ? tmp->ptr : &tmp->ptr[1]);
+srcs/lexer_loader.c:100:		lex->encoding = encoding_byte(lex->encoding, param, tmp->type);
+srcs/lexer_loader.c:101:		lex->code = encoding_byte_pres(lex->opcode);

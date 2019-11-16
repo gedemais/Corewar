@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 12:52:20 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/19 23:46:48 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/16 18:05:03 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,7 @@ static inline void	write_indirect_number(t_env *env, int fd, t_lexem lex, int pa
 	char			rev[2];
 	char			tmp;
 
+	printf("indirect\n");
 	if (lex.label[param] >= 0)
 	{
 		val = (unsigned short)(label_pos(env, lex.label[param]) - (int)lex.start_byte);
@@ -114,7 +115,11 @@ static inline void	write_indirect_number(t_env *env, int fd, t_lexem lex, int pa
 	else
 	{
 		val = (unsigned short)lex.args[param].nb;
-		write(fd, &val, IND_SIZE);
+		ft_memcpy(&rev[0], &val, IND_SIZE);
+		tmp = rev[0];
+		rev[0] = rev[1];
+		rev[1] = tmp;
+		write(fd, &rev[0], IND_SIZE);
 	}
 }
 
@@ -126,6 +131,7 @@ static inline void	write_direct_number(t_env *env, int fd, t_lexem lex, int para
 	int				val;
 
 	val = 0;
+	printf("direct\n");
 	if (lex.label[param] >= 0)
 	{
 		val = (unsigned short)(label_pos(env, lex.label[param]) - (int)lex.start_byte);
@@ -134,6 +140,7 @@ static inline void	write_direct_number(t_env *env, int fd, t_lexem lex, int para
 		rev[0] = rev[1];
 		rev[1] = tmp;
 		write(fd, &rev[0], IND_SIZE);
+		printf("label %d : val = %d - %d\n", lex.label[param], label_pos(env, lex.label[param]), (int)lex.start_byte);
 	}
 	else
 	{
@@ -147,6 +154,7 @@ static inline void	write_register(int fd, t_lexem lex, int param)
 {
 	char	reg;
 
+	printf("register\n");
 	reg = (char)lex.args[param].reg;
 	write(fd, &reg, 1);
 }
