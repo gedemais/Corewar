@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/07 19:45:10 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/16 18:08:39 by gedemais         ###   ########.fr       */
+/*   Created: 2019/11/16 18:14:17 by gedemais          #+#    #+#             */
+/*   Updated: 2019/11/16 18:14:23 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static inline int	crush_tokens(t_env *env)
 	t_token	*t;
 
 	t = env->tokens;
-	printf("-----------------------\nCRUSH_TOKENS :\n");
+//	printf("-----------------------\nCRUSH_TOKENS :\n");
 	while (t)
 	{
 		if (t->type == TOK_DLABA || t->type == TOK_INDLABA)
@@ -73,7 +73,7 @@ static inline int	get_token_type(t_env *env, t_tokenizer *tok)
 	}
 	return (0);
 }
-
+/*
 static inline void	print_token(int tok)
 {
 	switch (tok)
@@ -134,14 +134,14 @@ static inline void	print_tokens(t_token *lst)
 		print_token(tmp->type);
 		tmp = tmp->next;
 	}
-}
+}*/
 
 int		tokenizer(t_env *env)
 {
 	int		ret;
 
 	ft_memset(&env->tok, 0, sizeof(t_tokenizer));
-	printf("TOKENIZER :\n------------------------------------------------------------------\n");
+//	printf("TOKENIZER :\n------------------------------------------------------------------\n");
 	fflush(stdout);
 	if (init_labels(env) != 0)
 		return (-1);
@@ -158,11 +158,11 @@ int		tokenizer(t_env *env)
 		env->tok.index++;
 	}
 	env->nb_tokens = env->tok.index;
-	printf("-----------------------\nTokens :\n-----------------------\n");
-	print_tokens(env->tokens);
+//	printf("-----------------------\nTokens :\n-----------------------\n");
+//	print_tokens(env->tokens);
 	if (crush_tokens(env) != 0)
 		return (-1);
-	printf("-----------------------\nCrushed Tokens :\n-----------------------\n");
-	print_tokens(env->tokens);
+//	printf("-----------------------\nCrushed Tokens :\n-----------------------\n");
+//	print_tokens(env->tokens);
 	return (0);
 }

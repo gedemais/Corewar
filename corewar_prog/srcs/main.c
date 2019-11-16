@@ -6,17 +6,19 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/19 14:26:57 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/07 21:15:37 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-void				free_env(t_env *env)
+void				free_env(t_env *env, char *arg)
 {
 	t_process	*tmp;
 
 	tmp = NULL;
+	if (arg)
+		ft_strdel(&arg);
 	if (env->process)
 	{
 		while (env->process->next)
@@ -29,31 +31,47 @@ void				free_env(t_env *env)
 	}
 }
 
-int				error(char *error_msg, char *file)
+int				error(char *error_msg, char *err_msg, char *junk)
 {
-	if (file)
-		ft_strdel(&file);
-	ft_putendl_fd(error_msg, STDERR_FILENO);
+	if (junk)
+		ft_strdel(&junk);
+	if (error_msg)
+		ft_putendl_fd(error_msg, STDERR_FILENO);
+	if (err_msg)
+		ft_putendl_fd(err_msg, STDERR_FILENO);
 	return (1);
+}
+
+static inline void	introducing_champions(t_env *env)
+{
+	unsigned int	i;
+	
+	i = 1;
+	if (env->nb_pl == 1)
+		printf("The champion (%s) is lonely, his weight is %u and he ha\
+s the id %u.\n\n", env->player[0].name, env->player[0].size, env->player[0].id);
+	else
+		printf("The champions are %u : (%s), his weight is %u and his \
+id is  %u.\n\n", env->nb_pl, env->player[0].name, env->player[0].size,
+			env->player[0].id);
+	while (i < env->nb_pl)
+	{
+		printf("                      (%s), his weight is %u and his i\
+d is %u.\n\n", env->player[i].name, env->player[i].size, env->player[i].id);
+		i++;
+	}
+	fflush(stdout);
 }
 
 static inline int	vm(t_env *env, char *arg)
 {
-	if (get_opt_champ(env, arg))
-	{	
-		ft_putendl_fd(BAD_ARGS, STDERR_FILENO);
-		return (error(USAGE, arg));
-	}
+	if (get_data(env, arg))
+		return (1);
+	introducing_champions(env);
 	if (cw_loop(env))
-		return (error(VM_ERR, arg));
-	ft_strdel(&arg);
+		return (1);
+	free_env(env, arg);
 	return (0);
-}
-
-static inline void	init_env(t_env *env)
-{
-	ft_memset(env, 0, sizeof(t_env));
-	env->cycle_to_die = CYCLE_TO_DIE;
 }
 
 int					main(int ac, char **av)
@@ -62,21 +80,15 @@ int					main(int ac, char **av)
 	char			*arg;
 
 	if (ac > MAX_ARGS || ac < 2)
-	{
-		ft_putendl_fd(TOO_MANY_ARGS, STDERR_FILENO);
-		return (error(USAGE, NULL));	
-	}
-	init_env(&env);
+		return (error(TOO_MANY_ARGS, USAGE, NULL));	
 	if (!(arg = merge_args(ac, av)))
-	{
-		ft_putendl_fd(BAD_ARGS, STDERR_FILENO);
-		return (error(USAGE, NULL));	
-	}
+		return (error(BAD_ARGS, USAGE, NULL));	
+	ft_memset(&env, 0, sizeof(t_env));
+	env.cycle_to_die = CYCLE_TO_DIE;
 	if (vm(&env, arg))
 	{
-		free_env(&env);
+		free_env(&env, arg);
 		return (1);
 	}
-	free_env(&env);
 	return (0);
 }

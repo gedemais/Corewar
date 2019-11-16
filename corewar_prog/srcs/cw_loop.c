@@ -6,115 +6,91 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/19 17:13:11 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/07 21:49:47 by unknown          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static inline int	check_delta(t_env *env, int victim)
+static inline void	cycle_run(t_env *env, t_process *pro)
 {
-	unsigned int		nb_pl = 0;
+	t_process	*tmp;
 
-	if (victim == 1)
-		return (0);
-	while (nb_pl < env->nb_players)
+	tmp = pro;
+	if (env->verbose & (1 << 2))
+		printf("%d cycles have been done.\n", env->cycle_tot + env->cycle_curr);
+	while (tmp)
 	{
-		new_lives += env->nb_lives[nb_pl];
-		nb_pl++;
+		tmp->cycle_to_exec--;
+		if (tmp->cycle_to_exec <= 0)
+		{
+			launch_instruct(env, tmp);
+			ft_memset(&tmp->instruct, 0, sizeof(t_instruct));
+			create_instruct(env, tmp);
+		//	aff_process(tmp, false);
+		}
+		if (tmp->next)
+			tmp = tmp->next;
+		else
+			tmp = NULL;
 	}
-	if (new_lives >= NBR_LIVE)
-	{
-		env->cycle_to_die -=  CYCLE_DELTA;
-		return (1);
-	}
-	return (0);
 }
 
-static inline int	check_live(t_env *env)
+static inline int	init_arena(t_env *env)
 {
-	static unsigned int	prev_lives[4] = {0, 0, 0, 0};
-	static unsigned int	nb_pl = 0;
-	static unsigned int	count = 0;
-	bool				victim;
-
-	victim = false;
-	nb_pl = env->nb_players;
-	while (nb_pl >= 1)
-	{
-
-		nb_pl--;
-		if (env->nb_lives[nb_pl] > prev_lives[nb_pl])
-			prev_lives[nb_pl] = env->nb_lives[nb_pl];
-		else if (env->nb_lives[nb_pl] <= prev_lives[nb_pl] && (victim = true))
-			env->player[nb_pl].dead = 1;
-	}
-	if (check_delta(env, victim))
-		count = 0;
-	else
-		count++;
-	if (count == MAX_CHECKS && (count = 0))
-		env->cycle_to_die -=  CYCLE_DELTA;
-	env->cycle += env->curr_cycle;
-	env->curr_cycle = 0;
-	check_dying_process(env);
-	return (0);
-}
-
-static inline void	init_arena(t_env *env)
-{
+	unsigned int	i;
 	unsigned int	offset;
-	unsigned int	num_pl;
+
+	i = 0;
+	env->cycle_to_dump = env->opt[DMP];
+	offset = MEM_SIZE / env->nb_pl;
+	while (i < env->nb_pl)
+	{
+		ft_memcpy(&env->arena[offset * i], env->player[i].champ,
+				env->player[i].size);
+		if (create_pro(env, i, offset * i))
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+static inline void	print_winner(t_env *env)
+{
 	unsigned int	i;
 
 	i = 0;
-	num_pl = env->nb_players;
-	offset = MEM_SIZE / num_pl;
-	while (num_pl >= 1)
-	{
-		num_pl--;
-		ft_memcpy(&env->arena[offset * i], env->player[num_pl].champ,
-				env->player[num_pl].siz);
-		env->player[num_pl].first_pc = (uint16_t)(offset * i);
+	while (i < env->nb_pl && env->player[i].id != env->last_live)
 		i++;
-	}
-}
-
-static inline int	cycle_run(t_env *env)
-{
-	unsigned int		i;
-
-	i = 0;
-	while (i < env->nb_players)
-	{
-		if (!env->player[i].dead)
-		{
-			if (add_instruction(env, env->process))
-				return (1);
-			convert_instruction(env, env->process);
-		}
-
-		i++;
-	}
-	return (0);
+	if (i == env->nb_pl)
+		printf("Aucun joueur n'a emis de live...LOSERS!!\n");
+	else
+		printf("le joueur %u(%s) a gagne.\n",
+			env->player[i].id, env->player[i].name);
 }
 
 int		cw_loop(t_env *env)
 {
-	init_arena(env);
-	if (create_first_process(env))
+	if (init_arena(env))
 		return (1);
-	while (env->curr_cycle <= env->cycle_to_die && env->curr_cycle <= MAX_CYCLE)
+	//aff_env(env, 1);
+	while (env->cycle_curr <= env->cycle_to_die && env->cycle_tot <= MAX_CYCLE
+			&& env->process)
 	{
-		while (env->curr_cycle < env->cycle_to_die
-				&& env->curr_cycle <= MAX_CYCLE)
+		while (env->cycle_curr < env->cycle_to_die
+			&& env->cycle_tot <= MAX_CYCLE)
 		{
-			if (cycle_run(env))
-				return (1);
-			env->curr_cycle++;
+			env->cycle_curr++;
+			cycle_run(env, env->process);
+			if (env->opt[DMP] != 0 && (env->cycle_to_dump -= 1) == 0)
+			{
+				dump(env);
+				if (env->opt[D] == true)
+					return (0);
+			}
 		}
-		if (check_live(env))
-			return (1);
+		check_live(env);
 	}
+	print_winner(env);
 	return (0);
 }

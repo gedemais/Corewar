@@ -52,7 +52,7 @@ int							find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels)
 	int				i;
 
 	i = 0;
-	offset = (tok->type == TOK_DLABA) ? 2 : 1;
+	offset = (tok->type == TOK_DLABA || tok->type == TOK_LNUMBER) ? 2 : 1;
 	while (i < (int)nb_labels)
 	{
 		len = 0;
@@ -82,7 +82,7 @@ static inline unsigned int	count_labels(t_env *env)
 		while (env->file[i] && !ft_is_whitespace(env->file[i]))
 			i++;
 	}
-	printf("COUNT LABELS : %d\n", ret);
+	//printf("COUNT LABELS : %d\n", ret);
 	return (ret);
 }
 
@@ -101,13 +101,13 @@ static inline int			add_label(t_env *env, unsigned int i)
 		return (-1);
 	env->labels[env->lab_i].ptr = &env->file[i];
 	env->labels[env->lab_i].stick = i;
-	unsigned int		tmp = i;
+//	unsigned int		tmp = i;
 	while (env->file[i] != ':')
 	{
 		len++;
 		i++;
 	}
-	printf("Loading %.*s (%d)\n", len, &env->file[tmp], env->labels[env->lab_i].stick);
+	//printf("Loading %.*s (%d)\n", len, &env->file[tmp], env->labels[env->lab_i].stick);
 	env->labels[env->lab_i].len = len;
 	env->lab_i++;
 	return (0);
@@ -118,7 +118,7 @@ static inline int			load_labels(t_env *env)
 	unsigned int	i;
 
 	i = 0;
-	printf("----------------------\nLOAD LABELS :\n");
+//	printf("----------------------\nLOAD LABELS :\n");
 	while (env->file[i])
 	{
 		cross_whitespace(env->file, &i);
@@ -135,7 +135,7 @@ static inline int			load_labels(t_env *env)
 
 int							init_labels(t_env *env)
 {
-	printf("INIT LABELS\n--------------------------------------------\n");
+	//printf("INIT LABELS\n--------------------------------------------\n");
 	if ((env->nb_labels = count_labels(env)) == 0)
 		return (0);
 	if (!(env->labels = (t_label*)malloc(sizeof(t_label) * env->nb_labels)))

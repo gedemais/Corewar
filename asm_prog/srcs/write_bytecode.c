@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/16 12:52:20 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/16 18:05:03 by gedemais         ###   ########.fr       */
+/*   Created: 2019/11/16 18:13:15 by gedemais          #+#    #+#             */
+/*   Updated: 2019/11/16 18:13:47 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ static inline int	label_pos(t_env *env, int label)
 	{
 		if (env->lexemes[i].type == LEX_LABEL)
 			j++;
-		if (j == label)
+		if (j == label + 2)
 			return ((int)env->lexemes[i].start_byte);
 		i++;
 	}
@@ -104,17 +104,19 @@ static inline void	write_indirect_number(t_env *env, int fd, t_lexem lex, int pa
 	printf("indirect\n");
 	if (lex.label[param] >= 0)
 	{
-		val = (unsigned short)(label_pos(env, lex.label[param]) - (int)lex.start_byte);
+		val = (unsigned short)(label_pos(env, lex.label[param]) - (unsigned short)lex.start_byte);
+		printf("indirect label access : %d\n", val);
+//		printf("label %d : val = %d - %d = %d\n", lex.label[param], label_pos(env, lex.label[param]), lex.start_byte, val);
 		ft_memcpy(&rev[0], &val, IND_SIZE);
 		tmp = rev[0];
 		rev[0] = rev[1];
 		rev[1] = tmp;
 		write(fd, &rev[0], IND_SIZE);
-		printf("label %d : val = %d - %d\n", lex.label[param], label_pos(env, lex.label[param]), (int)lex.start_byte);
 	}
 	else
 	{
 		val = (unsigned short)lex.args[param].nb;
+		printf("indirect number %d\n", val);
 		ft_memcpy(&rev[0], &val, IND_SIZE);
 		tmp = rev[0];
 		rev[0] = rev[1];
@@ -125,28 +127,36 @@ static inline void	write_indirect_number(t_env *env, int fd, t_lexem lex, int pa
 
 static inline void	write_direct_number(t_env *env, int fd, t_lexem lex, int param)
 {
-	char			buff[LBE_BUFFER];
-	char			rev[2];
-	char			tmp;
-	int				val;
+//	char			buff[LBE_BUFFER];
+	char			rev[4];
+	int			val;
 
 	val = 0;
 	printf("direct\n");
 	if (lex.label[param] >= 0)
 	{
-		val = (unsigned short)(label_pos(env, lex.label[param]) - (int)lex.start_byte);
+		val = (unsigned short)label_pos(env, lex.label[param]) - (unsigned short)lex.start_byte;
+		printf("direct label access %d\n", val);
 		ft_memcpy(&rev[0], &val, IND_SIZE);
-		tmp = rev[0];
-		rev[0] = rev[1];
-		rev[1] = tmp;
+		swap_bytes(&rev[0], &rev[1]);
 		write(fd, &rev[0], IND_SIZE);
 		printf("label %d : val = %d - %d\n", lex.label[param], label_pos(env, lex.label[param]), (int)lex.start_byte);
 	}
 	else
 	{
-		val = g_direct_size[(int)lex.opcode] == 4 ? (int)lex.args[param].nb : (short)lex.args[param].nb;
-		reverse_bits(buff, val);
-		write(fd, &buff, (size_t)g_direct_size[(int)lex.opcode]);
+		val = g_direct_size[(int)lex.opcode] == 4 ? (int)lex.args[param].nb : (unsigned short)lex.args[param].nb;
+		printf("direct number %d\n", val);
+		ft_memcpy(&rev[0], &val, (size_t)g_direct_size[(int)lex.opcode]);
+		if (g_direct_size[(int)lex.opcode] == DIR_SIZE)
+		{
+			swap_bytes(&rev[0], &rev[3]);
+			swap_bytes(&rev[1], &rev[2]);
+		}
+		else
+		{
+			swap_bytes(&rev[0], &rev[1]);
+		}
+		write(fd, &rev, (size_t)g_direct_size[(int)lex.opcode]);
 	}
 }
 
@@ -161,7 +171,6 @@ static inline void	write_register(int fd, t_lexem lex, int param)
 
 static inline void	write_params(t_env *env, t_lexem lex, int fd)
 {
-	(void)fd;
 	if (lex.encoding & 128 && lex.encoding & 64)
 		write_indirect_number(env, fd, lex, 0);
 	if ((lex.encoding & 128) && !(lex.encoding & 64))
@@ -175,7 +184,7 @@ static inline void	write_params(t_env *env, t_lexem lex, int fd)
 		write_direct_number(env, fd, lex, 1);
 	if (!(lex.encoding & 32) && (lex.encoding & 16))
 		write_register(fd, lex, 1);
-	
+
 	if (lex.encoding & 8 && lex.encoding & 4)
 		write_indirect_number(env, fd, lex, 2);
 	if ((lex.encoding & 8) && !(lex.encoding & 4))
@@ -190,12 +199,12 @@ int					write_bytecode(t_env *env)
 	int				fd;
 
 	i = 0;
-	printf("---------------------------------------------------\nWRITE_BYTECODE\n");
-	if ((fd = open(env->file_name, O_CREAT|O_WRONLY, 0666)) < 0
-		|| write_header(env, fd) != 0)
+//	printf("---------------------------------------------------\nWRITE_BYTECODE\n");
+	if (write_header(env, &fd) != 0)
 		return (-1);
 	while (i < env->nb_lex)
 	{
+//²		print_lexem(env->lexemes[i]);
 		if (env->lexemes[i].type == LEX_OP)
 		{
 			write(fd, &g_opcodes[(int)env->lexemes[i].opcode], 1);
