@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:35:34 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/17 16:31:44 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/17 19:20:09 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,27 @@ void				write_direct_number(t_env *env, int fd, t_lexem lex, int param)
 	int		val;
 	short	addr;
 
-	(void)env;
 	if (lex.label[param] >= 0)
 	{
-		if (g_direct_size[(int)lex.opcode] == DIR_SIZE)
-		{
-			val = reverse_int_bytes((int)get_label_pos(env, lex.label[param]) - (int)lex.start_byte);
-			write(fd, &val, DIR_SIZE);
-		printf("direct label access to label n%d (%d)\n", lex.label[param], val);
-		}
-		else
-		{
-			addr = get_label_pos(env, lex.label[param]) - (short)lex.start_byte;
-			swap_short_bytes(&addr);
-			write(fd, &addr, IND_SIZE);
+		addr = get_label_pos(env, lex.label[param]) - (short)lex.start_byte;
+		swap_short_bytes(&addr);
+		write(fd, &addr, IND_SIZE);
 		printf("direct label access to label n%d (%d)\n", lex.label[param], addr);
-		}
 	}
 	else
 	{
 		printf("direct number %d\n", (int)lex.args[param].nb);
-		val = reverse_int_bytes((int)lex.args[param].nb);
-		write(fd, &val, DIR_SIZE);
+		if (g_direct_size[(int)lex.opcode] == DIR_SIZE)
+		{
+			val = reverse_int_bytes((int)lex.args[param].nb);
+			write(fd, &val, DIR_SIZE);
+		}
+		else
+		{
+			addr = (short)lex.args[param].nb;
+			swap_short_bytes(&addr);
+			write(fd, &addr, IND_SIZE);
+		}
 	}
 }
 

@@ -1,5 +1,0 @@
-indirect label access :
-Write the address relative to pc with swapped bytes
-
-indirect number :
-Write to two bytes raw with swapped bytes

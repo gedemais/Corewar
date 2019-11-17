@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 19:13:39 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/17 16:32:25 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/17 18:52:59 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,5 +64,3 @@ void	cross_names(char *stream, unsigned int *i)
 	while (stream[*i] && (ft_isalnum(stream[*i]) || stream[*i] == '_'))
 		*i += 1;
 }
-
-

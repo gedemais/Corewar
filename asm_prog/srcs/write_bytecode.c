@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:13:15 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/17 15:22:35 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/17 16:37:00 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,12 +94,10 @@ int					write_bytecode(t_env *env)
 	int				fd;
 
 	i = 0;
-//	printf("---------------------------------------------------\nWRITE_BYTECODE\n");
 	if (write_header(env, &fd) != 0)
 		return (-1);
 	while (i < env->nb_lex)
 	{
-//		print_lexem(env->lexemes[i]);
 		if (env->lexemes[i].type == LEX_OP)
 		{
 			write(fd, &g_opcodes[(int)env->lexemes[i].opcode], 1);
