@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:13:15 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/16 18:13:47 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/17 11:42:24 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ static inline int	set_dir_size(t_env *env)
 	}
 	return (0);
 }*/
-
+/*
 static inline int	label_pos(t_env *env, int label)
 {
 	unsigned int	i;
@@ -94,78 +94,39 @@ static inline int	label_pos(t_env *env, int label)
 	}
 	return (-1);
 }
-
+*/
 static inline void	write_indirect_number(t_env *env, int fd, t_lexem lex, int param)
 {
-	unsigned short	val;
-	char			rev[2];
-	char			tmp;
+//	char	buff[DIR_SIZE];
 
-	printf("indirect\n");
 	if (lex.label[param] >= 0)
-	{
-		val = (unsigned short)(label_pos(env, lex.label[param]) - (unsigned short)lex.start_byte);
-		printf("indirect label access : %d\n", val);
-//		printf("label %d : val = %d - %d = %d\n", lex.label[param], label_pos(env, lex.label[param]), lex.start_byte, val);
-		ft_memcpy(&rev[0], &val, IND_SIZE);
-		tmp = rev[0];
-		rev[0] = rev[1];
-		rev[1] = tmp;
-		write(fd, &rev[0], IND_SIZE);
-	}
+		printf("indirect label access to label n%d\n", lex.label[param]);
 	else
-	{
-		val = (unsigned short)lex.args[param].nb;
-		printf("indirect number %d\n", val);
-		ft_memcpy(&rev[0], &val, IND_SIZE);
-		tmp = rev[0];
-		rev[0] = rev[1];
-		rev[1] = tmp;
-		write(fd, &rev[0], IND_SIZE);
-	}
+		printf("indirect number %d\n", (int)lex.args[param].nb);
+	(void)env;
+	(void)fd;
+	(void)lex;
+	(void)param;
 }
 
 static inline void	write_direct_number(t_env *env, int fd, t_lexem lex, int param)
 {
-//	char			buff[LBE_BUFFER];
-	char			rev[4];
-	int			val;
-
-	val = 0;
-	printf("direct\n");
 	if (lex.label[param] >= 0)
-	{
-		val = (unsigned short)label_pos(env, lex.label[param]) - (unsigned short)lex.start_byte;
-		printf("direct label access %d\n", val);
-		ft_memcpy(&rev[0], &val, IND_SIZE);
-		swap_bytes(&rev[0], &rev[1]);
-		write(fd, &rev[0], IND_SIZE);
-		printf("label %d : val = %d - %d\n", lex.label[param], label_pos(env, lex.label[param]), (int)lex.start_byte);
-	}
+		printf("direct label access to label n%d\n", lex.label[param]);
 	else
-	{
-		val = g_direct_size[(int)lex.opcode] == 4 ? (int)lex.args[param].nb : (unsigned short)lex.args[param].nb;
-		printf("direct number %d\n", val);
-		ft_memcpy(&rev[0], &val, (size_t)g_direct_size[(int)lex.opcode]);
-		if (g_direct_size[(int)lex.opcode] == DIR_SIZE)
-		{
-			swap_bytes(&rev[0], &rev[3]);
-			swap_bytes(&rev[1], &rev[2]);
-		}
-		else
-		{
-			swap_bytes(&rev[0], &rev[1]);
-		}
-		write(fd, &rev, (size_t)g_direct_size[(int)lex.opcode]);
-	}
+		printf("direct number %d\n", (int)lex.args[param].nb);
+	(void)env;
+	(void)fd;
+	(void)lex;
+	(void)param;
 }
 
 static inline void	write_register(int fd, t_lexem lex, int param)
 {
 	char	reg;
 
-	printf("register\n");
 	reg = (char)lex.args[param].reg;
+	printf("register %d\n", reg);
 	write(fd, &reg, 1);
 }
 
@@ -204,7 +165,7 @@ int					write_bytecode(t_env *env)
 		return (-1);
 	while (i < env->nb_lex)
 	{
-//²		print_lexem(env->lexemes[i]);
+//		print_lexem(env->lexemes[i]);
 		if (env->lexemes[i].type == LEX_OP)
 		{
 			write(fd, &g_opcodes[(int)env->lexemes[i].opcode], 1);
