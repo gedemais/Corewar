@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:13:15 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/17 11:42:24 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/11/17 15:22:35 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,72 +62,6 @@ void	print_lexem(t_lexem lex)
 			break;
 	}
 	printf("\n");
-}
-/*
-static inline int	set_dir_size(t_env *env)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (i < env->nb_lex)
-	{
-		env->lexemes[i].dir_size = (char)sizes[(int)env->lexemes[i].type];
-		i++;
-	}
-	return (0);
-}*/
-/*
-static inline int	label_pos(t_env *env, int label)
-{
-	unsigned int	i;
-	int				j;
-
-	i = 0;
-	j = 0;
-	while (i < env->nb_lex)
-	{
-		if (env->lexemes[i].type == LEX_LABEL)
-			j++;
-		if (j == label + 2)
-			return ((int)env->lexemes[i].start_byte);
-		i++;
-	}
-	return (-1);
-}
-*/
-static inline void	write_indirect_number(t_env *env, int fd, t_lexem lex, int param)
-{
-//	char	buff[DIR_SIZE];
-
-	if (lex.label[param] >= 0)
-		printf("indirect label access to label n%d\n", lex.label[param]);
-	else
-		printf("indirect number %d\n", (int)lex.args[param].nb);
-	(void)env;
-	(void)fd;
-	(void)lex;
-	(void)param;
-}
-
-static inline void	write_direct_number(t_env *env, int fd, t_lexem lex, int param)
-{
-	if (lex.label[param] >= 0)
-		printf("direct label access to label n%d\n", lex.label[param]);
-	else
-		printf("direct number %d\n", (int)lex.args[param].nb);
-	(void)env;
-	(void)fd;
-	(void)lex;
-	(void)param;
-}
-
-static inline void	write_register(int fd, t_lexem lex, int param)
-{
-	char	reg;
-
-	reg = (char)lex.args[param].reg;
-	printf("register %d\n", reg);
-	write(fd, &reg, 1);
 }
 
 static inline void	write_params(t_env *env, t_lexem lex, int fd)

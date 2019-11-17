@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/09 18:07:39 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/11/17 16:32:23 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -314,6 +314,11 @@ unsigned char			rev_bits(unsigned char b, bool shift);
 int						write_bytecode(t_env *env);
 int						write_header(t_env *env, int *fd);
 
+
+void					write_indirect_number(t_env *env, int fd, t_lexem lex, int param);
+void					write_direct_number(t_env *env, int fd, t_lexem lex, int param);
+void					write_register(int fd, t_lexem lex, int param);
+
 /*
 ** Errors reporting
 */
@@ -338,7 +343,8 @@ int						free_env(t_env *env);
 void					cross_whitespaces(char *stream, unsigned int *i);
 void					cross_whitespace(char *stream, unsigned int *i);
 void					cross_names(char *stream, unsigned int *i);
-void					swap_bytes(char *a, char *b);
+void					swap_short_bytes(short *val);
+int						reverse_int_bytes(int val);
 
 void					print_op_args(t_lexem lex);
 void					print_lexem(t_lexem lex);

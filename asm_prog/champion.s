@@ -1,6 +1,7 @@
 .name    "sebc"
 .comment "sebc"
 
+	st		r1, 42
 	st		r1, :l1
 	ld		%4, r3
 
