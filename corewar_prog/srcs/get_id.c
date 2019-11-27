@@ -13,7 +13,7 @@
 #include "corewar.h"
 
 static inline void			give_id(t_env *env, unsigned int i, unsigned int j,
-		u_int8_t opt_n)
+		uint8_t opt_n)
 {
 	while (i < env->nb_pl)
 	{
@@ -23,7 +23,7 @@ static inline void			give_id(t_env *env, unsigned int i, unsigned int j,
 			{
 				if (!(opt_n & (1 << j)))
 				{
-					env->player[i].id = (u_int32_t)j;
+					env->player[i].id = (uint32_t)j;
 					j++;
 					break ;
 				}
@@ -34,9 +34,9 @@ static inline void			give_id(t_env *env, unsigned int i, unsigned int j,
 	}
 }
 
-static inline u_int8_t			ft_power(u_int8_t nb, u_int8_t pow)
+static inline uint8_t			ft_power(uint8_t nb, uint8_t pow)
 {
-	u_int8_t	tmp;
+	uint8_t	tmp;
 
 	tmp = nb;
 	if (pow < 1)
@@ -51,7 +51,7 @@ static inline u_int8_t			ft_power(u_int8_t nb, u_int8_t pow)
 
 int					get_id(t_env *env, char *arg, unsigned int *j, bool end)
 {
-	static u_int8_t	opt_n = 0;
+	static uint8_t	opt_n = 0;
 	long long int	id;
 	unsigned int	i;
 
@@ -63,10 +63,10 @@ int					get_id(t_env *env, char *arg, unsigned int *j, bool end)
 	i = after_space(arg, *j + 3);
 	if (!ft_isdigit(arg[i]) || (id = ft_atoi(&arg[i])) < 1 || id > 4)
 		return (error(BAD_ID, USAGE, NULL));
-	env->player[env->nb_pl].id  = (u_int32_t)id;
+	env->player[env->nb_pl].id  = (uint32_t)id;
 	*j = i + 2;
 	if (!(opt_n & (1 << env->player[env->nb_pl].id)))
-		opt_n |= ft_power(2, (u_int8_t)env->player[env->nb_pl].id);
+		opt_n |= ft_power(2, (uint8_t)env->player[env->nb_pl].id);
 	else 
 		return (error(SAME_ID, USAGE, NULL));
 	return (0);

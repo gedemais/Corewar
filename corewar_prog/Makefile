@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/11/07 03:30:53 by unknown          ###   ########.fr        #
+#    Updated: 2019/11/27 03:38:05 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,21 +49,20 @@ SRCS_PATH=srcs/
 SRCS_NAME=	after_space.c\
 		after_word.c\
 		check_lives.c\
-		convert_instruction.c\
-		conv_table.c\
 		create_launch.c\
 		cw_loop.c\
 		get_data.c\
 		get_id.c\
 		get_name_len.c\
-		is_valid.c\
-		is_valid2.c\
 		load_args.c\
 		loader.c\
 		lst.c\
 		main.c\
 		merge_args.c\
 		op_functions.c\
+		op_functions2.c\
+		op_functions3.c\
+		op_functions4.c\
 		opt.c\
 		opt_utils.c\
 		aff.c\

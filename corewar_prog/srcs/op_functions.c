@@ -6,234 +6,93 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:16:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/08 04:08:51 by unknown          ###   ########.fr       */
+/*   Updated: 2019/11/27 08:34:30 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-int				live(t_env *env, t_process *p)
+void				live(t_env *env, t_process *p)
 {
 	unsigned int	i;
+	int32_t			value;
 
 	i = 0;
-	env->live_pl[p->instruct.args[0].arg - 1]++;
-	env->last_live = p->instruct.args[0].arg;
+	value = get_arg_value(env, p, 0, true);
+	if (value < 1 || value > (int32_t)env->nb_pl)
+		return ;
+	env->live_pl[value - 1]++;
+	env->last_live = (uint32_t)value;
+	env->cycle_last_live[value - 1] = env->cycle_tot;
 	while (i < env->nb_pl && env->player[i].id != env->last_live)
 		i++;
 	printf("un processus dit que le joueur %u(%s) est en vie\n",
 				env->player[i].id, &env->player[i].name[0]);
-	return (0);
 }
 
-int				ld(t_env *env, t_process *p)
+void				ld(t_env *env, t_process *p)
 {
-	if (p->instruct.args[0].type == ARG_DIR)
-		p->r[p->instruct.args[1].id - 1] = (int32_t)p->instruct.args[0].arg;
+	int32_t		value;
+	int32_t		reg;
+
+	value = get_arg_value(env, p, 0, true);
+	reg = p->instruct.args[1].arg;
+	if (reg <= REG_NONE || reg >= REG_MAX)
+		return ;
+	p->r[reg - 1] = value;
+	if (value)
+		p->carry = false;
 	else
+		p->carry = true;
+}
+
+void				st(t_env *env, t_process *p)
+{
+	int32_t		value;
+	int32_t		tmp;
+
+	tmp = p->instruct.args[0].arg;
+	if (tmp <= REG_NONE || tmp >= REG_MAX)
+		return ;
+	value = get_arg_value(env, p, 0, true);
+	tmp = p->instruct.args[1].arg;
+	if (p->instruct.args[1].type == T_REG && tmp > REG_NONE && tmp < REG_MAX)
+		p->r[tmp - 1] = value;
+	else if (p->instruct.args[1].type == T_IND)
 	{
-		p->tpc = p->pc + (p->instruct.args[0].arg % IDX_MOD);
-		ft_memcpy(&p->r[p->instruct.args[1].id - 1],
-			&env->arena[p->tpc], REG_SIZE);
+		p->pctmp = p->pc + (tmp % IDX_MOD);
+		write_mem_cell(env, p, value);
 	}
-	p->carry = true;
-	return (0);
 }
 
-int				st(t_env *env, t_process *p)
+void				add(t_env *env, t_process *p)
 {
-	if (p->instruct.args[1].type == ARG_IND)
-	{
-		p->tpc = p->pc + (p->instruct.args[1].arg % IDX_MOD);
-		ft_memcpy(&env->arena[p->tpc], &p->r[p->instruct.args[0].id - 1],
-			REG_SIZE);
-	}
-	if (p->instruct.args[1].type == ARG_REG)
-		ft_memcpy(&p->r[p->instruct.args[1].id - 1],
-			&p->r[p->instruct.args[0].id - 1], REG_SIZE);
-	return (0);
+	int32_t		val[3];
+
+	val[0] = p->instruct.args[0].arg;
+	val[1] = p->instruct.args[1].arg;
+	val[2] = p->instruct.args[2].arg;
+	if (val[0] <= REG_NONE || val[0] >= REG_MAX || val[1] <= REG_NONE
+			|| val[1] >= REG_MAX || val[2] <= REG_NONE || val[2] >= REG_MAX)
+		return ;
+	val[0] = get_arg_value(env, p, 0, true);
+	val[1] = get_arg_value(env, p, 1, true);
+	p->r[val[2] - 1] = val[0] + val[1];
+	p->carry = (p->r[val[2] - 1]) ? false : true;
 }
 
-int				add(t_env *env, t_process *p)
+void				sub(t_env *env, t_process *p)
 {
-	int32_t	tmp;
+	int32_t		val[3];
 
-	(void)env;
-	tmp = p->r[p->instruct.args[0].id - 1] + p->r[p->instruct.args[1].id - 1];
-	p->r[p->instruct.args[2].id - 1] = tmp;
-	p->carry = true;
-	return (0);
-}
-
-int				sub(t_env *env, t_process *p)
-{
-	int32_t	tmp;
-
-	(void)env;
-	tmp = p->r[p->instruct.args[0].id - 1] - p->r[p->instruct.args[1].id - 1];
-	p->r[p->instruct.args[2].id - 1] = tmp;
-	p->carry = true;
-	return (0);
-}
-
-u_int32_t		get_direct(t_env *env, t_process *p, t_op_arg args)
-{
-	u_int32_t	tmp;
-
-	if (args.type == ARG_DIR)
-		return (args.arg);
-	else if (args.type == ARG_IND)
-	{
-		ft_memcpy(&tmp, &env->arena[p->pc + args.arg], REG_SIZE);
-		return (tmp);
-	}
-	else if (args.type == ARG_REG)
-		return ((u_int32_t)p->r[args.id - 1]);
-	return (0);
-}
-
-int				and(t_env *env, t_process *p)
-{
-	u_int32_t	tmp;
-	u_int32_t	tmp2;
-
-	tmp = get_direct(env, p, p->instruct.args[0]);
-	tmp2 = get_direct(env, p, p->instruct.args[1]);
-	tmp &= tmp2;
-	p->r[p->instruct.args[2].id - 1] = (int32_t)tmp;
-	p->carry = true;
-	return (0);
-}
-
-int				xor(t_env *env, t_process *p)
-{
-	u_int32_t	tmp;
-	u_int32_t	tmp2;
-
-	tmp = get_direct(env, p, p->instruct.args[0]);
-	tmp2 = get_direct(env, p, p->instruct.args[1]);
-	tmp ^= tmp2;
-	p->r[p->instruct.args[2].id - 1] = (int32_t)tmp;
-	p->carry = true;
-	return (0);
-}
-
-int				or(t_env *env, t_process *p)
-{
-	u_int32_t	tmp;
-	u_int32_t	tmp2;
-
-	tmp = get_direct(env, p, p->instruct.args[0]);
-	tmp2 = get_direct(env, p, p->instruct.args[1]);
-	tmp |= tmp2;
-	p->r[p->instruct.args[2].id - 1] = (int32_t)tmp;
-	p->carry = true;
-	return (0);
-}
-
-int				zjmp(t_env *env, t_process *p)
-{
-	(void)env;
-	if (p->carry == false)
-		return (1);
-	p->pc += (u_int16_t)((u_int16_t)p->instruct.args[0].arg % IDX_MOD);
-	return (0);
-}
-
-int				ldi(t_env *env, t_process *p)
-{
-	if (p->instruct.args[0].type == ARG_IND)
-	{
-		p->tpc = p->pc + (p->instruct.args[0].arg % IDX_MOD);
-		if (p->instruct.args[1].type == ARG_REG)
-			p->tpc += p->instruct.args[1].id;
-		else
-			p->tpc += p->instruct.args[1].arg;
-	}
-	else if (p->instruct.args[0].type == ARG_REG)
-	{	
-		if (p->instruct.args[1].type == ARG_REG)
-			p->tpc = p->instruct.args[0].id + p->instruct.args[1].id;
-		else
-			p->tpc = p->instruct.args[0].id + p->instruct.args[1].arg;
-	}
-	else if (p->instruct.args[1].type == ARG_REG)
-		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].id;
-	else
-		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].arg;
-	p->tpc = p->pc + (p->tpc % IDX_MOD);
-	ft_memcpy(&p->r[p->instruct.args[2].id - 1], &env->arena[p->tpc], REG_SIZE);
-	p->carry = true;
-	return (0);
-}
-
-int				sti(t_env *env, t_process *p)
-{
-	p->tpc = p->instruct.args[1].arg + p->instruct.args[2].arg;
-	ft_memcpy(&env->arena[p->tpc], &p->r[p->instruct.args[0].id - 1], REG_SIZE);
-	return (0);
-}
-
-int				forky(t_env *env, t_process *p)
-{
-	(void)env;
-	p->tpc = p->pc + (p->instruct.args[0].arg % IDX_MOD);
-	env->process = push_lst(env->process, (u_int32_t)p->r[0], p->tpc);
-	return (0);
-}
-
-int				lld(t_env *env, t_process *p)
-{
-	if (p->instruct.args[0].type == ARG_DIR)
-		p->r[p->instruct.args[1].id - 1] = (int32_t)p->instruct.args[0].arg;
-	else
-	{
-		p->tpc = p->pc + p->instruct.args[0].arg;
-		ft_memcpy(&p->r[p->instruct.args[1].id - 1],
-			&env->arena[p->tpc], REG_SIZE);
-	}
-	p->carry = true;
-	return (0);
-}
-
-int				lldi(t_env *env, t_process *p)
-{
-	if (p->instruct.args[0].type == ARG_IND)
-	{
-		p->tpc = p->pc + p->instruct.args[0].arg;
-		if (p->instruct.args[1].type == ARG_REG)
-			p->tpc += p->instruct.args[1].id;
-		else
-			p->tpc += p->instruct.args[1].arg;
-	}
-	else if (p->instruct.args[0].type == ARG_REG)
-	{	
-		if (p->instruct.args[1].type == ARG_REG)
-			p->tpc = p->instruct.args[0].id + p->instruct.args[1].id;
-		else
-			p->tpc = p->instruct.args[0].id + p->instruct.args[1].arg;
-	}
-	else if (p->instruct.args[1].type == ARG_REG)
-		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].id;
-	else
-		p->tpc = p->instruct.args[0].arg + p->instruct.args[1].arg;
-	p->tpc = p->pc + p->tpc;
-	ft_memcpy(&p->r[p->instruct.args[2].id - 1], &env->arena[p->tpc], REG_SIZE);
-	p->carry = true;
-	return (0);
-}
-
-int				lfork(t_env *env, t_process *p)
-{
-	(void)env;
-	p->tpc = p->pc + p->instruct.args[0].arg;
-	env->process = push_lst(env->process, (u_int32_t)p->r[0], p->tpc);
-	return (0);
-}
-
-int				aff(t_env *env, t_process *p)
-{
-	(void)env;
-	ft_putchar((char)(p->r[p->instruct.args[0].id - 1] % 256));
-	return (0);
+	val[0] = p->instruct.args[0].arg;
+	val[1] = p->instruct.args[1].arg;
+	val[2] = p->instruct.args[2].arg;
+	if (val[0] <= REG_NONE || val[0] >= REG_MAX || val[1] <= REG_NONE
+			|| val[1] >= REG_MAX || val[2] <= REG_NONE || val[2] >= REG_MAX)
+		return ;
+	val[0] = get_arg_value(env, p, 0, true);
+	val[1] = get_arg_value(env, p, 1, true);
+	p->r[val[2] - 1] = val[0] - val[1];
+	p->carry = (p->r[val[2] - 1]) ? false : true;
 }

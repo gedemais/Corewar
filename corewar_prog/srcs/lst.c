@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 
-t_process	*new_lst(u_int32_t id, u_int16_t pc)
+t_process	*new_lst(uint32_t id, uint16_t pc)
 {
 	t_process	*new;
 
@@ -24,7 +24,7 @@ t_process	*new_lst(u_int32_t id, u_int16_t pc)
 	return (new);
 }
 
-t_process	*push_lst(t_process *process, u_int32_t id, u_int16_t pc)
+t_process	*push_lst(t_process *process, uint32_t id, uint16_t pc)
 {	
 	t_process	*new;
 

@@ -12,7 +12,7 @@
 
 #include "corewar.h"
 
-static inline char	hex_tab(u_int8_t quartet)
+static inline char	hex_tab(uint8_t quartet)
 {
 	static char			hex_value[16] = {'0', '1', '2', '3', '4', '5', '6', '7',
 		'8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
@@ -22,9 +22,9 @@ static inline char	hex_tab(u_int8_t quartet)
 
 static inline char 	hex_lines(int j)
 {
-	static u_int8_t		a = 0;
-	static u_int8_t		b = 0;
-	static u_int8_t		c = 0;
+	static uint8_t		a = 0;
+	static uint8_t		b = 0;
+	static uint8_t		c = 0;
 	static char		buffer[9] = {'0', 'x', '0', '0', '0', '0',
 		' ', ':', ' '};
 
@@ -46,7 +46,7 @@ static inline char 	hex_lines(int j)
 	return (buffer[j]);
 }
 
-static inline void	print_octet(u_int8_t hquartet, u_int8_t lquartet, bool flush)
+static inline void	print_octet(uint8_t hquartet, uint8_t lquartet, bool flush)
 {
 	static char			buffer[DUMP_LENGTH];
 	static int			i = 0;
@@ -75,7 +75,7 @@ static inline void	print_octet(u_int8_t hquartet, u_int8_t lquartet, bool flush)
 
 void				dump(t_env *env)
 {
-	u_int8_t				*arena;
+	uint8_t				*arena;
 	unsigned int		i;
 
 	i = 0;

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/08 04:10:42 by unknown          ###   ########.fr       */
+/*   Updated: 2019/11/27 09:04:05 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 # include <stdio.h>
 
 /*
-** ==============================================================================
+** =============================================================================
 ** 						OPTIONS
-** ==============================================================================
+** =============================================================================
 */
 
 typedef enum		e_option
@@ -34,9 +34,9 @@ typedef enum		e_option
 }					t_option;
 
 /*
-** ==============================================================================
+** =============================================================================
 ** 						OP_CODES
-** ==============================================================================
+** =============================================================================
 */
 
 typedef enum		e_op_code
@@ -62,24 +62,9 @@ typedef enum		e_op_code
 }					t_op_code;
 
 /*
-** ==============================================================================
-** 						ARGUMENTS
-** ==============================================================================
-*/
-
-typedef enum		e_op_arg_type
-{
-	ARG_NONE,
-	ARG_REG,
-	ARG_DIR,
-	ARG_IND,
-	ARG_MX
-}					t_op_arg_type;
-
-/*
-** ==============================================================================
+** =============================================================================
 ** 						REGISTRES
-** ==============================================================================
+** =============================================================================
 */
 
 typedef enum		e_reg_id
@@ -105,16 +90,16 @@ typedef enum		e_reg_id
 }					t_reg_id;
 
 /*
-** ==============================================================================
+** =============================================================================
 ** 						PROCESS
-** ==============================================================================
+** =============================================================================
 */
 
 typedef struct		s_op_arg
 {
-	t_op_arg_type	type;
-	t_reg_id		id;
-	u_int32_t		arg;
+	unsigned char	type;
+	unsigned char	pad[3];
+	int32_t			arg;
 }					t_op_arg;
 
 typedef struct s_instruct	t_instruct;
@@ -122,7 +107,7 @@ typedef struct s_instruct	t_instruct;
 struct				s_instruct
 {
 	t_op_arg		args[MAX_ARGS_NUMBER];
-	u_int32_t		op;
+	uint32_t		op;
 };
 
 typedef struct s_process	t_process;
@@ -133,17 +118,20 @@ struct				s_process
 	t_instruct		instruct;
 	int32_t			r[REG_NUMBER];
 	int				cycle_to_exec;
-	u_int16_t		pc : 12;
-	u_int32_t		tpc : 12;
+	uint16_t		pc : 12;
+	uint8_t			pad0 : 4;
+	uint16_t		tpc : 12;
+	uint8_t			pad1 : 4;
+	uint16_t		pctmp : 12;
+	uint8_t			pad2 : 4;
 	bool			alive;
 	bool			carry;
-	char			padding[7];
 };
 
 /*
-** ==============================================================================
+** =============================================================================
 ** 						VM AND PLAYERS
-** ==============================================================================
+** =============================================================================
 */
 
 typedef struct		s_player
@@ -152,33 +140,33 @@ typedef struct		s_player
 	char			champ[CHAMP_MAX_SIZE];
 	char			name[PROG_NAME_LENGTH + 1];
 	char			pad[2][PAD_LENGTH];
-	u_int32_t		id;
-	u_int32_t		magic;
-	u_int32_t		size;
+	uint32_t		id;
+	uint32_t		magic;
+	uint32_t		size;
 }					t_player;
 
 typedef struct		s_env
 {
 	t_process		*process;
 	t_player		player[MAX_PLAYERS];
-	u_int8_t			arena[MEM_SIZE];
+	uint8_t			arena[MEM_SIZE];
 	int				opt[OPT_MAX];
 	unsigned int	live_pl[MAX_PLAYERS];
-	unsigned int			verbose;
-	char			pad[7];
+	int				cycle_last_live[MAX_PLAYERS];
+	unsigned int	verbose;
 	int				cycle_to_dump;
 	int				cycle_to_die;
 	int				cycle_curr;
 	int				cycle_tot;
 	unsigned int	curr_lives;
 	unsigned int	nb_pl;
-	u_int32_t		last_live;
+	uint32_t		last_live;
 }					t_env;
 
 /*
-** ==============================================================================
+** =============================================================================
 ** 						PROTOTYPES
-** ==============================================================================
+** =============================================================================
 */
 
 /*
@@ -195,8 +183,7 @@ int				rev_bits(int num);
 ** OPTIONS UTILS
 */
 
-int				get_dump(char *arg, unsigned int *j,
-		unsigned int k);
+int				get_dump(char *arg, unsigned int *j, unsigned int k);
 
 /*
 ** OPTIONS
@@ -224,41 +211,18 @@ void			check_live(t_env *env);
 void			create_instruct(t_env *env, t_process *process);
 int				create_pro(t_env *env, unsigned int i, unsigned int offset);
 int				cw_loop(t_env *env);
-u_int32_t		get_mem_cell(t_env *env, t_process *p, size_t siz, u_int16_t add);
+int32_t			get_arg_value(t_env *v, t_process *p, int i, bool mod);
+int32_t			get_mem_cell(t_env *v, t_process *p, size_t siz);
 void			launch_instruct(t_env *env, t_process *process);
 void			load_args(t_env *env, t_process *p, bool enco, bool dir);
-
-/*
-** FUNCTIONS TO GET THE DATA OF THE OP_FUNCTIONS
-*/
-
-void			convert_instruction(t_env *env, t_process *process);
-bool			direct_size(u_int32_t c);
-bool			encod_byte(u_int32_t c);
-int				nb_arg(u_int32_t c);
-int				wait_cycle(u_int32_t c);
-
-/*
-** CHECK OF THE ARGUMENTS OF THE OP_FUNCTIONS
-*/
-
-bool			is_op_other2_valid(t_process *p);
-bool			is_op_other_valid(t_process *p);
-bool			is_l_ld_st_valid(t_process *p);
-bool			is_lldi_valid(t_process *p);
-bool			is_sti_valid(t_process *p);
-bool			is_ldi_valid(t_process *p);
-bool			is_xor_valid(t_process *p);
-bool			is_or_valid(t_process *p);
-bool			is_and_valid(t_process *p);
-bool			is_op_arg_valid(t_process *p, u_int32_t op);
+void			write_mem_cell(t_env *v, t_process *p, int32_t value);
 
 /*
 ** LISTS
 */
 
-t_process		*new_lst(u_int32_t id, u_int16_t pc);
-t_process		*push_lst(t_process *process, u_int32_t id, u_int16_t pc);
+t_process		*new_lst(uint32_t id, uint16_t pc);
+t_process		*push_lst(t_process *process, uint32_t id, uint16_t pc);
 t_process		*pop_lst(t_process *process, t_process *prev);
 
 /*
@@ -280,22 +244,68 @@ void			test_system(void);
 ** OP_FUNCTIONS
 */
 
-u_int32_t		get_direct(t_env *env, t_process *p, t_op_arg args);
-int				live(t_env *env, t_process *process);
-int				ld(t_env *env, t_process *process);
-int				st(t_env *env, t_process *process);
-int				add(t_env *env, t_process *process);
-int				sub(t_env *env, t_process *process);
-int				and(t_env *env, t_process *process);
-int				xor(t_env *env, t_process *process);
-int				or(t_env *env, t_process *process);
-int				zjmp(t_env *env, t_process *process);
-int				ldi(t_env *env, t_process *process);
-int				sti(t_env *env, t_process *process);
-int				forky(t_env *env, t_process *process);
-int				lld(t_env *env, t_process *process);
-int				lldi(t_env *env, t_process *process);
-int				lfork(t_env *env, t_process *process);
-int				aff(t_env *env, t_process *process);
+void			live(t_env *env, t_process *process);
+void			ld(t_env *env, t_process *process);
+void			st(t_env *env, t_process *process);
+void			add(t_env *env, t_process *process);
+void			sub(t_env *env, t_process *process);
+void			and(t_env *env, t_process *process);
+void			xor(t_env *env, t_process *process);
+void			or(t_env *env, t_process *process);
+void			zjmp(t_env *env, t_process *process);
+void			ldi(t_env *env, t_process *process);
+void			sti(t_env *env, t_process *process);
+void			op_fork(t_env *env, t_process *process);
+void			lld(t_env *env, t_process *process);
+void			lldi(t_env *env, t_process *process);
+void			lfork(t_env *env, t_process *process);
+void			aff(t_env *env, t_process *process);
+
+/*
+** =============================================================================
+** 						FUNCTION_TABLE
+** =============================================================================
+*/
+
+typedef struct s_op		t_op;
+
+struct					s_op
+{
+	char				*name;
+	unsigned char		nb_arg;
+	unsigned char		args[3];
+	unsigned int		op_code;
+	uint64_t			wait_cycles;
+	char				*description;
+	unsigned int		encoding;
+	unsigned int		direct;
+	void				(*f)(t_env *env, t_process *p);
+};
+
+static const t_op			func_tab[NB_FUNC] =
+{
+	{"live", 1, {T_DIR}, 1, 10, "alive", 0, 0, &live},
+	{"ld", 2, {T_DIR | T_IND, T_REG}, 2, 5, "load", 1, 0, &ld},
+	{"st", 2, {T_REG, T_IND | T_REG}, 3, 5, "store", 1, 0, &st},
+	{"add", 3, {T_REG, T_REG, T_REG}, 4, 10, "addition", 1, 0, &add},
+	{"sub", 3, {T_REG, T_REG, T_REG}, 5, 10, "soustraction", 1, 0, &sub},
+	{"and", 3, {T_REG | T_DIR | T_IND, T_REG | T_IND | T_DIR, T_REG}, 6, 6,
+		"et (and  r1, r2, r3   r1&r2 -> r3", 1, 0, &and},
+	{"or", 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG}, 7, 6,
+		"ou  (or   r1, r2, r3   r1 | r2 -> r3", 1, 0, &or},
+	{"xor", 3, {T_REG | T_IND | T_DIR, T_REG | T_IND | T_DIR, T_REG}, 8, 6,
+		"ou (xor  r1, r2, r3   r1^r2 -> r3", 1, 0, &xor},
+	{"zjmp", 1, {T_DIR}, 9, 20, "jump if zero", 0, 1, &zjmp},
+	{"ldi", 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 10, 25,
+		"load index", 1, 1, &ldi},
+	{"sti", 3, {T_REG, T_REG | T_DIR | T_IND, T_DIR | T_REG}, 11, 25,
+		"store index", 1, 1, &sti},
+	{"fork", 1, {T_DIR}, 12, 800, "fork", 0, 1, &op_fork},
+	{"lld", 2, {T_DIR | T_IND, T_REG}, 13, 10, "long load", 1, 0, &lld},
+	{"lldi", 3, {T_REG | T_DIR | T_IND, T_DIR | T_REG, T_REG}, 14, 50,
+		"long load index", 1, 1, &lldi},
+	{"lfork", 1, {T_DIR}, 15, 1000, "long fork", 0, 1, &lfork},
+	{"aff", 1, {T_REG}, 16, 2, "aff", 1, 0, &aff},
+};
 
 #endif

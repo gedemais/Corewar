@@ -23,13 +23,13 @@ int				read_big_endian(t_env *env, int fd, bool magic)
 	reverse = rev_bits(reverse);
 	if (magic)
 	{
-		env->player[env->nb_pl].magic = (u_int32_t)reverse;
+		env->player[env->nb_pl].magic = (uint32_t)reverse;
 		if (env->player[env->nb_pl].magic != COREWAR_EXEC_MAGIC)
 			return (error(BAD_MAGIC, NULL, NULL));
 	}
 	else
 	{
-		env->player[env->nb_pl].size = (u_int32_t)reverse;
+		env->player[env->nb_pl].size = (uint32_t)reverse;
 		if (env->player[env->nb_pl].size > CHAMP_MAX_SIZE)
 			return (error(BAD_SIZE, NULL, NULL));
 	}

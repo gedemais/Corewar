@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/15 12:15:41 by moguy             #+#    #+#             */
-/*   Updated: 2019/10/31 15:50:11 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/27 05:16:24 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	aff_env(t_env *env, bool all)
 
 void	aff_player(t_player *player)
 {
-	printf("*******************PLAYER*****************\n\n");
+	printf("****************PLAYER**************\n\n");
 	printf("ID = %d\n", player->id);
 	printf("********COMMENT********\n\n");
 	printf("%s\n\n", player->com);
@@ -61,13 +61,11 @@ void	aff_player(t_player *player)
 
 static inline void	aff_instruct(t_process *p)
 {
-	printf("******************INSTRUCTION******************\n\n");
+	printf("**************INSTRUCTION**************\n\n");
 	printf("OP_CODE = %u\n", (unsigned int)p->instruct.op);
 	printf ("Types = %u,  %u,  %u.\n", p->instruct.args[0].type,
 		p->instruct.args[1].type, p->instruct.args[2].type);
-	printf ("REG = %u,  %u,  %u.\n", p->instruct.args[0].id,
-		p->instruct.args[1].id, p->instruct.args[2].id);
-	printf ("ARG= %u,  %u,  %u.\n", p->instruct.args[0].arg,
+	printf ("ARG= %d,  %d,  %d.\n", p->instruct.args[0].arg,
 		p->instruct.args[1].arg, p->instruct.args[2].arg);
 }
 
@@ -83,9 +81,11 @@ void	aff_process(t_process *process, bool all)
 	tmp = process;
 	while (tmp)
 	{
-		printf("******************PROCESS******************\n\n");
+		printf("******************PROCESS********************************\n\n");
 		printf("id = %d\n\n", tmp->r[0]);
 		printf("PC = %u\n", tmp->pc);
+		printf("PCTMP = %u\n", tmp->pctmp);
+		printf("TPC = %u\n", tmp->tpc);
 		printf("Wait cycle = %d\n", tmp->cycle_to_exec);
 		printf("alive = %d\n", tmp->alive);
 		printf("carry = %d\n", tmp->carry);
