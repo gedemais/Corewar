@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 00:38:04 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/27 08:35:54 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/30 05:16:41 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,14 @@ void				ldi(t_env *env, t_process *p)
 		return ;
 	val[0] = get_arg_value(env, p, 0, true);
 	val[1] = get_arg_value(env, p, 1, true);
-	p->pctmp = p->pc + (uint16_t)((val[0] + val[1]) % IDX_MOD);
+	p->pctmp = p->pc + (uint32_t)((val[0] + val[1]) % IDX_MOD);
 	p->r[val[2] - 1] = get_mem_cell(env, p, REG_SIZE);
 }
 
 void				aff(t_env *env, t_process *p)
 {
-	(void)env;
+	if (!env->opt[A])
+		return ;
 	if (p->instruct.args[0].arg > REG_NONE && p->instruct.args[0].arg < REG_MAX)
 		ft_putchar((char)(p->r[p->instruct.args[0].arg - 1] % 256));
 }

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 00:13:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/27 08:54:54 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/28 03:42:53 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,6 @@ void		write_mem_cell(t_env *env, t_process *p, int32_t value)
 	while (i < REG_SIZE)
 	{
 		val = (uint8_t)((value << (8 * i)) >> (8 * (sizeof(int) - 1)));
-		ft_putstr("\n\nval = ");
-		ft_putnbr(val);
-		ft_putstr("\n\n");
 		env->arena[p->pctmp] = val;
 		p->pctmp++;
 		i++;

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 00:15:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/27 08:23:20 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/30 05:16:34 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,11 @@ void				op_fork(t_env *env, t_process *p)
 	unsigned int	i;
 
 	i = 0;
-	p->pctmp = p->pc + (uint16_t)(p->instruct.args[0].arg % IDX_MOD);
-	if (!(env->process = push_lst(env->process, (uint32_t)p->r[0], p->pctmp)))
+	p->pctmp = p->pc + (uint32_t)(p->instruct.args[0].arg % IDX_MOD);
+	if (!(env->process = push_lst(env, (uint32_t)p->r[0], p->pctmp)))
 	{
 		error(LST_ERR, NULL, NULL);
+		free_env(env, NULL);
 		exit(EXIT_FAILURE);
 	}
 	env->process->alive = p->alive;
@@ -81,7 +82,7 @@ void				lldi(t_env *env, t_process *p)
 		return ;
 	val[0] = get_arg_value(env, p, 0, true);
 	val[1] = get_arg_value(env, p, 1, true);
-	p->pctmp = p->pc + (uint16_t)(val[0] + val[1]);
+	p->pctmp = p->pc + (uint32_t)(val[0] + val[1]);
 	p->r[val[2] - 1] = get_mem_cell(env, p, REG_SIZE);
 }
 
@@ -90,8 +91,8 @@ void				lfork(t_env *env, t_process *p)
 	unsigned int	i;
 
 	i = 0;
-	p->pctmp = p->pc + (uint16_t)p->instruct.args[0].arg;
-	if (!(env->process = push_lst(env->process, (uint32_t)p->r[0], p->pctmp)))
+	p->pctmp = p->pc + (uint32_t)p->instruct.args[0].arg;
+	if (!(env->process = push_lst(env, (uint32_t)p->r[0], p->pctmp)))
 	{
 		error(LST_ERR, NULL, NULL);
 		free_env(env, NULL);

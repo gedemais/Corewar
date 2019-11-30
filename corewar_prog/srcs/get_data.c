@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 17:55:04 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/07 21:44:36 by unknown          ###   ########.fr       */
+/*   Updated: 2019/11/30 06:53:22 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ static inline int	get_file(t_env *env, char *arg, unsigned int *j)
 	unsigned int	i;
 
 	i = *j;
-	if (arg[i] == '-' && !ft_strncmp(&arg[i], OPT_N, 3))
+	if (!ft_strncmp(&arg[i], OPT_N, 3))
 	{
 		if (get_id(env, arg, &i, false))
 			return (1);
@@ -43,42 +43,45 @@ static inline int	check_verbose(t_env *env, char *arg, unsigned int *j)
 	unsigned int	i;
 	long long int	nb;
 
-	i = *j;
-	if (arg[i + 1] == 'v' && ft_is_whitespace(arg[i + 2])
-			&& (nb = ft_atoi(&arg[i + 3])) > 0 && nb < VERB_MAX)
+	i = *j + 3;
+	nb = ft_atoi(&arg[i]);
+	if (nb > 0 && nb <= VERB_MAX)
 	{
-		env->verbose = (unsigned int)nb;
-		i += 3;
+		env->opt[V] = (int)nb;
 		*j = after_word(arg, i);
 		return (1);
 	}
+	else
+		env->opt[V] = -1;
 	return (0);
 }
 
 static inline int	get_opt(t_env *env, char *arg, unsigned int *j)
 {
 	unsigned int	i;
-	bool			close_op;
+	int				ret;
 
 	i = *j;
-	close_op = false;
-	while (arg[i] == '-' && !close_op)
+	while (arg[i] == '-')
 	{
-		if (arg[i + 1] == 'v' && check_verbose(env, arg, &i))
-			i++;
-		else if (arg[i + 1] == 'd' && ft_is_whitespace(arg[i + 2]))
+		if (!ft_strncmp(&arg[i], OPT_V, 3) && env->opt[V] == 0)
+			check_verbose(env, arg, &i);
+		else if (!ft_strncmp(&arg[i], OPT_A, 3) && env->opt[A] == false)
+			env->opt[A] = true;
+		else if (!ft_strncmp(&arg[i], OPT_D, 3) && env->opt[D] == false)
 		{
-			env->opt[D] = true;
-			if ((env->opt[DMP] = get_dump(arg, &i, 2)) < 0)
+			if ((env->opt[D] = get_dump(arg, &i)) < 0)
 				return (error(BAD_DUMP, USAGE, NULL));
 		}
-		else if (!ft_strncmp(&arg[i], DUMP, 6) && env->opt[DMP] == 0)
+		else if (!ft_strncmp(&arg[i], OPT_S, 3) && env->opt[D] == false)
 		{
-			if ((env->opt[DMP] = get_dump(arg, &i, 5)) < 0)
+			env->opt[S] = true;
+			if ((env->opt[D] = get_dump(arg, &i)) == 0)
 				return (error(BAD_DUMP, USAGE, NULL));
 		}
 		else if (!ft_strncmp(&arg[i], OPT_N, 3)
-			|| !ft_strncmp(&arg[i + get_name_len(&arg[i]) - 4], EXT, 4))
+			|| ((ret = (int)i + (int)get_name_len(&arg[i]) - 4) >= 0
+				&& !ft_strncmp(&arg[ret], EXT, 4)))
 			break ;
 		else
 			return (error(BAD_OPT, USAGE, NULL));

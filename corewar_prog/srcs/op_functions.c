@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:16:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/27 08:34:30 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/30 04:49:05 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,19 @@
 
 void				live(t_env *env, t_process *p)
 {
-	unsigned int	i;
 	int32_t			value;
 
-	i = 0;
-	value = get_arg_value(env, p, 0, true);
+	value = -(get_arg_value(env, p, 0, true));
+	p->alive = env->cycle_tot + env->cycle_curr;
 	if (value < 1 || value > (int32_t)env->nb_pl)
 		return ;
 	env->live_pl[value - 1]++;
 	env->last_live = (uint32_t)value;
-	env->cycle_last_live[value - 1] = env->cycle_tot;
-	while (i < env->nb_pl && env->player[i].id != env->last_live)
-		i++;
-	printf("un processus dit que le joueur %u(%s) est en vie\n",
-				env->player[i].id, &env->player[i].name[0]);
+	env->curr_lives++;
+	if (!(env->opt[V] & (1 << 0)))
+		return ;
+	printf("Player %u (%s) is said to be alive\n",
+				env->player[value - 1].id, &env->player[value - 1].name[0]);
 }
 
 void				ld(t_env *env, t_process *p)

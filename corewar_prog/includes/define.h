@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:14:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/26 06:28:53 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/30 02:36:43 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,10 @@ defined in the header."
 # define MALLOC_ERR "Malloc error."
 # define SAME_ID "Some players has the same attributed ID."
 # define TOO_MANY_ARGS "Too many arguments to the ./corewar call."
-# define TOO_MANY_PLAYERS "Too many players, only 4 champions can fight in \
-the area at once, for at least one champion..."
+# define TOO_MANY_PLAYERS "Too many players, only 4 contestants can fight in \
+the area at once, for a minimum of one champion..."
 # define VM_ERR "Virtual machine error."
-# define USAGE "Usage: /vm [-dump nbr_cycles] [[-n number between \
-1 and number of players] champion1.cor] ..."
+# define USAGE "usage"
 
 /*
 ** =============================================================================
@@ -54,13 +53,13 @@ the area at once, for at least one champion..."
 ** =============================================================================
 */
 
+# define DUMP_LENGTH 12864
 # define MAX_ARGS 32
 # define MAX_CYCLE 1000000
-# define PAD_LENGTH 4
 # define NB_FUNC 16
-# define OPT_MAX 2
-# define VERB_MAX 64
-# define DUMP_LENGTH 12864
+# define PAD_LENGTH 4
+# define OPT_MAX 5
+# define VERB_MAX 31
 
 /*
 ** =============================================================================
@@ -68,8 +67,11 @@ the area at once, for at least one champion..."
 ** =============================================================================
 */
 
-# define DUMP "-dump "
+# define OPT_A "-a "
+# define OPT_D "-d "
 # define OPT_N "-n "
+# define OPT_S "-s "
+# define OPT_V "-v "
 # define EXT ".cor"
 
 /*
@@ -79,5 +81,7 @@ the area at once, for at least one champion..."
 */
 
 # define MASK_ENCO 0x03
+# define MASK_NEG 0x80
+# define MASK_FF 0xFF
 
 #endif

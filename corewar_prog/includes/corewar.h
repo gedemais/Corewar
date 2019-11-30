@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/27 09:04:05 by moguy            ###   ########.fr       */
+/*   Updated: 2019/11/30 08:29:38 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,11 @@
 
 typedef enum		e_option
 {
-	DMP,
-	D
+	A,
+	D,
+	N,
+	S,
+	V
 }					t_option;
 
 /*
@@ -117,15 +120,14 @@ struct				s_process
 	t_process		*next;
 	t_instruct		instruct;
 	int32_t			r[REG_NUMBER];
+	uint32_t		pc : 12;
+	uint32_t		tpc : 12;
+	char			carry;
+	uint32_t		pctmp : 12;
+	uint32_t		pad : 20;
+	int				alive;
 	int				cycle_to_exec;
-	uint16_t		pc : 12;
-	uint8_t			pad0 : 4;
-	uint16_t		tpc : 12;
-	uint8_t			pad1 : 4;
-	uint16_t		pctmp : 12;
-	uint8_t			pad2 : 4;
-	bool			alive;
-	bool			carry;
+	int				rank;
 };
 
 /*
@@ -136,8 +138,8 @@ struct				s_process
 
 typedef struct		s_player
 {
-	char			com[COMMENT_LENGTH + 1];
 	char			champ[CHAMP_MAX_SIZE];
+	char			com[COMMENT_LENGTH + 1];
 	char			name[PROG_NAME_LENGTH + 1];
 	char			pad[2][PAD_LENGTH];
 	uint32_t		id;
@@ -150,17 +152,15 @@ typedef struct		s_env
 	t_process		*process;
 	t_player		player[MAX_PLAYERS];
 	uint8_t			arena[MEM_SIZE];
-	int				opt[OPT_MAX];
 	unsigned int	live_pl[MAX_PLAYERS];
-	int				cycle_last_live[MAX_PLAYERS];
-	unsigned int	verbose;
+	int				opt[OPT_MAX];
+	int				cycle_curr;
 	int				cycle_to_dump;
 	int				cycle_to_die;
-	int				cycle_curr;
 	int				cycle_tot;
+	uint32_t		last_live;
 	unsigned int	curr_lives;
 	unsigned int	nb_pl;
-	uint32_t		last_live;
 }					t_env;
 
 /*
@@ -176,6 +176,7 @@ typedef struct		s_env
 unsigned int	after_space(char *arg, unsigned int i);
 unsigned int	after_word(char *arg, unsigned int i);
 unsigned int	get_name_len(char *name);
+char			hex_tab(uint8_t quartet);
 char			*merge_args(int ac, char **av);
 int				rev_bits(int num);
 
@@ -183,7 +184,7 @@ int				rev_bits(int num);
 ** OPTIONS UTILS
 */
 
-int				get_dump(char *arg, unsigned int *j, unsigned int k);
+int				get_dump(char *arg, unsigned int *j);
 
 /*
 ** OPTIONS
@@ -221,8 +222,8 @@ void			write_mem_cell(t_env *v, t_process *p, int32_t value);
 ** LISTS
 */
 
-t_process		*new_lst(uint32_t id, uint16_t pc);
-t_process		*push_lst(t_process *process, uint32_t id, uint16_t pc);
+t_process		*new_lst(uint32_t id, uint32_t pc);
+t_process		*push_lst(t_env *env, uint32_t id, uint32_t pc);
 t_process		*pop_lst(t_process *process, t_process *prev);
 
 /*
