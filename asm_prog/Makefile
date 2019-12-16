@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/11/17 14:35:53 by gedemais         ###   ########.fr        #
+#    Updated: 2019/12/16 04:15:48 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ LIB=$(LIB_PATH)libft.a
 INC_PATH=includes/
 INC_NAME=	asm.h\
 			error.h\
+			global.h\
 			op.h
 INC=$(addprefix $(INC_PATH), $(INC_NAME))
 
@@ -61,6 +62,7 @@ SRCS_NAME=	main.c\
 			header.c\
 			utils.c\
 			free.c
+
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
 OBJS_PATH=objs/

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/09 00:42:28 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/12/16 03:51:40 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@ unsigned char rev_bits(unsigned char b, bool shift)
 	b = (unsigned char)((b & 0xF0) >> 4 | (b & 0x0F) << 4);
 	b = (unsigned char)((b & 0xCC) >> 2 | (b & 0x33) << 2);
 	b = (unsigned char)((b & 0xAA) >> 1 | (b & 0x55) << 1);
-	(void)shift;
 	if (shift)
 		b = (unsigned char)(b << 2);
 	return (b);

@@ -148,17 +148,17 @@ static inline void	op_usage(int op)
 	while (i < 9)
 	{
 		j = 0;
+		ft_putstr_fd("[", 2);
 		while (j < 3 && g_op_args[op][i + j])
 		{
 			if (get_type_str(g_op_args[op][i + j], &type[0]) != 0)
 				return ;
 			ft_putstr_fd(&type[0], 2);
-			if (g_op_args[op][i + j + 1])
+			if (i + j + 1 < 9 && g_op_args[op][i + j + 1])
 				ft_putstr_fd("|", 2);
 			j++;
 		}
-		if (g_op_args[op][i + 3])
-			ft_putstr_fd(", ", 2);
+		ft_putstr_fd("] ", 2);
 		i += 3;
 	}
 }

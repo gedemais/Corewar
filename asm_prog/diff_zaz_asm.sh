@@ -1,4 +1,4 @@
-!#/bin/bash
+#!/bin/bash
 
 # Copying the corresponding champ
 ./asm $1
