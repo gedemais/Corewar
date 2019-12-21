@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/17 18:55:05 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/21 05:44:52 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,16 +16,14 @@
 # include "../../libft/libft.h"
 # include <op.h>
 # include <error.h>
-
 # include <stdbool.h>
 # include <stdio.h>
 
 # define BUFF_READ 65536
 # define BUFF_WRITE 4096
 
-# define FILE_SIZE 4096
-
 # define HEADER_SIZE 2180
+# define LEAKS true
 
 # define NB_OPS 16
 # define MAX_TYPE_SIZE 32
@@ -39,28 +37,19 @@
 # define LBE_BUFFER 4
 # define PADDING_VALUE 0
 
-static char				*g_opnames[NB_OPS] = {"add",
-											"aff",
-											"and",
-											"fork",
-											"lfork",
-											"ld",
-											"ldi",
-											"lld",
-											"lldi",
-											"live",
-											"or",
-											"st",
-											"sti",
-											"sub",
-											"xor",
-											"zjmp"};
+static char	*g_opnames[NB_OPS] = {"add", "aff", "and", "fork", "lfork",
+								"ld", "ldi", "lld", "lldi", "live",
+								"or", "st", "sti", "sub", "xor", "zjmp"};
 
-static char						g_opcodes[NB_OPS] = {4, 16, 6, 12, 15, 2, 10, 13, 14, 1, 7, 3, 11, 5, 8, 9};
+static char						g_opcodes[NB_OPS] = {4, 16, 6, 12, 15, 2,
+														10, 13, 14, 1, 7, 3, 11,
+														5, 8, 9};
 
-static int						g_direct_size[NB_OPS] = {4, 4, 4, 2, 2, 4, 2, 4, 2, 4, 4, 4, 2, 4, 4, 2};
+static int						g_direct_size[NB_OPS] = {4, 4, 4, 2, 2, 4, 2,
+															4, 2, 4, 4, 4, 2, 4,
+															4, 2};
 
-typedef enum			e_token_type
+typedef enum					e_token_type
 {
 	TOK_NONE,
 	TOK_P_NAME,
@@ -77,9 +66,9 @@ typedef enum			e_token_type
 	TOK_NEWLINE,
 	TOK_COMMENT,
 	TOK_MAX
-}						t_token_type;
+}								t_token_type;
 
-typedef enum			e_lexemes_type
+typedef enum					e_lexemes_type
 {
 	LEX_NONE,
 	LEX_NAME_PROP,
@@ -87,16 +76,16 @@ typedef enum			e_lexemes_type
 	LEX_LABEL,
 	LEX_OP,
 	LEX_MAX
-}						t_lexemes_type;
+}								t_lexemes_type;
 
-typedef union		u_args
+typedef union					u_args
 {
-	char			*str;
-	int				reg;
-	unsigned int	stick;
-	long long int	nb;
-	bool			label;
-}					t_args;
+	char						*str;
+	int							reg;
+	unsigned int				stick;
+	long long int				nb;
+	bool						label;
+}								t_args;
 
 typedef struct			s_lexem
 {

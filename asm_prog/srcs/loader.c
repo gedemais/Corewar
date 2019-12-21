@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/07 21:51:45 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/12/21 05:22:52 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int		loader(t_env *env, char *file_name)
 		ft_putendl_fd(FILE_EXT_ERR, 2);
 		return (-1);
 	}
-	if (!(env->bin_name = ft_strnew(ft_strlen(file_name + 2))))
+	if (!(env->bin_name = ft_strnew(ft_strlen(file_name) + 2)))
 		return (-1);
 	ft_strncat(env->bin_name, file_name, ft_strlen(file_name) - 1);
 	ft_strcat(env->bin_name, "cor");
