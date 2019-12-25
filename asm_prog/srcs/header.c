@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/16 03:51:40 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/26 00:38:32 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static inline int	compute_bytecode_size(t_env *env)
 	{
 		if (env->lexemes[i].type == LEX_LABEL)
 		{
-			printf("Label start at %d\n", ret);
+//			printf("Label start at %d\n", ret);
 			env->lexemes[i].start_byte = (unsigned int)ret;
 		}
 		else if (env->lexemes[i].type == LEX_OP)

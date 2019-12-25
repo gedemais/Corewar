@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/12/21 06:09:35 by gedemais         ###   ########.fr        #
+#    Updated: 2019/12/26 00:48:01 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ LIB=$(LIB_PATH)libft.a
 INC_PATH=includes/
 INC_NAME=	asm.h\
 			error.h\
+			globals.h\
 			op.h
 
 INC=$(addprefix $(INC_PATH), $(INC_NAME))

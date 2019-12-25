@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/25 23:45:22 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/26 00:49:43 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include "../../libft/libft.h"
 # include <op.h>
 # include <error.h>
+# include <globals.h>
 # include <stdbool.h>
 # include <stdio.h>
 
@@ -25,9 +26,7 @@
 # define HEADER_SIZE 2180
 # define LEAKS false
 
-# define NB_OPS 16
 # define MAX_TYPE_SIZE 32
-# define MAX_PARAM_NB 3
 
 # define NB_TOKENS_FUNCS 13
 # define NB_LEX_FUNCS 4
@@ -36,47 +35,6 @@
 # define FCHAR stream[0]
 # define LBE_BUFFER 4
 # define PADDING_VALUE 0
-
-static char	*g_opnames[NB_OPS] = {"add", "aff", "and", "fork", "lfork",
-								"ld", "ldi", "lld", "lldi", "live",
-								"or", "st", "sti", "sub", "xor", "zjmp"};
-
-static char						g_opcodes[NB_OPS] = {4, 16, 6, 12, 15, 2,
-														10, 13, 14, 1, 7, 3, 11,
-														5, 8, 9};
-
-static int						g_direct_size[NB_OPS] = {4, 4, 4, 2, 2, 4, 2,
-															4, 2, 4, 4, 4, 2, 4,
-															4, 2};
-
-typedef enum					e_token_type
-{
-	TOK_NONE,
-	TOK_P_NAME,
-	TOK_P_COM,
-	TOK_STRING,
-	TOK_LABEL,
-	TOK_REG,
-	TOK_NUMBER,
-	TOK_LNUMBER,
-	TOK_DLABA,
-	TOK_INDLABA,
-	TOK_OPCODE,
-	TOK_SEPARATOR,
-	TOK_NEWLINE,
-	TOK_COMMENT,
-	TOK_MAX
-}								t_token_type;
-
-typedef enum					e_lexemes_type
-{
-	LEX_NONE,
-	LEX_NAME_PROP,
-	LEX_COMMENT_PROP,
-	LEX_LABEL,
-	LEX_OP,
-	LEX_MAX
-}								t_lexemes_type;
 
 typedef union					u_args
 {
@@ -162,11 +120,11 @@ typedef	struct			s_env
 void					print_lst(t_token *lst);
 void					print_byte_as_bits(unsigned char val);
 int						loader(t_env *env, char *file_name);
+int						tokenizer(t_env *env);
 
 /*
 ** Tokenizer
 */
-int						tokenizer(t_env *env);
 void					cross_whitespaces(char *stream, unsigned int *i);
 
 int						init_labels(t_env *env);
@@ -226,73 +184,6 @@ int						load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok);
 int						load_lex_comment_prop(t_env *env, t_lexem *lex, t_token **tok);
 int						load_lex_label(t_env *env, t_lexem *lex, t_token **tok);
 int						load_lex_opcode(t_env *env, t_lexem *lex, t_token **tok);
-
-static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
-
-						{TOK_REG, 0, 0, // Types possibles du premier param
-						TOK_REG, 0, 0, // ____ second param
-						TOK_REG, 0, 0},// add
-
-						{TOK_REG, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, // aff
-
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, 0, 0}, // and
-						
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, //fork
-						
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, //lfork
-						
-						{TOK_NUMBER, TOK_LNUMBER, 0,
-						TOK_REG, 0, 0,
-						0, 0, 0}, //ld
-
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, TOK_LNUMBER, 0,
-						TOK_REG, 0, 0}, //ldi
-
-						{TOK_NUMBER, TOK_LNUMBER, 0,
-						TOK_REG, 0, 0,
-						0, 0, 0}, //lld
-
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_NUMBER, TOK_REG, 0,
-						TOK_REG, 0, 0}, //lldi
-
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, //live
-
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, 0, 0}, // or
-
-						{TOK_REG, 0, 0,
-						TOK_REG, TOK_NUMBER, 0,
-						0, 0, 0}, //st
-
-						{TOK_REG, 0, 0,
-						TOK_REG, TOK_LNUMBER, TOK_NUMBER,
-						TOK_LNUMBER, TOK_REG},//sti
-
-						{TOK_REG, 0, 0,
-						TOK_REG, 0, 0,
-						TOK_REG, 0, 0}, //sub
-
-						{TOK_REG, TOK_LNUMBER, TOK_NUMBER,
-						TOK_REG, TOK_LNUMBER, TOK_NUMBER,
-						TOK_REG, 0, 0}, //xor
-
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}//zjmp
-};
 
 /*
 ** Bytecode translating

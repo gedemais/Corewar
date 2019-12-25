@@ -1,5 +1,21 @@
 #include "asm.h"
 
+static inline bool			is_label_char(char c)
+{
+	unsigned int	i;
+
+	i = 0;
+	if (c == 0)
+		return (false);
+	while (LABEL_CHARS[i])
+	{
+		if (LABEL_CHARS[i] == c)
+			return (true);
+		i++;
+	}
+	return (false);
+}
+
 bool						is_label(t_env *env, char *label)
 {
 	unsigned int	i;
@@ -7,7 +23,7 @@ bool						is_label(t_env *env, char *label)
 
 	i = 0;
 	len = 0;
-	while (label[len] && (ft_isalnum(label[len]) || label[len] == '_'))
+	while (is_label_char(label[len]))
 		len++;
 	while (i < env->nb_labels && env->labels[i].ptr)
 	{
@@ -27,13 +43,12 @@ static inline bool			check_presence(t_label *labels, unsigned int n, char *try, 
 
 	i = 0;
 	try_len = 0;
-	while (try[try_len] && (try[try_len] == '_' || ft_isalnum(try[try_len])))
+	while (is_label_char(try[try_len]))
 		try_len++;
 	while (i < n && labels[i].ptr)
 	{
 		len = 0;
-		while (labels[i].ptr[len]
-			&& (labels[i].ptr[len] == '_' || ft_isalnum(labels[i].ptr[len])))
+		while (is_label_char(labels[i].ptr[len]))
 			len++;
 		if (len == try_len && !ft_strncmp(labels[i].ptr, try, len))
 		{
@@ -58,7 +73,7 @@ int							find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels)
 	while (i < (int)nb_labels)
 	{
 		len = 0;
-		while (labs[i].ptr[len] && (ft_isalnum(labs[i].ptr[len]) || labs[i].ptr[len] == '_'))
+		while (is_label_char(labs[i].ptr[len]))
 			len++;
 		if (len == labs[i].len && !ft_strncmp(&tok->ptr[offset], labs[i].ptr, len))
 			ret = i;
@@ -72,8 +87,8 @@ static inline unsigned int	count_labels(t_env *env)
 	unsigned int	ret;
 	unsigned int	i;
 
-	ret = 0;
 	i = 0;
+	ret = 0;
 	while (env->file[i])
 	{
 		cross_whitespace(env->file, &i);

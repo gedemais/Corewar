@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:14:17 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/25 23:55:56 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/26 00:40:03 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static inline int	crush_tokens(t_env *env)
 		if (t->type == TOK_DLABA || t->type == TOK_INDLABA)
 		{
 			t->label = find_label_index(env->labels, t, env->nb_labels);
-			printf("%d\n", t->label);
+//			printf("%d\n", t->label);
 			t->type = (t->type == TOK_DLABA) ? TOK_LNUMBER : TOK_NUMBER;
 		}
 		if ((t->type == TOK_NEWLINE && t->next && t->next->type == TOK_NEWLINE)
