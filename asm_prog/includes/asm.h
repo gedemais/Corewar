@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/21 05:44:52 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/25 23:45:22 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define BUFF_WRITE 4096
 
 # define HEADER_SIZE 2180
-# define LEAKS true
+# define LEAKS false
 
 # define NB_OPS 16
 # define MAX_TYPE_SIZE 32

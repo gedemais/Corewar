@@ -49,9 +49,11 @@ int							find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels)
 {
 	unsigned int	offset;
 	unsigned int	len;
+	int				ret;
 	int				i;
 
 	i = 0;
+	ret = -1;
 	offset = (tok->type == TOK_DLABA || tok->type == TOK_LNUMBER) ? 2 : 1;
 	while (i < (int)nb_labels)
 	{
@@ -59,10 +61,10 @@ int							find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels)
 		while (labs[i].ptr[len] && (ft_isalnum(labs[i].ptr[len]) || labs[i].ptr[len] == '_'))
 			len++;
 		if (len == labs[i].len && !ft_strncmp(&tok->ptr[offset], labs[i].ptr, len))
-			return (i);
+			ret = i;
 		i++;
 	}
-	return (-1);
+	return (ret);
 }
 
 static inline unsigned int	count_labels(t_env *env)
