@@ -121,7 +121,7 @@ char	get_tok_dlaba(t_env *env, char *stream, unsigned int *i)
 	size = 2;
 	if (FCHAR != '%' || stream[1] != ':')
 		return (0);
-	while (stream[size] && (ft_isalnum(stream[size]) || stream[size] == '_'))
+	while (is_label_char(stream[size]))
 		size++;
 	if (!is_label(env, &stream[2]) && !undefined_label_err(env))
 		return (-1);
@@ -136,7 +136,7 @@ char	get_tok_indlaba(t_env *env, char *stream, unsigned int *i)
 	size = 1;
 	if (FCHAR != ':')
 		return (0);
-	while (stream[size] && (ft_isalnum(stream[size]) || stream[size] == '_'))
+	while (is_label_char(stream[size]))
 		size++;
 	if (size == 1)
 		return (0);

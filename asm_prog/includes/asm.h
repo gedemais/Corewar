@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/26 00:49:43 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/26 10:12:34 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,27 +130,29 @@ void					cross_whitespaces(char *stream, unsigned int *i);
 int						init_labels(t_env *env);
 bool					is_label(t_env *env, char *label);
 int						find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels);
+bool					is_label_char(char c);
 
 t_token					*token_lstnew(t_env *env, t_tokenizer *tok);
 int						token_pushfront(t_token **lst, t_token *new);
 void					token_snap_node(t_token **lst, t_token *node);
 void					token_free_lst(t_token *lst);
 
-char					get_tok_p_name(t_env *env, char *stream, unsigned int *i);
-char					get_tok_p_com(t_env *env, char *stream, unsigned int *i);
-char					get_tok_string(t_env *env, char *stream, unsigned int *i);
-char					get_tok_reg(t_env *env, char *stream, unsigned int *i);
-char					get_tok_number(t_env *env, char *stream, unsigned int *i);
-char					get_tok_lnumber(t_env *env, char *stream, unsigned int *i);
-char					get_tok_dlaba(t_env *env, char *stream, unsigned int *i);
-char					get_tok_indlaba(t_env *env, char *stream, unsigned int *i);
-char					get_tok_opcode(t_env *env, char *stream, unsigned int *i);
-char					get_tok_separator(t_env *env, char *stream, unsigned int *i);
-char					get_tok_newline(t_env *env, char *stream, unsigned int *i);
-char					get_tok_comment(t_env *env, char *stream, unsigned int *i);
-char					get_tok_label(t_env *env, char *stream, unsigned int *i);
+char					get_tok_p_name(t_env *env, char *str, unsigned int *i);
+char					get_tok_p_com(t_env *env, char *str, unsigned int *i);
+char					get_tok_string(t_env *env, char *str, unsigned int *i);
+char					get_tok_reg(t_env *env, char *str, unsigned int *i);
+char					get_tok_number(t_env *env, char *str, unsigned int *i);
+char					get_tok_lnumber(t_env *env, char *str, unsigned int *i);
+char					get_tok_dlaba(t_env *env, char *str, unsigned int *i);
+char					get_tok_indlaba(t_env *env, char *str, unsigned int *i);
+char					get_tok_opcode(t_env *env, char *str, unsigned int *i);
+char					get_tok_separator(t_env *env, char *s, unsigned int *i);
+char					get_tok_newline(t_env *env, char *str, unsigned int *i);
+char					get_tok_comment(t_env *env, char *str, unsigned int *i);
+char					get_tok_label(t_env *env, char *str, unsigned int *i);
 
-static char				(*g_token_fts[NB_TOKENS_FUNCS])(t_env*, char*, unsigned int*) = {
+static char				(*g_token_fts[NB_TOKENS_FUNCS])(t_env*, char*,
+															unsigned int*) = {
 						[TOK_P_NAME - 1] = &get_tok_p_name,
 						[TOK_P_COM - 1] = &get_tok_p_com,
 						[TOK_STRING - 1] = &get_tok_string,

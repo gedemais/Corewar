@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:13:15 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/26 00:36:47 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/26 08:59:18 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int					write_bytecode(t_env *env)
 		{
 			write(fd, &g_opcodes[(int)env->lexemes[i].opcode], 1);
 			if (encoding_byte_pres(env->lexemes[i].opcode))
-			write(fd, &env->lexemes[i].encoding, 1);
+				write(fd, &env->lexemes[i].encoding, 1);
 			write_params(env, env->lexemes[i], fd);
 		}
 		i++;

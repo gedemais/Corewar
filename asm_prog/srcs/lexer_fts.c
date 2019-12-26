@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:40:45 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/17 18:13:57 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/26 10:13:16 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ static inline size_t	arg_len(char *s)
 	size_t	ret;
 
 	ret = 0;
-	while (s[ret] && (ft_isalnum(s[ret]) || s[ret] == '_'))
+	while (is_label_char(s[ret]))
 		ret++;
 	return (ret);
 }
@@ -104,11 +104,9 @@ static inline int	check_opcode_params(t_token *tok, int op, int nb_params)
 	i = 0;
 	while (i < 9 && tok && nb_params > 0)
 	{
-//		printf("Looking for %d\n", tok->type);
 		j = 0;
 		while (j < 3 && g_op_args[op][i + j])
 		{
-			//printf("--->%d\n", g_op_args[op][i + j]);
 			if (tok->type == g_op_args[op][i + j])
 			{
 				nb_params--;

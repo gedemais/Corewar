@@ -1,6 +1,6 @@
 #include "asm.h"
 
-static inline bool			is_label_char(char c)
+bool						is_label_char(char c)
 {
 	unsigned int	i;
 
@@ -99,17 +99,17 @@ static inline unsigned int	count_labels(t_env *env)
 		while (env->file[i] && !ft_is_whitespace(env->file[i]))
 			i++;
 	}
-	//printf("COUNT LABELS : %d\n", ret);
 	return (ret);
 }
 
 static inline int			add_label(t_env *env, unsigned int i)
 {
+	static int		index = 0;
 	unsigned int	len;
 
 	len = 0;
 	i--;
-	while ((ft_isalnum(env->file[i]) || env->file[i] == '_')
+	while (is_label_char(env->file[i])
 		&& env->file[i] != '\n' && i > 0)
 		i--;
 	i++;
@@ -118,15 +118,16 @@ static inline int			add_label(t_env *env, unsigned int i)
 		return (-1);
 	env->labels[env->lab_i].ptr = &env->file[i];
 	env->labels[env->lab_i].stick = i;
-//	unsigned int		tmp = i;
+	unsigned int tmp = i;
 	while (env->file[i] != ':')
 	{
 		len++;
 		i++;
 	}
-	//printf("Loading %.*s (%d)\n", len, &env->file[tmp], env->labels[env->lab_i].stick);
+	printf("Loading %.*s[%d] (%d)\n", len + 1, &env->file[tmp], index, env->labels[env->lab_i].stick);
 	env->labels[env->lab_i].len = len;
 	env->lab_i++;
+	index++;
 	return (0);
 }
 

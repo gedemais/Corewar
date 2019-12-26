@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:14:17 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/26 00:40:03 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/26 09:21:03 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,12 @@ static inline int	crush_tokens(t_env *env)
 	t_token	*t;
 
 	t = env->tokens;
-//	printf("-----------------------\nCRUSH_TOKENS :\n");
 	while (t)
 	{
 		if (t->type == TOK_DLABA || t->type == TOK_INDLABA)
 		{
 			t->label = find_label_index(env->labels, t, env->nb_labels);
-//			printf("%d\n", t->label);
+			printf("Searching for label %d\n", t->label);
 			t->type = (t->type == TOK_DLABA) ? TOK_LNUMBER : TOK_NUMBER;
 		}
 		if ((t->type == TOK_NEWLINE && t->next && t->next->type == TOK_NEWLINE)
@@ -74,76 +73,12 @@ static inline int	get_token_type(t_env *env, t_tokenizer *tok)
 	}
 	return (0);
 }
-/*
-static inline void	print_token(int tok)
-{
-	switch (tok)
-	{
-	case 1:
-		printf("NAME_PROPERITY|");
-		break;
-	case 2:
-		printf("COMMENT_PROPERITY|");
-		break;
-	case 3:
-		printf("STRING|");
-		break;
-	case 4:
-		printf("REGISTER|");
-		break;
-	case 5:
-		printf("LABEL|");
-		break;
-	case 6:
-		printf("NUMBER|");
-		break;
-	case 7:
-		printf("LNUMBER|");
-		break;
-	case 8:
-		printf("DIRECT LABEL ACCESS|");
-		break;
-	case 9:
-		printf("INDIRECT LABEL ACCESS|");
-		break;
-	case 10:
-		printf("OPCODE|");
-		break;
-	case 11:
-		printf("SEPARATOR|");
-		break;
-	case 12:
-		printf("NEWLINE\n");
-		break;
-	case 13:
-		printf("COMMENT|");
-		break;
-	default:
-		printf("NONE|");
-		break;
-	}
-	fflush(stdout);
-}
-
-static inline void	print_tokens(t_token *lst)
-{
-	t_token	*tmp;
-
-	tmp = lst;
-	while (tmp)
-	{
-		print_token(tmp->type);
-		tmp = tmp->next;
-	}
-}*/
 
 int		tokenizer(t_env *env)
 {
 	int		ret;
 
 	ft_memset(&env->tok, 0, sizeof(t_tokenizer));
-//	printf("TOKENIZER :\n------------------------------------------------------------------\n");
-	fflush(stdout);
 	if (init_labels(env) != 0)
 		return (-1);
 	while (env->file[env->tok.i])
@@ -159,11 +94,7 @@ int		tokenizer(t_env *env)
 		env->tok.index++;
 	}
 	env->nb_tokens = env->tok.index;
-//	printf("-----------------------\nTokens :\n-----------------------\n");
-//	print_tokens(env->tokens);
 	if (crush_tokens(env) != 0)
 		return (-1);
-//	printf("-----------------------\nCrushed Tokens :\n-----------------------\n");
-//	print_tokens(env->tokens);
 	return (0);
 }
