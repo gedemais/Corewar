@@ -64,19 +64,26 @@ int							find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels)
 {
 	unsigned int	offset;
 	unsigned int	len;
+	unsigned int	less;
 	int				ret;
 	int				i;
 
 	i = 0;
 	ret = -1;
+	less = 0;
 	offset = (tok->type == TOK_DLABA || tok->type == TOK_LNUMBER) ? 2 : 1;
 	while (i < (int)nb_labels)
 	{
 		len = 0;
 		while (is_label_char(labs[i].ptr[len]))
 			len++;
-		if (len == labs[i].len && !ft_strncmp(&tok->ptr[offset], labs[i].ptr, len))
+		if (len >= less && len == labs[i].len && !ft_strncmp(&tok->ptr[offset], labs[i].ptr, len))
+		{
+			less = len;
+			printf("|%.*s|", len, &tok->ptr[offset]);
+			printf("%.*s|(%d)\n", len, labs[i].ptr, len);
 			ret = i;
+		}
 		i++;
 	}
 	return (ret);
