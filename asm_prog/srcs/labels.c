@@ -80,8 +80,8 @@ int							find_label_index(t_label *labs, t_token *tok, unsigned int nb_labels)
 		if (len >= less && len == labs[i].len && !ft_strncmp(&tok->ptr[offset], labs[i].ptr, len))
 		{
 			less = len;
-			printf("|%.*s|", len, &tok->ptr[offset]);
-			printf("%.*s|(%d)\n", len, labs[i].ptr, len);
+		//	printf("|%.*s|", len, &tok->ptr[offset]);
+		//	printf("%.*s|(%d)\n", len, labs[i].ptr, len);
 			ret = i;
 		}
 		i++;
@@ -125,13 +125,13 @@ static inline int			add_label(t_env *env, unsigned int i)
 		return (-1);
 	env->labels[env->lab_i].ptr = &env->file[i];
 	env->labels[env->lab_i].stick = i;
-	unsigned int tmp = i;
+//	unsigned int tmp = i;
 	while (env->file[i] != ':')
 	{
 		len++;
 		i++;
 	}
-	printf("Loading %.*s[%d] (%d)\n", len + 1, &env->file[tmp], index, env->labels[env->lab_i].stick);
+	//printf("Loading %.*s[%d] (%d)\n", len + 1, &env->file[tmp], index, env->labels[env->lab_i].stick);
 	env->labels[env->lab_i].len = len;
 	env->lab_i++;
 	index++;

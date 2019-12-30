@@ -25,7 +25,7 @@ static inline void	print_cursor(char *line, unsigned int col)
 	ft_putchar_fd('\n', 2);
 }
 
-static inline void	print_line_n_col(unsigned int line, unsigned int col)
+static inline void	print_line_n_col(unsigned int line, unsigned int col, bool colon)
 {
 	char		*nline;
 	char		*ncol;
@@ -39,7 +39,8 @@ static inline void	print_line_n_col(unsigned int line, unsigned int col)
 	ft_putstr_fd(COL, 2);
 	ft_putstr_fd(ncol, 2);
 	free(ncol);
-	ft_putendl_fd(":", 2);
+	if (colon)
+		ft_putendl_fd(":", 2);
 }
 
 int					expected_newline_err(t_token *tok)
@@ -63,7 +64,7 @@ int					property_error(char *file, t_token *tok)
 	i = tok->index;
 	print_err_name((tok->type == TOK_P_COM) ? COMMENT_CMD_ERR : NAME_CMD_ERR);
 	ft_putchar_fd(' ', 2);
-	print_line_n_col(tok->line, tok->col);
+	print_line_n_col(tok->line, tok->col, true);
 	while (i > 0 && file[i] != '\n')
 		i--;
 	i++;
@@ -84,7 +85,7 @@ int					undefined_label_err(t_env *env)
 
 	i = 0;
 	print_err_name(UNDEFINED_LABEL);
-	print_line_n_col(env->tok.line, env->tok.col);
+	print_line_n_col(env->tok.line, env->tok.col, true);
 	while (&env->file[env->tok.line_start + i] && env->file[env->tok.line_start + i] != '\n')
 	{
 		ft_putchar_fd(env->file[env->tok.line_start + i], 2);
@@ -101,7 +102,7 @@ int					invalid_syntax_err(t_env *env, t_tokenizer *tok)
 
 	j = 0;
 	print_err_name(INVALID_SYNTAX);
-	print_line_n_col(tok->line, tok->col);
+	print_line_n_col(tok->line, tok->col, true);
 	while (env->file[tok->line_start + j]
 		&& env->file[tok->line_start + j] != '\n')
 	{
@@ -170,7 +171,7 @@ int					invalid_op_parameter(t_token *tok, int op)
 
 	j = 0;
 	print_err_name(INVALID_OP_PARAM);
-	print_line_n_col(tok->line, tok->col);
+	print_line_n_col(tok->line, tok->col, true);
 	ft_putstr_fd("Incompatible type ", 1);
 	get_type_str(tok->type, &type[0]);
 	ft_putstr_fd(L_RED, 2);
@@ -192,7 +193,7 @@ int					too_few_op_args(t_token *tok, int op)
 	ft_putstr_fd(g_opnames[op], 2);
 	ft_putstr_fd(STOP, 2);
 	ft_putchar_fd(' ', 2);
-	print_line_n_col(tok->line, tok->col);
+	print_line_n_col(tok->line, tok->col, true);
 	op_usage(op);
 	ft_putchar_fd('\n', 2);
 	return (0);
@@ -222,7 +223,7 @@ int		not_eno_args(t_token *tok, int op)
 	ft_putstr_fd(g_opnames[op], 2);
 	ft_putstr_fd(STOP, 2);
 	ft_putchar_fd(' ', 2);
-	print_line_n_col(tok->line, tok->col);
+	print_line_n_col(tok->line, tok->col, true);
 	op_usage(op);
 	ft_putchar_fd('\n', 2);
 	return (1);
@@ -234,7 +235,7 @@ int		invalid_label_err(t_token *tok)
 
 	i = 0;
 	print_err_name(INVALID_LABEL);
-	print_line_n_col(tok->line, tok->col);
+	print_line_n_col(tok->line, tok->col, true);
 	while (tok->ptr[i] && tok->ptr[i] != '\n')
 	{
 		ft_putchar_fd(tok->ptr[i], 2);
@@ -304,4 +305,14 @@ bool	check_after(t_token *tok)
 		tok = tok->next;
 	}
 	return (true);
+}
+
+int		unex_token(t_token *tok)
+{
+	ft_putstr_fd(L_RED, 2);
+	print_err_name(UNEX_TOKEN);
+	ft_putstr_fd(STOP, 2);
+	print_line_n_col(tok->line, tok->col, fglse);
+gft_putchar_fd('\n', 2);
+	return (0);
 }

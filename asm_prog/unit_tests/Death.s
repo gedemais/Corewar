@@ -1,13 +1,12 @@
 .name "Death"
 .comment "Fork"
-.extend
 
-	st	r1, :l1+1
-	st	r1, :l2+1
-	st	r1, :l3+1
-	st	r1, :l4+1
-	st	r1, :golive+1
-	st	r1, :live+1
+	st	r1, :l1
+	st	r1, :l2
+	st	r1, :l3
+	st	r1, :l4
+	st	r1, :golive
+	st	r1, :live
 	xor	r2,r2,r2
 	fork	%:f1
 	ld	%-15, r3
@@ -26,7 +25,6 @@ lock:	add	r3, r4, r3
 nolock:	
 	xor	r1, r1, r1
 	add	r1, r1, r1
-	.code	00 00 00
 live:	live	%1
 
 
@@ -38,8 +36,7 @@ f5:	fork	%:f6
 f6:	fork	%:f7
 f7:	fork	%:f8
 f8:	fork	%:f9
-f9:	fork	%:f10
-f10:
+f9:	aff		r3
 
 l1:	live	%1
 l2:	live	%1

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/07 21:28:01 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/12/30 22:19:11 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ static inline char	get_lexeme_type(t_env *env, t_token *tok)
 	{
 		ret = g_lex_fts[i](env, tok);
 		if (ret == -1)
+		{
+			unex_token(tok);
 			return (-1);
+		}
 		if (ret > TOK_NONE)
 			return (ret);
 		i++;

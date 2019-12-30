@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/07 21:36:09 by demaisonc        ###   ########.fr       */
+/*   Updated: 2019/12/30 22:26:47 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 # define DUP_PROPERITY "Duplicate properity "
 
 # define INVALID_SYNTAX "Invalid syntax "
+# define UNEX_TOKEN "Unexpected token "
 # define EX_NEWLINE "Expected newline "
 
 # define UNDEFINED_LABEL "Reference to undefined label "

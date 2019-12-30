@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/26 10:12:34 by gedemais         ###   ########.fr       */
+/*   Updated: 2019/12/30 22:15:20 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,6 +216,7 @@ int						unknown_properity(char *stream);
 int						property_error(char *file, t_token *tok);
 int						missing_properity(bool name, bool comment);
 int						dup_properity_err(char *file, unsigned int i);
+int						unex_token(t_token *tok);
 
 int						free_env(t_env *env);
 
