@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/19 19:13:39 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/17 18:52:59 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/01 23:17:31 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,6 @@ void	cross_whitespace(char *stream, unsigned int *i)
 
 void	cross_names(char *stream, unsigned int *i)
 {
-	while (stream[*i] && (ft_isalnum(stream[*i]) || stream[*i] == '_'))
+	while (is_label_char(stream[*i]))
 		*i += 1;
 }

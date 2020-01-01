@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/30 22:15:20 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/01 23:39:04 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define BUFF_WRITE 4096
 
 # define HEADER_SIZE 2180
-# define LEAKS false
+# define LEAKS true
 
 # define MAX_TYPE_SIZE 32
 
@@ -110,7 +110,7 @@ typedef	struct			s_env
 	unsigned int		nb_tokens;
 	unsigned int		nb_labels;
 	unsigned int		nb_lex;
-	int					file_size;
+	int					bin_size;
 	char				_pad[4];
 }						t_env;
 

@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/12/26 00:48:01 by gedemais         ###   ########.fr        #
+#    Updated: 2020/01/01 22:46:49 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,6 +60,9 @@ SRCS_NAME=	main.c\
 			lexer_fts.c\
 			lexer_loader.c\
 			error.c\
+			error_utils.c\
+			label_errors.c\
+			op_errors.c\
 			header.c\
 			utils.c\
 			free.c

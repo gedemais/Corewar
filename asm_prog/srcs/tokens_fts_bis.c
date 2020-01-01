@@ -24,7 +24,7 @@ char	get_tok_opcode(t_env *env, char *stream, unsigned int *i)
 char	get_tok_separator(t_env *env, char *stream, unsigned int *i)
 {
 	(void)env;
-	if (FCHAR == ',')
+	if (FCHAR == SEPARATOR_CHAR)
 	{
 		*i += 1;
 		return (TOK_SEPARATOR);
@@ -40,9 +40,9 @@ char	get_tok_label(t_env *env, char *stream, unsigned int *i)
 	j = 0;
 	if (!ft_isalnum(FCHAR))
 		return (0);
-	while (stream[j] && (ft_isalnum(stream[j]) || stream[j] == '_'))
+	while (is_label_char(stream[j]))
 		j++;
-	if (stream[j] != ':')
+	if (stream[j] != LABEL_CHAR)
 		return (0);
 	*i += j + 1;
 	return (TOK_LABEL);
@@ -65,7 +65,7 @@ char	get_tok_comment(t_env *env, char *stream, unsigned int *i)
 
 	(void)env;
 	j = 1;
-	if (FCHAR != '#')
+	if (FCHAR != COMMENT_CHAR)
 		return (0);
 	while (stream[j] && stream[j] != '\n')
 		j++;

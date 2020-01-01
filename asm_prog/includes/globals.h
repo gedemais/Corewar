@@ -69,7 +69,7 @@ static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 						TOK_REG, 0, 0,
 						0, 0, 0}, //lld
 
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+						{TOK_REG, TOK_NUMBER, TOK_LNUMBER, // pb
 						TOK_NUMBER, TOK_REG, 0,
 						TOK_REG, 0, 0}, //lldi
 

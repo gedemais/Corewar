@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:35:34 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/28 23:22:12 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/01 20:39:48 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,25 @@ static inline short	get_label_pos(t_env *env, int label)
 	return (-1);
 }
 
+static void				write_label(t_env *env, int fd, t_lexem lex, int param)
+{
+	int		val;
+	short	addr;
+
+	if (g_direct_size[(int)lex.opcode] == IND_SIZE)
+	{
+		addr = get_label_pos(env, lex.label[param]) - (short)lex.start_byte;
+		swap_short_bytes(&addr);
+		write(fd, &addr, IND_SIZE);
+	}
+	else
+	{
+		val = get_label_pos(env, lex.label[param]) - (unsigned short)lex.start_byte;
+		val = reverse_int_bytes(val);
+		write(fd, &val, DIR_SIZE);
+	}
+}
+
 void				write_indirect_number(t_env *env, int fd, t_lexem lex, int param)
 {
 	short	val;
@@ -50,24 +69,17 @@ void				write_direct_number(t_env *env, int fd, t_lexem lex, int param)
 	short	addr;
 
 	if (lex.label[param] >= 0)
+		write_label(env, fd, lex, param);
+	else if (g_direct_size[(int)lex.opcode] == DIR_SIZE)
 	{
-		addr = get_label_pos(env, lex.label[param]) - (short)lex.start_byte;
-		swap_short_bytes(&addr);
-		write(fd, &addr, IND_SIZE);
+		val = reverse_int_bytes((int)lex.args[param].nb);
+		write(fd, &val, DIR_SIZE);
 	}
 	else
 	{
-		if (g_direct_size[(int)lex.opcode] == DIR_SIZE)
-		{
-			val = reverse_int_bytes((int)lex.args[param].nb);
-			write(fd, &val, DIR_SIZE);
-		}
-		else
-		{
-			addr = (short)lex.args[param].nb;
-			swap_short_bytes(&addr);
-			write(fd, &addr, IND_SIZE);
-		}
+		addr = (short)lex.args[param].nb;
+		swap_short_bytes(&addr);
+		write(fd, &addr, IND_SIZE);
 	}
 }
 

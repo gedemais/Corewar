@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/26 00:38:32 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/01 23:10:25 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,10 +72,7 @@ static inline int	compute_bytecode_size(t_env *env)
 	while (i < env->nb_lex)
 	{
 		if (env->lexemes[i].type == LEX_LABEL)
-		{
-//			printf("Label start at %d\n", ret);
 			env->lexemes[i].start_byte = (unsigned int)ret;
-		}
 		else if (env->lexemes[i].type == LEX_OP)
 		{
 			env->lexemes[i].start_byte = (unsigned int)ret;
@@ -110,11 +107,11 @@ int		write_header(t_env *env, int *fd)
 
 	if (!(env->p_name = get_lex_string(env, LEX_NAME_PROP))
 		|| !(env->p_comment = get_lex_string(env, LEX_COMMENT_PROP)))
-		return (-1);
-	if ((env->file_size = compute_bytecode_size(env)) <= 0)
+		return (1);
+	if ((env->bin_size = compute_bytecode_size(env)) <= 0)
 	{
-	free(env->p_name);
-	free(env->p_comment);
+		free(env->p_name);
+		free(env->p_comment);
 		ft_putendl_fd(EMPTY_OP_SECTION, 2);
 		return (-1);
 	}
@@ -134,7 +131,7 @@ int		write_header(t_env *env, int *fd)
 	ft_memset(lbe_buff, PADDING_VALUE, sizeof(char) * LBE_BUFFER);
 	write(*fd, lbe_buff, LBE_BUFFER);//padding 1
 
-	reverse_bits(lbe_buff, env->file_size);
+	reverse_bits(lbe_buff, env->bin_size);
 	write(*fd, lbe_buff, LBE_BUFFER);//instruction section size
 
 	ft_memset(buff, 0, sizeof(char) * HEADER_SIZE);

@@ -6,12 +6,14 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/30 22:26:47 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/01 22:39:05 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_H
 # define ERROR_H
+
+# include <stdbool.h>
 
 # define BLACK "\033[22;30m"
 # define BLUE "\033[1;36m"
@@ -50,5 +52,12 @@
 # define INVALID_OP_PARAM "Invalid operation parameter "
 # define TOO_FEW_ARGS "Too few arguments for operation "
 # define NOT_ENO_ARGS "Not enough arguments for operation "
+
+
+void	print_err_name(char *err);
+void	print_cursor(char *line, unsigned int col);
+void	print_line_n_col(unsigned int line, unsigned int col, bool colon);
+int		get_type_str(int id, char *buff);
+void	op_usage(int op);
 
 #endif

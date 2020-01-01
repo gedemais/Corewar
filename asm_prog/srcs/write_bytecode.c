@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:13:15 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/26 08:59:18 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/01 23:05:33 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,13 +88,25 @@ static inline void	write_params(t_env *env, t_lexem lex, int fd)
 		write_register(fd, lex, 2);
 }
 
+static inline void	print_fine(int size, char *path)
+{
+	ft_putstr("Binary successfully written at ");
+	ft_putstr(BLUE);
+	ft_putstr(path);
+	ft_putstr(STOP);
+	ft_putstr(" (");
+	ft_putnbr(size);
+	ft_putendl(" bytes)");
+}
+
 int					write_bytecode(t_env *env)
 {
 	unsigned int	i;
 	int				fd;
+	int				ret;
 
 	i = 0;
-	if (write_header(env, &fd) != 0)
+	if ((ret = write_header(env, &fd)) != 0)
 		return (-1);
 	while (i < env->nb_lex)
 	{
@@ -108,5 +120,6 @@ int					write_bytecode(t_env *env)
 		i++;
 	}
 	close(fd);
+	print_fine(env->bin_size, env->bin_name);
 	return (0);
 }
