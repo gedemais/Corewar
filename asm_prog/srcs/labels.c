@@ -25,6 +25,7 @@ bool						is_label(t_env *env, char *label)
 	len = 0;
 	while (is_label_char(label[len]))
 		len++;
+	printf("%s\n-------------------------------------------\n", label);
 	while (i < env->nb_labels && env->labels[i].ptr)
 	{
 		if (len == env->labels[i].len)

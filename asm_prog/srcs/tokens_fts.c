@@ -124,7 +124,10 @@ char	get_tok_dlaba(t_env *env, char *stream, unsigned int *i)
 	while (is_label_char(stream[size]))
 		size++;
 	if (!is_label(env, &stream[2]) && !undefined_label_err(env))
+	{
+		printf("|%.*s|", 4, stream);
 		return (-1);
+	}
 	*i += size;
 	return (TOK_DLABA);
 }
