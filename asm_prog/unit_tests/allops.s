@@ -49,8 +49,6 @@ l8:	zjmp	%:l1
 	zjmp	%:l14
 	zjmp	%:l15
 
-
-
 l9:	ldi	%42, %42, r5
 	ldi	%42, r4, r5
 	ldi	42, %42, r5
@@ -108,4 +106,3 @@ l14:lfork	%:l1
 	lfork	%:l15
 
 l15:aff r1
-
