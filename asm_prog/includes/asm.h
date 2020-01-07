@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/02 18:45:18 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/07 12:41:14 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,6 +226,7 @@ int						free_env(t_env *env);
 void					cross_whitespaces(char *stream, unsigned int *i);
 void					cross_whitespace(char *stream, unsigned int *i);
 void					cross_names(char *stream, unsigned int *i);
+void					cross_line(char *stream, unsigned int *i);
 void					swap_short_bytes(short *val);
 int						reverse_int_bytes(int val);
 

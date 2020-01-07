@@ -25,12 +25,15 @@ bool						is_label(t_env *env, char *label)
 	len = 0;
 	while (is_label_char(label[len]))
 		len++;
-	printf("%s\n-------------------------------------------\n", label);
+//	printf("%d labels\n", env->nb_labels);
+//	printf("%s\n-------------------------------------------\n", label);
 	while (i < env->nb_labels && env->labels[i].ptr)
 	{
 		if (len == env->labels[i].len)
+		{
 			if (!ft_strncmp(label, env->labels[i].ptr, len))
 				return (true);
+		}
 		i++;
 	}
 	return (false);
@@ -100,12 +103,15 @@ static inline unsigned int	count_labels(t_env *env)
 	while (env->file[i])
 	{
 		cross_whitespace(env->file, &i);
+		if (!is_label_char(env->file[i]))
+		{
+			cross_line(env->file, &i);
+			continue ;
+		}
 		cross_names(env->file, &i);
 		if (env->file[i] && env->file[i] == ':')
-			if (env->file[i + 1] == '\n' || ft_is_whitespace(env->file[i + 1]))
-				ret++;
-		while (env->file[i] && !ft_is_whitespace(env->file[i]))
-			i++;
+			ret++;
+		cross_line(env->file, &i);
 	}
 	return (ret);
 }
@@ -148,13 +154,16 @@ static inline int			load_labels(t_env *env)
 	while (env->file[i])
 	{
 		cross_whitespace(env->file, &i);
+		if (!is_label_char(env->file[i]))
+		{
+			cross_line(env->file, &i);
+			continue ;
+		}
 		cross_names(env->file, &i);
 		if (env->file[i] && env->file[i] == ':')
-			if (env->file[i + 1] == '\n' || ft_is_whitespace(env->file[i + 1]))
 				if (add_label(env, i) == -1)
 					return (-1);
-		while (env->file[i] && !ft_is_whitespace(env->file[i]))
-			i++;
+		cross_line(env->file, &i);
 	}
 	return (0);
 }
