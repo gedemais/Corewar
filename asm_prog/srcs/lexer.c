@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/30 22:19:11 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/08 14:54:19 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 static inline char	get_lexeme_type(t_env *env, t_token *tok)
 {
-	static char			(*g_lex_fts[NB_LEX_FUNCS])(t_env*, t_token*) = {
-						&get_lex_name_prop,
-						&get_lex_comment_prop,
-						&get_lex_label,
-						&get_lex_opcode};
+	static char		(*g_lex_fts[NB_LEX_FUNCS])(t_env*, t_token*) = {
+					&get_lex_name_prop,
+					&get_lex_comment_prop,
+					&get_lex_label,
+					&get_lex_opcode};
 	unsigned int	i;
 	char			ret;
 
@@ -38,10 +38,11 @@ static inline char	get_lexeme_type(t_env *env, t_token *tok)
 	return (0);
 }
 
-static inline int	load_lexeme(t_env *env, unsigned int lex, char type, t_token **tok)
+static inline int	load_lexeme(t_env *env, unsigned int lex,
+													char type, t_token **tok)
 {
-	static int		(*load_lex_fts[NB_LEX_LOAD_FUNCS])(t_env*, t_lexem*, t_token**) = {
-					&load_lex_name_prop,
+	static int		(*load_lex_fts[NB_LEX_LOAD_FUNCS])(t_env*, t_lexem*,
+					t_token**) = {&load_lex_name_prop,
 					&load_lex_comment_prop,
 					&load_lex_label,
 					&load_lex_opcode};
@@ -52,7 +53,8 @@ static inline int	load_lexeme(t_env *env, unsigned int lex, char type, t_token *
 	depth = 0;
 	while (i < LEX_MAX)
 	{
-		if ((char)i == type && (depth = load_lex_fts[i - 1](env, &env->lexemes[lex], tok)) == -1)
+		if ((char)i == type &&
+			(depth = load_lex_fts[i - 1](env, &env->lexemes[lex], tok)) == -1)
 			return (-1);
 		if (depth > 0)
 			break ;
@@ -73,7 +75,6 @@ static inline int	check_properitys(t_token *tok)
 
 	name = true;
 	comment = true;
-//	printf("Check properitys : ");
 	while (tok)
 	{
 		if (tok->type == TOK_P_NAME)
@@ -87,17 +88,15 @@ static inline int	check_properitys(t_token *tok)
 		missing_properity(name, comment);
 		return (-1);
 	}
-//	printf("OK\n---------------------\n");
 	return (0);
 }
 
-int		lexer(t_env *env)
+int					lexer(t_env *env)
 {
 	t_token			*tmp;
 	char			ret;
 
 	tmp = env->tokens;
-//	printf("------------------------------------------------------------------\nLEXER :\n------------------------------------------------------------------\n");
 	if (!(env->lexemes = (t_lexem*)malloc(sizeof(t_lexem) * env->nb_tokens)))
 		return (-1);
 	ft_memset(env->lexemes, 0, sizeof(t_lexem) * env->nb_tokens);
@@ -109,7 +108,6 @@ int		lexer(t_env *env)
 			return (-1);
 		if (load_lexeme(env, env->nb_lex, ret, &tmp) != 0)
 			return (-1);
-	//	print_lexem(env->lexemes[env->nb_lex]);
 		env->nb_lex++;
 	}
 	return (0);

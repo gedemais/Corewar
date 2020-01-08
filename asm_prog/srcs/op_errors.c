@@ -35,7 +35,7 @@ int					too_few_op_args(t_token *tok, int op)
 	return (0);
 }
 
-bool	check_after(t_token *tok)
+bool				check_after(t_token *tok)
 {
 	while (tok)
 	{
@@ -46,7 +46,7 @@ bool	check_after(t_token *tok)
 	return (true);
 }
 
-int		unex_token(t_token *tok)
+int					unex_token(t_token *tok)
 {
 	ft_putstr_fd(L_RED, 2);
 	print_err_name(UNEX_TOKEN);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/08 14:13:56 by gedemais          #+#    #+#             */
+/*   Updated: 2020/01/08 14:14:29 by gedemais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
 void	print_err_name(char *err)
@@ -23,6 +35,7 @@ void	print_cursor(char *line, unsigned int col)
 	}
 	ft_putchar_fd('^', 2);
 	ft_putchar_fd('\n', 2);
+	ft_putstr_fd(STOP, 2);
 }
 
 void	print_line_n_col(unsigned int line, unsigned int col, bool colon)
@@ -30,7 +43,8 @@ void	print_line_n_col(unsigned int line, unsigned int col, bool colon)
 	char		*nline;
 	char		*ncol;
 
-	if (!(nline = ft_itoa((int)line + 1)) || !(ncol = ft_itoa((int)col)))
+	if (!(nline = ft_itoa((int)line + 1))
+		|| !(ncol = ft_itoa((int)col)))
 		return ;
 	ft_putstr_fd(LINE, 2);
 	ft_putstr_fd(nline, 2);

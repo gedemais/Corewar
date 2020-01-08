@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   error.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/08 14:13:23 by gedemais          #+#    #+#             */
+/*   Updated: 2020/01/08 14:13:26 by gedemais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
-int					property_error(char *file, t_token *tok)
+int		property_error(char *file, t_token *tok)
 {
 	unsigned int	i;
 	unsigned int	tmp;
@@ -23,7 +35,7 @@ int					property_error(char *file, t_token *tok)
 	return (0);
 }
 
-int					invalid_syntax_err(t_env *env, t_tokenizer *tok)
+int		invalid_syntax_err(t_env *env, t_tokenizer *tok)
 {
 	unsigned int	j;
 
@@ -70,7 +82,7 @@ void	op_usage(int op)
 	}
 }
 
-int					not_eno_args(t_token *tok, int op)
+int		not_eno_args(t_token *tok, int op)
 {
 	unsigned int	i;
 
@@ -86,7 +98,7 @@ int					not_eno_args(t_token *tok, int op)
 	return (1);
 }
 
-int					dup_properity_err(char *file, unsigned int i)
+int		dup_properity_err(char *file, unsigned int i)
 {
 	print_err_name(DUP_PROPERITY);
 	while (file[i] && file[i] != '\n')

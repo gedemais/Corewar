@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/01/02 01:02:49 by gedemais         ###   ########.fr        #
+#    Updated: 2020/01/08 14:56:46 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,13 +52,16 @@ SRCS_NAME=	main.c\
 			token_lst.c\
 			tokens_fts.c\
 			tokens_fts_bis.c\
+			init_labels.c\
 			labels.c\
 			lexer.c\
+			bits.c\
 			write_bytecode.c\
 			write_values.c\
 			encoding_byte.c\
 			lexer_fts.c\
 			lexer_loader.c\
+			lexer_utils.c\
 			error.c\
 			error_utils.c\
 			label_errors.c\
@@ -81,7 +84,7 @@ $(LIB):
 
 $(NAME) : $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS)  $(LIB)
-	@cp $(NAME) ../
+#	@cp $(NAME) ../
 	@echo "$(GRE)Done !$(DEF)"
 
 $(OBJS_PATH)%.o : $(SRCS_PATH)%.c $(INC)

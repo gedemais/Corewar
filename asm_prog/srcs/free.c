@@ -6,25 +6,11 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:38:04 by gedemais          #+#    #+#             */
-/*   Updated: 2019/11/07 21:49:16 by demaisonc        ###   ########.fr       */
+/*   Updated: 2020/01/08 14:14:48 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
-/*
-static inline char	**free_ctab(char **tab)
-{
-	unsigned int	i;
-
-	i = 0;
-	while (tab[i])
-	{
-		free(tab[i]);
-		i++;
-	}
-	free(tab);
-	return (NULL);
-}*/
 
 int		free_env(t_env *env)
 {

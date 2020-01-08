@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/12/21 05:22:52 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/08 12:55:45 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ static inline char	*read_file(int fd)
 
 int		loader(t_env *env, char *file_name)
 {
+	int		fd;
+
 	if (!check_ext(file_name))
 	{
 		ft_putendl_fd(FILE_EXT_ERR, 2);
@@ -93,8 +95,15 @@ int		loader(t_env *env, char *file_name)
 		return (-1);
 	ft_strncat(env->bin_name, file_name, ft_strlen(file_name) - 1);
 	ft_strcat(env->bin_name, "cor");
-	if (!(env->file = read_file(open(file_name, O_RDONLY)))
-		|| !env->file[0])
+	if ((fd = open(file_name, O_RDONLY)) == -1)
+	{
+		ft_putstr_fd("asm: ", 2);
+		ft_putstr_fd(file_name, 2);
+		ft_putstr_fd(": ", 2);
+		ft_putendl_fd(strerror(errno), 2);
+		return (-1);
+	}
+	if (!(env->file = read_file(fd)) || !env->file[0])
 		return (-1);
 	return (0);
 }

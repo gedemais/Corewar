@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/07 12:41:14 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/08 14:56:20 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,14 @@
 # include <error.h>
 # include <globals.h>
 # include <stdbool.h>
+# include <errno.h>
 # include <stdio.h>
 
 # define BUFF_READ 65536
 # define BUFF_WRITE 4096
 
 # define HEADER_SIZE 2180
-# define LEAKS false
+# define LEAKS true
 
 # define MAX_TYPE_SIZE 32
 
@@ -118,7 +119,6 @@ typedef	struct			s_env
 ** Mains
 */
 void					print_lst(t_token *lst);
-void					print_byte_as_bits(unsigned char val);
 int						loader(t_env *env, char *file_name);
 int						tokenizer(t_env *env);
 
@@ -180,6 +180,7 @@ char					get_lex_name_prop(t_env *env, t_token *tok);
 char					get_lex_comment_prop(t_env *env, t_token *tok);
 char					get_lex_label(t_env *env, t_token *tok);
 char					get_lex_opcode(t_env *env, t_token *tok);
+int						check_opcode_params(t_token *tok, int op, int nb_params);
 
 bool					check_after(t_token *tok);
 int						load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok);
@@ -230,6 +231,4 @@ void					cross_line(char *stream, unsigned int *i);
 void					swap_short_bytes(short *val);
 int						reverse_int_bytes(int val);
 
-void					print_op_args(t_lexem lex);
-void					print_lexem(t_lexem lex);
 #endif

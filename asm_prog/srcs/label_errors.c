@@ -1,19 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   label_errors.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/08 14:26:58 by gedemais          #+#    #+#             */
+/*   Updated: 2020/01/08 14:27:11 by gedemais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
-int					undefined_label_err(t_env *env)
+int		undefined_label_err(t_env *env)
 {
 	unsigned int	i;
 
 	i = 0;
 	print_err_name(UNDEFINED_LABEL);
 	print_line_n_col(env->tok.line, env->tok.col, true);
-	while (&env->file[env->tok.line_start + i] && env->file[env->tok.line_start + i] != '\n')
+	while (&env->file[env->tok.line_start + i]
+		&& env->file[env->tok.line_start + i] != '\n')
 	{
 		ft_putchar_fd(env->file[env->tok.line_start + i], 2);
 		i++;
 	}
 	ft_putchar_fd('\n', 2);
 	print_cursor(&env->file[env->tok.line_start], env->tok.col);
+	ft_putstr_fd(STOP, 2);
 	return (0);
 }
 
@@ -55,7 +69,7 @@ int		dup_label_err(char *label, unsigned int i, unsigned int first)
 	return (1);
 }
 
-int					expected_newline_err(t_token *tok)
+int		expected_newline_err(t_token *tok)
 {
 	char		*nline;
 
