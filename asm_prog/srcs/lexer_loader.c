@@ -6,13 +6,13 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:15:53 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 15:18:36 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/08 16:11:41 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "asm.h"
 
-int		load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok)
+int			load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok)
 {
 	char	*err;
 	int		ret;
@@ -37,7 +37,7 @@ int		load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok)
 	return (ret);
 }
 
-int		load_lex_comment_prop(t_env *env, t_lexem *lex, t_token **tok)
+int			load_lex_comment_prop(t_env *env, t_lexem *lex, t_token **tok)
 {
 	char	*err;
 	int		ret;
@@ -62,7 +62,7 @@ int		load_lex_comment_prop(t_env *env, t_lexem *lex, t_token **tok)
 	return (ret);
 }
 
-int		load_lex_label(t_env *env, t_lexem *lex, t_token **tok)
+int			load_lex_label(t_env *env, t_lexem *lex, t_token **tok)
 {
 	if (!(*tok) || (*tok)->type != TOK_LABEL)
 		return (0);
@@ -73,44 +73,50 @@ int		load_lex_label(t_env *env, t_lexem *lex, t_token **tok)
 	return ((*tok)->next->type == TOK_NEWLINE ? 2 : 1);
 }
 
-static inline int	stuff_data(t_env *env, t_token **tmp, t_lexem *lex, int *ret)
+static void	load_opcode_arg(t_env *env, t_lexem *lex, t_token *tmp,
+																t_token **tok)
 {
-	*ret = 0;
-	if (!(*tmp) || (*tmp)->type != TOK_OPCODE)
-		return (1);
-	lex->type = LEX_OP;
-	lex->start = (unsigned int)((*tmp)->ptr - env->file);
-	lex->opcode = find_op((*tmp)->ptr);
-	(*tmp) = (*tmp)->next;
-	ft_memset(&lex->label, -1, sizeof(int) * MAX_ARGS_NUMBER);
-	return (0);
+	long long int	ret;
+
+	if (tmp->type == TOK_REG)
+		lex->args[env->c_param].reg = (int)ft_atoi(&tmp->ptr[1]);
+	else if (tmp->label >= 0
+		&& (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER))
+	{
+		(*tok)->type = tmp->type;
+		(*tok)->ptr = tmp->ptr;
+		ret = find_label_index(env->labels, *tok, env->nb_labels);
+		lex->label[env->c_param] = (int)ret;
+	}
+	else if (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER)
+	{
+		ret = ft_atoi(tmp->type == TOK_NUMBER ? tmp->ptr : &tmp->ptr[1]);
+		lex->args[env->c_param].nb = ret;
+	}
 }
 
-int		load_lex_opcode(t_env *env, t_lexem *lex, t_token **tok)
+int			load_lex_opcode(t_env *env, t_lexem *lex, t_token **tok)
 {
 	t_token			*tmp;
 	int				ret;
-	int				p;
 
-	p = -1;
-	tmp = *tok;
-	if (stuff_data(env, &tmp, lex, &ret))
+	tmp = (*tok);
+	ret = 0;
+	env->c_param = 0;
+	if (!tmp || tmp->type != TOK_OPCODE)
 		return (0);
-	while (tmp && tmp->type != TOK_NEWLINE && ++p >= 0)
+	lex->type = LEX_OP;
+	lex->start = (unsigned int)(tmp->ptr - env->file);
+	lex->opcode = find_op(tmp->ptr);
+	tmp = tmp->next;
+	ft_memset(&lex->label, -1, sizeof(int) * MAX_ARGS_NUMBER);
+	while (tmp && tmp->type != TOK_NEWLINE)
 	{
-		if (tmp->type == TOK_REG)
-			lex->args[p].reg = (int)ft_atoi(&tmp->ptr[1]);
-		else if (tmp->label >= 0 && (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER))
-		{
-			(*tok)->type = tmp->type;
-			(*tok)->ptr = tmp->ptr;
-			lex->label[p] = find_label_index(env->labels, *tok, env->nb_labels);
-		}
-		else if (tmp->type == TOK_NUMBER || tmp->type == TOK_LNUMBER)
-			lex->args[p].nb = ft_atoi(tmp->type == TOK_NUMBER ? tmp->ptr : &tmp->ptr[1]);
-		lex->encoding = encoding_byte(lex->encoding, (unsigned)p, tmp->type);
+		load_opcode_arg(env, lex, tmp, tok);
+		lex->encoding = encoding_byte(lex->encoding, env->c_param, tmp->type);
 		lex->code = encoding_byte_pres(lex->opcode);
 		tmp = (tmp->next->type == TOK_SEPARATOR) ? tmp->next->next : tmp->next;
+		env->c_param++;
 		ret += 2;
 	}
 	return (ret + 1);

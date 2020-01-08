@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 14:56:20 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/08 19:10:07 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,8 +111,8 @@ typedef	struct			s_env
 	unsigned int		nb_tokens;
 	unsigned int		nb_labels;
 	unsigned int		nb_lex;
+	unsigned int		c_param;
 	int					bin_size;
-	char				_pad[4];
 }						t_env;
 
 /*
@@ -231,4 +231,5 @@ void					cross_line(char *stream, unsigned int *i);
 void					swap_short_bytes(short *val);
 int						reverse_int_bytes(int val);
 
+void					free_lexemes(t_env *env);
 #endif

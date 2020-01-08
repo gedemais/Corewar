@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 14:24:38 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/08 19:12:23 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,6 @@ static inline void	write_content(t_env *env, int fd,
 	write(fd, buff, COMMENT_LENGTH);
 	ft_memset(lbe_buff, PADDING_VALUE, sizeof(char) * LBE_BUFFER);
 	write(fd, lbe_buff, LBE_BUFFER);
-	free(env->p_name);
-	free(env->p_comment);
 }
 
 static inline int	get_op_size(t_lexem *lex)
@@ -107,17 +105,11 @@ int					write_header(t_env *env, int *fd)
 		return (1);
 	if ((env->bin_size = compute_bytecode_size(env)) <= 0)
 	{
-		free(env->p_name);
-		free(env->p_comment);
 		ft_putendl_fd(EMPTY_OP_SECTION, 2);
 		return (-1);
 	}
 	if ((*fd = open(env->bin_name, O_CREAT | O_WRONLY, 0666)) < 0)
-	{
-		free(env->p_name);
-		free(env->p_comment);
 		return (-1);
-	}
 	write_content(env, *fd, buff, lbe_buff);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 19:22:03 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 14:54:19 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/08 19:11:06 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,10 +104,12 @@ int					lexer(t_env *env)
 		return (-1);
 	while (tmp && tmp->next)
 	{
-		if ((ret = get_lexeme_type(env, tmp)) <= LEX_NONE)
+		if ((ret = get_lexeme_type(env, tmp)) <= LEX_NONE
+			|| load_lexeme(env, env->nb_lex, ret, &tmp) != 0)
+		{
+			free_lexemes(env);
 			return (-1);
-		if (load_lexeme(env, env->nb_lex, ret, &tmp) != 0)
-			return (-1);
+		}
 		env->nb_lex++;
 	}
 	return (0);
