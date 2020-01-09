@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 21:08:32 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/30 06:58:36 by moguy            ###   ########.fr       */
+/*   Updated: 2019/12/04 12:21:48 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,10 @@
 static inline t_process	*kill_process(t_env *env, t_process *tmp, t_process *p)
 {
 	if (env->opt[V] & (1 << 3))
-		printf("Process %d hasnt't lived for %d cycles (CTD %d) !\n",
-				tmp->rank, env->cycle_tot - tmp->alive, env->cycle_to_die);
+	{
+		printf("Process %d hasn't lived for %d cycles (CTD %d)\n",
+			tmp->rank, env->cycle_tot - tmp->alive, env->cycle_to_die);
+	}
 	if (tmp == env->process)
 	{
 		env->process = pop_lst(tmp, p);
@@ -63,14 +65,9 @@ void				check_live(t_env *env)
 
 	env->cycle_tot += env->cycle_curr;
 	check_alive(env);
-	if (env->curr_lives >= NBR_LIVE)
-		count = 10;
-	else if (count < 10)
-		count++;
-	if (count >= 10)
+	count++;
+	if (env->curr_lives >= NBR_LIVE || count > 9)
 		env->cycle_to_die -= CYCLE_DELTA;
-	if ((env->opt[V] & (1 << 1)) && count == 0)
+	if ((env->opt[V] & (1 << 1)) && (count > 9 || env->curr_lives >= NBR_LIVE))
 		printf("Cycle to die is now %d\n", env->cycle_to_die);	
-	env->cycle_curr = 0;
-	env->curr_lives = 0;
 }

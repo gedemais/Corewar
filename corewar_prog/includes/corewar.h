@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/30 08:29:38 by moguy            ###   ########.fr       */
+/*   Updated: 2019/12/04 11:48:33 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ struct				s_process
 	uint32_t		pad : 20;
 	int				alive;
 	int				cycle_to_exec;
+	uint8_t			encoding;
 	int				rank;
 };
 
@@ -216,6 +217,7 @@ int32_t			get_arg_value(t_env *v, t_process *p, int i, bool mod);
 int32_t			get_mem_cell(t_env *v, t_process *p, size_t siz);
 void			launch_instruct(t_env *env, t_process *process);
 void			load_args(t_env *env, t_process *p, bool enco, bool dir);
+bool			reg_is_valid(t_op_arg arg[MAX_ARGS_NUMBER]);
 void			write_mem_cell(t_env *v, t_process *p, int32_t value);
 
 /*

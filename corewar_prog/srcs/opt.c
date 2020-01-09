@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 20:01:11 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/30 08:28:48 by moguy            ###   ########.fr       */
+/*   Updated: 2019/12/04 02:48:17 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static inline char 	hex_lines(int j)
 	static char				buffer[9] = {'0', 'x', '0', '0', '0', '0',
 		' ', ':', ' '};
 
-	if (j == -1 && (nb[0] = 0) && (nb[1] = 0) && (nb[2] = 0))
+	if (j == -1 && ft_memset(&nb[0], 0, 3) && ft_memset(&buffer[2], '0', 3))
 		return (0);
-	else if (j != 0)
+	else if (j > 0)
 	{
 		if (j == 8)
 			nb[2] += 4;
@@ -62,6 +62,7 @@ static inline void	print_octet(uint8_t hquartet, uint8_t lquartet, bool flush)
 	if (count == 64)
 	{
 		count = 0;
+		buffer[i++] = ' ';
 		buffer[i++] = '\n';
 	}
 	else
@@ -80,6 +81,7 @@ void				dump(t_env *env)
 	unsigned int			i;
 
 	i = 0;
+	fflush(stdout);
 	arena = &env->arena[0];
 	while (i < MEM_SIZE - 1)
 	{
@@ -90,4 +92,5 @@ void				dump(t_env *env)
 	if (env->opt[S] == true)
 		write(1, "\n", 1);
 	env->cycle_to_dump = env->opt[D];
+	fflush(stdout);
 }

@@ -6,26 +6,30 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/01/01 21:34:32 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/09 18:55:35 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static const char	tab_usage[] = "Usage: ./corewar [-d N -s N -v N | -ncurses "
-"--stealth] [-a] [-n N1] <champion1.cor> <...>\n"
-"\t-a\t\t\t: Prints output from \"aff\" (Default is to hide it)\n"
+static const char	g_tab_usage[] = "Usage: ./corewar [-d N -s N -v N | "
+"-ncurses --stealth] [-a] [-n N1] <champion1.cor> <...>\n"
+"    -a        : Prints output from \"aff\" (Default is to hide it)\n"
 "#### TEXT OUTPUT MODE #######################################################"
-"###\n\t-d N\t\t\t: Dumps memory after N cycles then exits\n"
-"\t-n N\t\t\t: Give an ID to the following player, must be between 1 and the "
-"number of contestants\n"
-"\t-s N\t\t\t: Runs N cycles, dumps memory, pauses, then repeats\n"
-"\t-v N\t\t\t: Verbosity levels, can be added together to enable several\n"
-"\t\t\t\t- 0 : Show only essentials\n\t\t\t\t- 1 : Show lives\n"
-"\t\t\t\t- 2 : Show cycles\n"
-"\t\t\t\t- 4 : Show operations (Params are NOT litteral ...)\n"
-"\t\t\t\t- 8 : Show deaths\n"
-"\t\t\t\t- 16 : Show PC movements (Except for jumps)\n";
+"##########################\n"
+"    -d N      : Dumps memory after N cycles then exits\n"
+"    -n N      : Give an ID to the following player, it must be between 1 and "
+"the number of contestants\n"
+"    -s N      : Runs N cycles, dumps memory, pauses, then repeats\n"
+"    -v N      : Verbosity levels, can be added together to enable several\n"
+"                - 0 : Show only essentials\n"
+"                - 1 : Show lives\n"
+"                - 2 : Show cycles\n"
+"                - 4 : Show operations (Params are NOT litteral ...)\n"
+"                - 8 : Show deaths\n"
+"                - 16 : Show PC movements (Except for jumps)\n"
+"#############################################################################"
+"##########################\n";
 
 void				free_env(t_env *env, char *arg)
 {
