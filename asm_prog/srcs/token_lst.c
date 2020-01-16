@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   token_lst.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/15 20:28:12 by gedemais          #+#    #+#             */
+/*   Updated: 2020/01/15 20:28:30 by gedemais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
 void	token_free_lst(t_token *lst)
@@ -32,7 +44,7 @@ void	token_snap_node(t_token **lst, t_token *node)
 	free(node);
 }
 
-int	token_pushfront(t_token **lst, t_token *new)
+int		token_pushfront(t_token **lst, t_token *new)
 {
 	t_token	*tmp;
 

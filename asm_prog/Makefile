@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/01/08 14:56:46 by gedemais         ###   ########.fr        #
+#    Updated: 2020/01/15 20:31:31 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,7 @@ SRCS_NAME=	main.c\
 			token_lst.c\
 			tokens_fts.c\
 			tokens_fts_bis.c\
+			tokens_fts_ter.c\
 			init_labels.c\
 			labels.c\
 			lexer.c\

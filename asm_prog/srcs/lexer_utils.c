@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 14:55:31 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 15:06:35 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/15 20:25:47 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static inline size_t	arg_len(char *s)
 	return (ret);
 }
 
-char				find_op(char *op)
+char					find_op(char *op)
 {
 	unsigned int	i;
 	size_t			size;
@@ -40,41 +40,51 @@ char				find_op(char *op)
 	return (-1);
 }
 
-int					check_opcode_params(t_token *tok, int op, int nb_params)
+static inline int		check_opcode_params_bis(t_token **tok, int op, int *n_p,
+														unsigned int i)
+{
+	unsigned int	j;
+
+	j = 0;
+	while (j < 3 && g_op_args[op][i + j])
+	{
+		if ((*tok)->type == g_op_args[op][i + j])
+		{
+			(*n_p)--;
+			break ;
+		}
+		j++;
+	}
+	if (!g_op_args[op][i + j] && invalid_op_parameter(*tok, op))
+		return (-1);
+	*tok = (*tok)->next;
+	if (*n_p > 0 && (*tok)->type != TOK_SEPARATOR)
+	{
+		if ((*tok)->type == TOK_NEWLINE)
+			not_eno_args(*tok, op);
+		return (-1);
+	}
+	*tok = *n_p > 0 ? (*tok)->next : *tok;
+	if (*n_p > 0 && (*tok)->type == TOK_NEWLINE && not_eno_args(*tok, op))
+		return (-1);
+	return (0);
+}
+
+int						check_opcode_params(t_token *tok, int op, int nb_params)
 {
 	unsigned int	i;
-	unsigned int	j;
 
 	i = 0;
 	while (i < 9 && tok && nb_params > 0)
 	{
-		j = 0;
-		while (j < 3 && g_op_args[op][i + j])
-		{
-			if (tok->type == g_op_args[op][i + j])
-			{
-				nb_params--;
-				break ;
-			}
-			j++;
-		}
-		if (!g_op_args[op][i + j] && invalid_op_parameter(tok, op))
-			return (-1);
-		tok = tok->next;
-		if (nb_params > 0 && tok->type != TOK_SEPARATOR)
-		{
-			if (tok->type == TOK_NEWLINE)
-				not_eno_args(tok, op);
-			return (-1);
-		}
-		tok = nb_params > 0 ? tok->next : tok;
-		if (nb_params > 0 && tok->type == TOK_NEWLINE && not_eno_args(tok, op))
+		if (check_opcode_params_bis(&tok, op, &nb_params, i) != 0)
 			return (-1);
 		i += 3;
 	}
 	if (tok->type != TOK_NEWLINE)
 	{
-		if (tok->type == TOK_SEPARATOR && (tok->next->type == TOK_REG || tok->next->type == TOK_LNUMBER || tok->next->type == TOK_NUMBER))
+		if (tok->type == TOK_SEPARATOR && (tok->next->type == TOK_REG
+			|| tok->next->type == TOK_LNUMBER || tok->next->type == TOK_NUMBER))
 		{
 			too_few_op_args(tok, op);
 			return (-1);
@@ -84,4 +94,3 @@ int					check_opcode_params(t_token *tok, int op, int nb_params)
 	}
 	return (0);
 }
-

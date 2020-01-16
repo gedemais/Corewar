@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/09 15:34:26 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/01 22:39:05 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/15 21:28:28 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 # define L_GREEN "\033[1;32m"
 # define GRA "\033[1m"
 # define STOP "\033[0m"
-
 
 # define USAGE "usage: ./asm [champion.s]"
 
@@ -52,7 +51,6 @@
 # define INVALID_OP_PARAM "Invalid operation parameter "
 # define TOO_FEW_ARGS "Too few arguments for operation "
 # define NOT_ENO_ARGS "Not enough arguments for operation "
-
 
 void	print_err_name(char *err);
 void	print_cursor(char *line, unsigned int col);

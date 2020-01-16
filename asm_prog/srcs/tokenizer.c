@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/16 18:14:17 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 17:04:04 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/15 20:29:33 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ static inline int	crush_tokens(t_env *env)
 			t->type = (t->type == TOK_DLABA) ? TOK_LNUMBER : TOK_NUMBER;
 		}
 		if ((t->type == TOK_NEWLINE && t->next && t->next->type == TOK_NEWLINE)
-			|| t->type == TOK_COMMENT || (t == env->tokens && t->type == TOK_NEWLINE))
+			|| t->type == TOK_COMMENT
+			|| (t == env->tokens && t->type == TOK_NEWLINE))
 		{
 			token_snap_node(&env->tokens, t);
 			env->nb_tokens--;
@@ -73,7 +74,7 @@ static inline int	get_token_type(t_env *env, t_tokenizer *tok)
 	return (0);
 }
 
-int		tokenizer(t_env *env)
+int					tokenizer(t_env *env)
 {
 	int		ret;
 

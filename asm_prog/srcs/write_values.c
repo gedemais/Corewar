@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/17 14:35:34 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/01 20:39:48 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/15 20:37:26 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static inline short	get_label_pos(t_env *env, int label)
 	return (-1);
 }
 
-static void				write_label(t_env *env, int fd, t_lexem lex, int param)
+static void			write_label(t_env *env, int fd, t_lexem lex, int param)
 {
 	int		val;
 	short	addr;
@@ -45,25 +45,31 @@ static void				write_label(t_env *env, int fd, t_lexem lex, int param)
 	}
 	else
 	{
-		val = get_label_pos(env, lex.label[param]) - (unsigned short)lex.start_byte;
+		val = get_label_pos(env, lex.label[param]);
+		val -= (unsigned short)lex.start_byte;
 		val = reverse_int_bytes(val);
 		write(fd, &val, DIR_SIZE);
 	}
 }
 
-void				write_indirect_number(t_env *env, int fd, t_lexem lex, int param)
+void				write_indirect_number(t_env *env, int fd, t_lexem lex,
+																	int param)
 {
 	short	val;
 
 	if (lex.label[param] >= 0)
-		val = get_label_pos(env, lex.label[param]) - (unsigned short)lex.start_byte;
+	{
+		val = get_label_pos(env, lex.label[param]);
+		val -= (unsigned short)lex.start_byte;
+	}
 	else
 		val = (short)lex.args[param].nb;
 	swap_short_bytes(&val);
 	write(fd, &val, IND_SIZE);
 }
 
-void				write_direct_number(t_env *env, int fd, t_lexem lex, int param)
+void				write_direct_number(t_env *env, int fd, t_lexem lex,
+																	int param)
 {
 	int		val;
 	short	addr;

@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 12:55:45 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/01/15 20:26:28 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static inline char	*read_file(int fd)
 	return (dest);
 }
 
-int		loader(t_env *env, char *file_name)
+int					loader(t_env *env, char *file_name)
 {
 	int		fd;
 

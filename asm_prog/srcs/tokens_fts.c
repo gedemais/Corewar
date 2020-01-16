@@ -1,84 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokens_fts.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/15 20:29:54 by gedemais          #+#    #+#             */
+/*   Updated: 2020/01/15 20:40:30 by gedemais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
-
-char	get_tok_p_name(t_env *env, char *stream, unsigned int *i)
-{
-	static bool	done = false;
-	size_t		prop_len;
-
-	(void)env;
-	prop_len = ft_strlen(NAME_CMD_STRING);
-	if (FCHAR != '.')
-		return (0);
-	if (!ft_strncmp(NAME_CMD_STRING, stream, prop_len))
-	{
-		if (done && dup_properity_err(env->file, *i))
-			return (-1);
-		done = true;
-		*i += prop_len;
-		return (TOK_P_NAME);
-	}
-	return (0);
-}
-
-char	get_tok_p_com(t_env *env, char *stream, unsigned int *i)
-{
-	static bool	done = false;
-	size_t	prop_len;
-
-	(void)env;
-	prop_len = ft_strlen(COMMENT_CMD_STRING);
-	if (FCHAR != '.')
-		return (0);
-	if (!ft_strncmp(COMMENT_CMD_STRING, stream, prop_len))
-	{
-		if (done && dup_properity_err(env->file, *i))
-			return (-1);
-		done = true;
-		*i += prop_len;
-		return (TOK_P_COM);
-	}
-	unknown_properity(stream);
-	return (-1);
-}
-
-char	get_tok_string(t_env *env, char *stream, unsigned int *i)
-{
-	unsigned int	j;
-
-	(void)env;
-	j = 1;
-	if (FCHAR != '"')
-		return (0);
-	while (stream[j] && stream[j] != '"' && stream[j] != '\n')
-		j++;
-	if (!stream[j] || stream[j] != '"')
-		return (0);
-	*i += j + 1;
-	return (TOK_STRING);
-}
-
-char	get_tok_reg(t_env *env, char *stream, unsigned int *i)
-{
-	unsigned int	j;
-	long long int	id;
-
-	(void)env;
-	j = 1;
-	if (FCHAR != 'r')
-		return (0);
-	while (stream[j] && ft_isdigit(stream[j]))
-		j++;
-	id = ft_atoi(&stream[1]);
-	if (j == 1 || j > 3 || id > REG_NUMBER || id <= 0)
-	{
-		ft_putstr_fd("Wrong register index ", 2);
-		ft_putnbr_fd((int)id, 2);
-		ft_putchar_fd('\n', 2);
-		return (-1);
-	}
-	*i += j;
-	return (TOK_REG);
-}
 
 char	get_tok_number(t_env *env, char *stream, unsigned int *i)
 {
@@ -86,9 +18,10 @@ char	get_tok_number(t_env *env, char *stream, unsigned int *i)
 
 	(void)env;
 	j = 0;
-	if (!ft_isdigit(FCHAR) && FCHAR != '-' && FCHAR != '+')
+	if (!ft_isdigit(stream[0]) && stream[0] != '-' && stream[0] != '+')
 		return (0);
-	while (stream[j] && (ft_isdigit(stream[j]) || stream[j] == '-' || stream[j] == '+'))
+	while (stream[j]
+		&& (ft_isdigit(stream[j]) || stream[j] == '-' || stream[j] == '+'))
 		j++;
 	if (j == 0)
 		return (0);
@@ -102,7 +35,7 @@ char	get_tok_lnumber(t_env *env, char *stream, unsigned int *i)
 
 	(void)env;
 	j = 1;
-	if (FCHAR != '%')
+	if (stream[0] != '%')
 		return (0);
 	if (stream[j] == '-' || stream[j] == '+')
 		j++;
@@ -119,7 +52,7 @@ char	get_tok_dlaba(t_env *env, char *stream, unsigned int *i)
 	size_t	size;
 
 	size = 2;
-	if (FCHAR != '%' || stream[1] != ':')
+	if (stream[0] != '%' || stream[1] != ':')
 		return (0);
 	while (is_label_char(stream[size]))
 		size++;
@@ -134,7 +67,7 @@ char	get_tok_indlaba(t_env *env, char *stream, unsigned int *i)
 	size_t	size;
 
 	size = 1;
-	if (FCHAR != ':')
+	if (stream[0] != ':')
 		return (0);
 	while (is_label_char(stream[size]))
 		size++;

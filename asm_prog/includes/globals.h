@@ -1,22 +1,34 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   globals.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/15 21:26:48 by gedemais          #+#    #+#             */
+/*   Updated: 2020/01/15 21:28:13 by gedemais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef GLOBALS_H
 # define GLOBALS_H
 
 # define NB_OPS 16
 # define MAX_PARAM_NB 3
 
-static char	*g_opnames[NB_OPS] = {"add", "aff", "and", "fork", "lfork",
-								"ld", "ldi", "lld", "lldi", "live",
-								"or", "st", "sti", "sub", "xor", "zjmp"};
+static char			*g_opnames[NB_OPS] = {"add", "aff", "and", "fork", "lfork",
+	"ld", "ldi", "lld", "lldi", "live",
+	"or", "st", "sti", "sub", "xor", "zjmp"};
 
-static char						g_opcodes[NB_OPS] = {4, 16, 6, 12, 15, 2,
-														10, 13, 14, 1, 7, 3, 11,
-														5, 8, 9};
+static char			g_opcodes[NB_OPS] = {4, 16, 6, 12, 15, 2,
+	10, 13, 14, 1, 7, 3, 11,
+	5, 8, 9};
 
-static int						g_direct_size[NB_OPS] = {4, 4, 4, 2, 2, 4, 2,
-															4, 2, 4, 4, 4, 2, 4,
-															4, 2};
+static int			g_direct_size[NB_OPS] = {4, 4, 4, 2, 2, 4, 2,
+	4, 2, 4, 4, 4, 2, 4,
+	4, 2};
 
-typedef enum					e_token_type
+typedef enum		e_token_type
 {
 	TOK_NONE,
 	TOK_P_NAME,
@@ -33,77 +45,76 @@ typedef enum					e_token_type
 	TOK_NEWLINE,
 	TOK_COMMENT,
 	TOK_MAX
-}								t_token_type;
+}					t_token_type;
 
-static int				g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
+static int			g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 
-						{TOK_REG, 0, 0, // Types possibles du premier param
-						TOK_REG, 0, 0, // ____ second param
-						TOK_REG, 0, 0},// add
+	{TOK_REG, 0, 0,
+		TOK_REG, 0, 0,
+		TOK_REG, 0, 0},
 
-						{TOK_REG, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, // aff
+	{TOK_REG, 0, 0,
+		0, 0, 0,
+		0, 0, 0},
 
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, 0, 0}, // and
-						
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, //fork
-						
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, //lfork
-						
-						{TOK_NUMBER, TOK_LNUMBER, 0,
-						TOK_REG, 0, 0,
-						0, 0, 0}, //ld
+	{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+		TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+		TOK_REG, 0, 0},
 
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, TOK_LNUMBER, 0,
-						TOK_REG, 0, 0}, //ldi
+	{TOK_LNUMBER, 0, 0,
+		0, 0, 0,
+		0, 0, 0},
 
-						{TOK_NUMBER, TOK_LNUMBER, 0,
-						TOK_REG, 0, 0,
-						0, 0, 0}, //lld
+	{TOK_LNUMBER, 0, 0,
+		0, 0, 0,
+		0, 0, 0},
 
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER, // pb
-						TOK_NUMBER, TOK_REG, 0,
-						TOK_REG, 0, 0}, //lldi
+	{TOK_NUMBER, TOK_LNUMBER, 0,
+		TOK_REG, 0, 0,
+		0, 0, 0},
 
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}, //live
+	{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+		TOK_REG, TOK_LNUMBER, 0,
+		TOK_REG, 0, 0},
 
-						{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-						TOK_REG, 0, 0}, // or
+	{TOK_NUMBER, TOK_LNUMBER, 0,
+		TOK_REG, 0, 0,
+		0, 0, 0},
 
-						{TOK_REG, 0, 0,
-						TOK_REG, TOK_NUMBER, 0,
-						0, 0, 0}, //st
+	{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+		TOK_NUMBER, TOK_REG, 0,
+		TOK_REG, 0, 0},
 
-						{TOK_REG, 0, 0,
-						TOK_REG, TOK_LNUMBER, TOK_NUMBER,
-						TOK_LNUMBER, TOK_REG},//sti
+	{TOK_LNUMBER, 0, 0,
+		0, 0, 0,
+		0, 0, 0},
 
-						{TOK_REG, 0, 0,
-						TOK_REG, 0, 0,
-						TOK_REG, 0, 0}, //sub
+	{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+		TOK_REG, TOK_NUMBER, TOK_LNUMBER,
+		TOK_REG, 0, 0},
 
-						{TOK_REG, TOK_LNUMBER, TOK_NUMBER,
-						TOK_REG, TOK_LNUMBER, TOK_NUMBER,
-						TOK_REG, 0, 0}, //xor
+	{TOK_REG, 0, 0,
+		TOK_REG, TOK_NUMBER, 0,
+		0, 0, 0},
 
-						{TOK_LNUMBER, 0, 0,
-						0, 0, 0,
-						0, 0, 0}//zjmp
+	{TOK_REG, 0, 0,
+		TOK_REG, TOK_LNUMBER, TOK_NUMBER,
+		TOK_LNUMBER, TOK_REG},
+
+	{TOK_REG, 0, 0,
+		TOK_REG, 0, 0,
+		TOK_REG, 0, 0},
+
+	{TOK_REG, TOK_LNUMBER, TOK_NUMBER,
+		TOK_REG, TOK_LNUMBER, TOK_NUMBER,
+		TOK_REG, 0, 0},
+
+	{TOK_LNUMBER, 0, 0,
+		0, 0, 0,
+		0, 0, 0}
 };
 
-
-typedef enum					e_lexemes_type
+typedef enum		e_lexemes_type
 {
 	LEX_NONE,
 	LEX_NAME_PROP,
@@ -111,6 +122,6 @@ typedef enum					e_lexemes_type
 	LEX_LABEL,
 	LEX_OP,
 	LEX_MAX
-}								t_lexemes_type;
+}					t_lexemes_type;
 
 #endif

@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tokens_fts_bis.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2020/01/15 20:33:03 by gedemais          #+#    #+#             */
+/*   Updated: 2020/01/15 20:40:47 by gedemais         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "asm.h"
 
 char	get_tok_opcode(t_env *env, char *stream, unsigned int *i)
 {
 	unsigned int	j;
-	size_t		size;
+	size_t			size;
 
 	(void)env;
 	j = 0;
@@ -24,7 +36,7 @@ char	get_tok_opcode(t_env *env, char *stream, unsigned int *i)
 char	get_tok_separator(t_env *env, char *stream, unsigned int *i)
 {
 	(void)env;
-	if (FCHAR == SEPARATOR_CHAR)
+	if (stream[0] == SEPARATOR_CHAR)
 	{
 		*i += 1;
 		return (TOK_SEPARATOR);
@@ -34,11 +46,11 @@ char	get_tok_separator(t_env *env, char *stream, unsigned int *i)
 
 char	get_tok_label(t_env *env, char *stream, unsigned int *i)
 {
-	(void)env;
 	unsigned int	j;
 
+	(void)env;
 	j = 0;
-	if (!ft_isalnum(FCHAR))
+	if (!ft_isalnum(stream[0]))
 		return (0);
 	while (is_label_char(stream[j]))
 		j++;
@@ -51,7 +63,7 @@ char	get_tok_label(t_env *env, char *stream, unsigned int *i)
 char	get_tok_newline(t_env *env, char *stream, unsigned int *i)
 {
 	(void)env;
-	if (FCHAR == '\n')
+	if (stream[0] == '\n')
 	{
 		*i += 1;
 		return (TOK_NEWLINE);
@@ -65,7 +77,7 @@ char	get_tok_comment(t_env *env, char *stream, unsigned int *i)
 
 	(void)env;
 	j = 1;
-	if (FCHAR != COMMENT_CHAR)
+	if (stream[0] != COMMENT_CHAR)
 		return (0);
 	while (stream[j] && stream[j] != '\n')
 		j++;
