@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/05 17:34:45 by gedemais          #+#    #+#              #
-#    Updated: 2019/10/13 18:46:08 by gedemais         ###   ########.fr        #
+#    Updated: 2020/01/16 03:17:42 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,21 +112,19 @@ OBJS=$(SRCS:.c=.o)
 
 all: $(NAME)
 
-$(NAME): $(OBJS) libft.h
+$(NAME): $(OBJS)
 	@ar rc $(NAME) $(OBJS)
 	@ranlib $(NAME)
 	@echo "$(GRE)Libft successfully compiled !$(DEF)"
 
-./%.o: ./%.c
-	@$(CC) $(FLAGS) -c $<
+./%.o: ./%.c libft.h
+	$(CC) $(FLAGS) -c $<
 
 clean: 
-	@rm -rf $(OBJS)
-	@echo "$(ORG)Objects files $(DEF)deleted."
+	rm -rf $(OBJS)
 
 fclean: clean
-	@rm -rf $(NAME)
-	@echo "$(YEL)libft.a$(DEF) deleted."
+	rm -rf $(NAME)
 
 re: fclean all
 

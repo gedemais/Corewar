@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/01/15 20:31:31 by gedemais         ###   ########.fr        #
+#    Updated: 2020/01/16 03:16:18 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,11 +27,11 @@ ORG = \033[1;31m
 NAME=asm
 
 CC=gcc
-CFLAGS= -Weverything -Wall -Werror -Wextra
+FLAGS= -Weverything -Wall -Werror -Wextra
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
-    CFLAGS += -g3 -fsanitize=address
+    FLAGS += -g3 -fsanitize=address
 endif
 
 LIB_PATH=../libft/
@@ -72,35 +72,29 @@ SRCS_NAME=	main.c\
 			free.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
+OBJS=$(SRCS:.c=.o)
 
-OBJS_PATH=objs/
-OBJS_NAME=$(SRCS_NAME:.c=.o)
+all: $(NAME)
 
-OBJS=$(addprefix $(OBJS_PATH), $(OBJS_NAME))
+$(NAME): $(LIB) $(OBJS)
+	$(CC) $(FLAGS) -I$(INC_PATH) -I $(LIB_PATH) -o $(NAME) $(OBJS) $(LIB)
 
-all: $(LIB) $(NAME)
+$(SRCS_PATH)%.o: $(SRCS_PATH)%.c $(INC)
+	$(CC) $(FLAGS) -I$(INC_PATH) -I$(LIB_PATH) -o $@ -c $<
 
-$(LIB):
-	@make -C $(LIB_PATH)
-
-$(NAME) : $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS)  $(LIB)
-#	@cp $(NAME) ../
-	@echo "$(GRE)Done !$(DEF)"
-
-$(OBJS_PATH)%.o : $(SRCS_PATH)%.c $(INC)
-	@echo "Making $(RED)ASM Compiler$(DEF)..."
-	@mkdir -p $(OBJS_PATH)
-	@$(CC) $(CFLAGS) -c $(SRCS) -I $(INC_PATH)
-	@mv $(OBJS_NAME) $(OBJS_PATH)
-
+$(LIB): $(LIB_PATH)
+	@echo -------------------
+	@echo "Making Libft"
+	@echo -------------------
+	make -C $(LIB_PATH)
+	
 clean:
-	@rm -rf $(OBJS_PATH)
-	@make -C $(LIB_PATH) clean
+	rm -rf $(OBJS)
+	make -C $(LIB_PATH) clean
 
 fclean: clean
-	@rm -rf $(NAME)
-	@make -C $(LIB_PATH) fclean
-
+	make -C $(LIB_PATH) fclean
+	rm -rf $(NAME)
+	rm -rf $(NAME).dSYM
 
 re: fclean all
