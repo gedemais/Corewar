@@ -6,11 +6,43 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 22:18:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/30 01:34:41 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 10:06:13 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+char	*singleton_str(int error)
+{
+	static char		magic[4][150];
+
+	if (magic[0][0] == 0)
+	{
+		ft_strcpy(&magic[0][0], "Magic number defined in the header of one of t\
+				he file is invalid. Magic number has to be COREWAR_EXEC_MAGIC");
+		ft_strcpy(&magic[1][0], "The size defined in the header of one of the \
+				file is invalid. Size can't be more than CHAMP_MAX_SIZE.");
+		ft_strcpy(&magic[2][0], "The size of the redcode is too long, or \
+				different than the size defined in the header.");
+		ft_strcpy(&magic[3][0], "Too many players, only 4 contestants can \
+				fight in the area at once, for a minimum of one.");
+	}
+	return (&magic[error][0]);
+}
+
+int		check_too_high_id(t_env *env)
+{
+	unsigned int	i;
+
+	i = 0;
+	while (i < env->nb_pl)
+	{
+		if (env->player[i].id > env->nb_pl || env->player[i].id < 1)
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 int		get_dump(char *arg, unsigned int *j)
 {

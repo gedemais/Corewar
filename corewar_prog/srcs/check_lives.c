@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 21:08:32 by moguy             #+#    #+#             */
-/*   Updated: 2019/12/04 12:21:48 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 10:00:45 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,45 +29,52 @@ static inline t_process	*kill_process(t_env *env, t_process *tmp, t_process *p)
 	return (tmp);
 }
 
-static inline void	check_alive(t_env *env)
+static inline void		check_alive(t_env *env)
 {
-	t_process			*tmp;
-	t_process			*prev;
-	
-	tmp = env->process;
-	prev = NULL;
-	while (tmp)
+	t_process			*p[2];
+
+	p[0] = env->process;
+	p[1] = NULL;
+	while (p[0])
 	{
-		if (tmp->next)
+		if (!p[0]->next && env->cycle_tot - p[0]->alive >= env->cycle_to_die)
 		{
-			if (env->cycle_tot - tmp->alive > env->cycle_to_die)
-				tmp = kill_process(env, tmp, prev);
+			p[0] = kill_process(env, p[0], p[1]);
+			if (p[1] == NULL)
+				env->process = NULL;
+		}
+		else if (p[0]->next)
+		{
+			if (env->cycle_tot - p[0]->alive >= env->cycle_to_die)
+				p[0] = kill_process(env, p[0], p[1]);
 			else
 			{
-				prev = tmp;
-				tmp = tmp->next;
+				p[1] = p[0];
+				p[0] = p[0]->next;
 			}
-		}
-		else if (!tmp->next && env->cycle_tot - tmp->alive > env->cycle_to_die)
-		{
-			tmp = kill_process(env, tmp, prev);
-			if (prev == NULL)
-				env->process = NULL;
 		}
 		else
 			return ;
 	}
 }
 
-void				check_live(t_env *env)
+void					check_live(t_env *env)
 {
 	static unsigned int	count = 0;
 
 	env->cycle_tot += env->cycle_curr;
 	check_alive(env);
-	count++;
-	if (env->curr_lives >= NBR_LIVE || count > 9)
+	if (env->curr_lives < NBR_LIVE && count < MAX_CHECKS)
+		count++;
+	else
+		count = 0;
+	if (env->curr_lives >= NBR_LIVE || count >= MAX_CHECKS)
 		env->cycle_to_die -= CYCLE_DELTA;
-	if ((env->opt[V] & (1 << 1)) && (count > 9 || env->curr_lives >= NBR_LIVE))
-		printf("Cycle to die is now %d\n", env->cycle_to_die);	
+	if ((env->opt[V] & (1 << 1))
+			&& (count >= MAX_CHECKS
+				|| env->curr_lives >= NBR_LIVE))
+		printf("Cycle to die is now %d\n", env->cycle_to_die);
+	if (count >= MAX_CHECKS)
+		count = 0;
+	env->curr_lives = 0;
 }

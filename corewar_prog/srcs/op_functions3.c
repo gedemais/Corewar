@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 00:15:40 by moguy             #+#    #+#             */
-/*   Updated: 2019/12/04 07:04:32 by moguy            ###   ########.fr       */
+/*   Updated: 2020/01/31 08:54:53 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,7 @@ void				sti(t_env *env, t_process *p)
 {
 	int32_t		val[3];
 
-	if (!reg_is_valid(p->instruct.args))
-		return ;
-	val[0] = get_arg_value(env, p, 0, true);
+	val[0] = p->r[p->instruct.args[0].arg - 1];
 	val[1] = get_arg_value(env, p, 1, true);
 	val[2] = get_arg_value(env, p, 2, true);
 	p->pctmp = p->pc + ((val[1] + val[2]) % IDX_MOD);
@@ -49,13 +47,9 @@ void				op_fork(t_env *env, t_process *p)
 void				lld(t_env *env, t_process *p)
 {
 	int32_t		value;
-	int32_t		reg;
 
-	value = get_arg_value(env, p, 0, false);
-	reg = p->instruct.args[1].arg;
-	if (reg <= REG_NONE || reg >= REG_MAX)
-		return ;
-	p->r[reg - 1] = value;
+	value = get_arg_value(env, p, 0, true);
+	p->r[p->instruct.args[1].arg - 1] = value;
 	if (value)
 		p->carry = false;
 	else
@@ -66,8 +60,6 @@ void				lldi(t_env *env, t_process *p)
 {
 	int32_t		val[3];
 
-	if (!reg_is_valid(p->instruct.args))
-		return ;
 	val[0] = get_arg_value(env, p, 0, true);
 	val[1] = get_arg_value(env, p, 1, true);
 	val[2] = p->instruct.args[2].arg;

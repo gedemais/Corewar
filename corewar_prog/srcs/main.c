@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/01/09 18:55:35 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 10:02:54 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static const char	g_tab_usage[] = "Usage: ./corewar [-d N -s N -v N | "
 
 void				free_env(t_env *env, char *arg)
 {
-	t_process	*tmp;
+	t_process		*tmp;
 
 	tmp = NULL;
 	if (arg)
@@ -50,15 +50,15 @@ void				free_env(t_env *env, char *arg)
 	}
 }
 
-int				error(char *error_msg, char *err_msg, char *junk)
+int					error(char *error_msg, char *err_msg, char *junk)
 {
 	if (junk)
 		ft_strdel(&junk);
 	if (error_msg)
 		ft_putendl_fd(error_msg, STDERR_FILENO);
 	if (err_msg && !ft_strcmp(err_msg, USAGE))
-		ft_putstr_fd(&tab_usage[0], 2);
-	else if(err_msg)
+		ft_putstr_fd(&g_tab_usage[0], 2);
+	else if (err_msg)
 		ft_putendl_fd(err_msg, STDERR_FILENO);
 	return (1);
 }
@@ -66,7 +66,7 @@ int				error(char *error_msg, char *err_msg, char *junk)
 static inline void	introducing_champions(t_env *env)
 {
 	unsigned int	i;
-	
+
 	i = 0;
 	printf("Introducing contestants...\n");
 	while (i < env->nb_pl)
@@ -84,6 +84,8 @@ static inline int	vm(t_env *env, char *arg)
 	if (get_data(env, arg))
 		return (1);
 	introducing_champions(env);
+	if (init_arena(env))
+		return (1);
 	if (cw_loop(env))
 		return (1);
 	free_env(env, arg);
@@ -96,9 +98,9 @@ int					main(int ac, char **av)
 	char			*arg;
 
 	if (ac > MAX_ARGS || ac < 2)
-		return (error(TOO_MANY_ARGS, USAGE, NULL));	
+		return (error(TOO_MANY_ARGS, USAGE, NULL));
 	if (!(arg = merge_args(ac, av)))
-		return (error(BAD_ARGS, USAGE, NULL));	
+		return (error(BAD_ARGS, USAGE, NULL));
 	ft_memset(&env, 0, sizeof(t_env));
 	env.cycle_to_die = CYCLE_TO_DIE;
 	if (vm(&env, arg))

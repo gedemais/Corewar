@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:08:31 by moguy             #+#    #+#             */
-/*   Updated: 2019/12/04 04:14:17 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 05:53:12 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ t_process	*new_lst(uint32_t id, uint32_t pc)
 {
 	t_process	*new;
 
-	if (!(new = (t_process*)malloc (sizeof(t_process))))
+	if (!(new = (t_process*)malloc(sizeof(t_process))))
 		return (NULL);
 	ft_memset(new, 0, sizeof(t_process));
 	new->r[0] = -(int32_t)id;
@@ -25,7 +25,7 @@ t_process	*new_lst(uint32_t id, uint32_t pc)
 }
 
 t_process	*push_lst(t_env *env, uint32_t id, uint32_t pc)
-{	
+{
 	t_process	*new;
 	static int	rank = 2;
 

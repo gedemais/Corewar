@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2019/10/31 19:04:49 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 09:30:49 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,13 +25,13 @@ int				read_big_endian(t_env *env, int fd, bool magic)
 	{
 		env->player[env->nb_pl].magic = (uint32_t)reverse;
 		if (env->player[env->nb_pl].magic != COREWAR_EXEC_MAGIC)
-			return (error(BAD_MAGIC, NULL, NULL));
+			return (error(singleton_str(0), NULL, NULL));
 	}
 	else
 	{
 		env->player[env->nb_pl].size = (uint32_t)reverse;
 		if (env->player[env->nb_pl].size > CHAMP_MAX_SIZE)
-			return (error(BAD_SIZE, NULL, NULL));
+			return (error(singleton_str(1), NULL, NULL));
 	}
 	return (0);
 }
@@ -61,6 +61,6 @@ int				loader(t_env *env, char *arg, unsigned int *j)
 		|| (ret = read(fd, &env->player[env->nb_pl].champ[0],
 				env->player[env->nb_pl].size + 1)) < 1
 		|| ret != env->player[env->nb_pl].size)
-		return (error((ret < 1) ? BAD_FILE : CODE, NULL, NULL));
+		return (error((ret < 1) ? BAD_FILE : singleton_str(2), NULL, NULL));
 	return (0);
 }

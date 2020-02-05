@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 15:48:03 by moguy             #+#    #+#             */
-/*   Updated: 2019/12/04 12:52:06 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 07:11:08 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,12 @@ static inline void	verbose_pc(t_env *env, t_process *p)
 
 	i = -1;
 	if (p->pc == 0)
-	printf("ADV %d (0x0000 -> %#.4x) ",
-			p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096), p->tpc);
+		printf("ADV %d (0x0000 -> %#.4x) ",
+				p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096), p->tpc);
 	else
 		printf("ADV %d (%#.4x -> %#.4x) ",
-				p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096), p->pc, p->tpc);
+				p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096), p->pc,
+				(p->tpc < p->pc) ? (4096 + p->tpc) : p->tpc);
 	p->pctmp = p->pc;
 	while (++i < p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096))
 	{
@@ -36,36 +37,28 @@ static inline void	verbose_pc(t_env *env, t_process *p)
 	}
 }
 
-static inline void	verbose_op(t_process *p)
+static inline int	check_encoding(t_env *env, t_process *p)
 {
 	int				i;
-	int32_t			arg;
+	int				j;
+	uint8_t			enco;
 
-	i = p->rank;
-	printf("P %5d | %s ", p->rank, func_tab[p->instruct.op - 1].name);
-	i = -1;
-	while (++i < func_tab[p->instruct.op - 1].nb_arg)
+	i = MAX_ARGS_NUMBER;
+	j = 0;
+	p->pctmp = p->tpc;
+	p->encoding = (uint8_t)get_mem_cell(env, p, 1);
+	while (i-- > 0)
 	{
-		if (p->instruct.args[i].type == T_REG)
-			printf("r%d", p->instruct.args[i].arg);
-		else
-			printf("%d", p->instruct.args[i].arg);
-		if (i + 1 < func_tab[p->instruct.op - 1].nb_arg)
-			printf(" ");
-		else
-		{
-			if (p->instruct.op == OP_FORK)
-				printf(" (%d)", (p->pc + (p->instruct.args[0].arg % IDX_MOD)));
-			if (p->instruct.op == OP_ZJMP)
-				printf((p->carry) ? " OK" : " KO");
-			printf("\n");
-		}
+		enco = ((p->encoding >> (2 * i)) & MASK_ENCO);
+		if (enco == DIR_CODE)
+			p->instruct.args[j].type = T_DIR;
+		else if (enco == IND_CODE)
+			p->instruct.args[j].type = T_IND;
+		else if (enco == REG_CODE)
+			p->instruct.args[j].type = T_REG;
+		j++;
 	}
-	if (p->instruct.op == OP_STI
-			&& (arg = p->instruct.args[1].arg + p->instruct.args[2].arg))
-		printf("       | -> store to %d + %d = %d (with pc and mod %d)\n",
-				p->instruct.args[1].arg, p->instruct.args[2].arg, arg,
-				p->pc + (arg % IDX_MOD));
+	return (0);
 }
 
 void				launch_instruct(t_env *env, t_process *p)
@@ -74,13 +67,23 @@ void				launch_instruct(t_env *env, t_process *p)
 
 	if (p->instruct.op <= OP_NONE || p->instruct.op >= OP_MAX)
 		return ;
-	enco = (bool)func_tab[p->instruct.op - 1].encoding;
-	load_args(env, p, enco, (bool)func_tab[p->instruct.op - 1].direct);
-	if (env->opt[V] & (1 << 2) && reg_is_valid(p->instruct.args)
-			&& p->encoding > ((enco) ? 0 : -1))
-		verbose_op(p);
-	func_tab[p->instruct.op - 1].f(env, p);
-	if (env->opt[V] & (1 << 4) && p->instruct.op != OP_ZJMP)
+	if (g_func_tab[p->instruct.op - 1].encoding)
+	{
+		if (check_encoding(env, p))
+		{
+			p->instruct.op = OP_NONE;
+			return ;
+		}
+	}
+	enco = (bool)g_func_tab[p->instruct.op - 1].encoding;
+	load_args(env, p, enco, (bool)g_func_tab[p->instruct.op - 1].direct);
+	if (reg_is_valid(p, p->instruct.args))
+	{
+		if (env->opt[V] & (1 << 2))
+			verbose_op(env, p);
+		g_func_tab[p->instruct.op - 1].f(env, p);
+	}
+	if (env->opt[V] & (1 << 4) && !(p->instruct.op == OP_ZJMP && p->carry))
 		verbose_pc(env, p);
 }
 
@@ -91,9 +94,8 @@ void				create_instruct(t_env *env, t_process *p)
 	p->tpc++;
 	p->instruct.op = (uint32_t)get_mem_cell(env, p, 1);
 	if (p->instruct.op <= OP_NONE || p->instruct.op >= OP_MAX)
-		p->cycle_to_exec = 0;
-	else
-		p->cycle_to_exec = (int)func_tab[p->instruct.op - 1].wait_cycles;
+		return ;
+	p->cycle_to_exec = (int)g_func_tab[p->instruct.op - 1].wait_cycles;
 }
 
 int					create_pro(t_env *env, unsigned int i, unsigned int ofset)

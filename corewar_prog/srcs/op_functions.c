@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:16:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/12/04 07:11:09 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/01 06:46:33 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,9 @@ void				live(t_env *env, t_process *p)
 void				ld(t_env *env, t_process *p)
 {
 	int32_t		value;
-	int32_t		reg;
 
 	value = get_arg_value(env, p, 0, true);
-	reg = p->instruct.args[1].arg;
-	if (reg <= REG_NONE || reg >= REG_MAX)
-		return ;
-	p->r[reg - 1] = value;
+	p->r[p->instruct.args[1].arg - 1] = value;
 	if (value)
 		p->carry = false;
 	else
@@ -50,9 +46,7 @@ void				st(t_env *env, t_process *p)
 	int32_t		value;
 	int32_t		tmp;
 
-	if (!reg_is_valid(p->instruct.args))
-		return ;
-	value = get_arg_value(env, p, 0, true);
+	value = p->r[p->instruct.args[0].arg - 1];
 	tmp = p->instruct.args[1].arg;
 	if (p->instruct.args[1].type == T_REG)
 		p->r[tmp - 1] = value;
@@ -67,10 +61,9 @@ void				add(t_env *env, t_process *p)
 {
 	int32_t		val[3];
 
-	if (!reg_is_valid(p->instruct.args))
-		return ;
-	val[0] = get_arg_value(env, p, 0, true);
-	val[1] = get_arg_value(env, p, 1, true);
+	(void)env;
+	val[0] = p->r[p->instruct.args[0].arg - 1];
+	val[1] = p->r[p->instruct.args[1].arg - 1];
 	val[2] = p->instruct.args[2].arg;
 	p->r[val[2] - 1] = val[0] + val[1];
 	p->carry = (p->r[val[2] - 1]) ? false : true;
@@ -80,10 +73,9 @@ void				sub(t_env *env, t_process *p)
 {
 	int32_t		val[3];
 
-	if (!reg_is_valid(p->instruct.args))
-		return ;
-	val[0] = get_arg_value(env, p, 0, true);
-	val[1] = get_arg_value(env, p, 1, true);
+	(void)env;
+	val[0] = p->r[p->instruct.args[0].arg - 1];
+	val[1] = p->r[p->instruct.args[1].arg - 1];
 	val[2] = p->instruct.args[2].arg;
 	p->r[val[2] - 1] = val[0] - val[1];
 	p->carry = (p->r[val[2] - 1]) ? false : true;

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2019/11/30 03:53:07 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 06:30:41 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,11 @@ int						get_id(t_env *env, char *arg, unsigned int *j, bool end)
 	i = after_space(arg, *j + 3);
 	if (!ft_isdigit(arg[i]) || (id = ft_atoi(&arg[i])) < 1 || id > 4)
 		return (error(BAD_ID, USAGE, NULL));
-	env->player[env->nb_pl].id  = (uint32_t)id;
+	env->player[env->nb_pl].id = (uint32_t)id;
 	*j = i + 1;
 	if (!(opt_n & (1 << env->player[env->nb_pl].id)))
 		opt_n |= ft_power(2, (uint8_t)id);
-	else 
+	else
 		return (error(SAME_ID, USAGE, NULL));
 	return (0);
 }

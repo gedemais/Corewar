@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:14:20 by moguy             #+#    #+#             */
-/*   Updated: 2019/12/04 02:56:57 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 11:43:55 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,19 +25,12 @@
 # define BAD_FILE "File invalid."
 # define BAD_FILE_OPEN "Opening of one of the file failed."
 # define BAD_FILE_READ "Reading of one of the file failed."
-# define BAD_MAGIC "Magic number defined in the header of one of the \
-file is invalid. Magic has to be COREWAR_EXEC_MAGIC."
 # define BAD_OPT "This option don't exist."
-# define BAD_SIZE "The size define in the header of one of the file is \
-invalid. Size can't be more than CHAMP_MAX_SIZE."
-# define CODE "Size of the redcode is too long, or diffent than the size \
-defined in the header."
+# define BAD_VERBOSE "Verbose value is incorrect."
 # define LST_ERR "A process failed to be created, malloc error."
 # define MALLOC_ERR "Malloc error."
 # define SAME_ID "Some players has the same attributed ID."
 # define TOO_MANY_ARGS "Too many arguments for the executable."
-# define TOO_MANY_PLAYERS "Too many players, only 4 contestants can fight in \
-the area at once, for a minimum of one champion..."
 # define VM_ERR "Virtual machine error."
 # define USAGE "usage"
 

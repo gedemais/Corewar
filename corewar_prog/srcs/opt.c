@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 20:01:11 by moguy             #+#    #+#             */
-/*   Updated: 2019/12/04 02:48:17 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/05 05:50:05 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ char				hex_tab(uint8_t quartet)
 	return (hex_value[quartet]);
 }
 
-static inline char 	hex_lines(int j)
+static inline char	hex_lines(int j)
 {
 	static uint8_t			nb[3] = {0};
 	static char				buffer[9] = {'0', 'x', '0', '0', '0', '0',
@@ -89,8 +89,6 @@ void				dump(t_env *env)
 		i++;
 	}
 	print_octet((arena[i] >> 4) & 0xf, arena[i] & 0xf, true);
-	if (env->opt[S] == true)
-		write(1, "\n", 1);
 	env->cycle_to_dump = env->opt[D];
 	fflush(stdout);
 }

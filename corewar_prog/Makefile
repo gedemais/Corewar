@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2019/11/27 03:38:05 by moguy            ###   ########.fr        #
+#    Updated: 2020/02/05 07:38:22 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ ORG = \033[1;31m
 NAME=corewar
 
 CC=gcc
-CFLAGS= -Wall -Wextra
+CFLAGS= -Wall -Werror -Wextra -Ofast -march=native
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
@@ -65,8 +65,8 @@ SRCS_NAME=	after_space.c\
 		op_functions4.c\
 		opt.c\
 		opt_utils.c\
-		aff.c\
-		reverse_bits.c
+		reverse_bits.c\
+		verbose_op.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
