@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/01/09 18:55:35 by moguy            ###   ########.fr       */
+/*   Updated: 2020/01/16 03:25:05 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int				error(char *error_msg, char *err_msg, char *junk)
 	if (error_msg)
 		ft_putendl_fd(error_msg, STDERR_FILENO);
 	if (err_msg && !ft_strcmp(err_msg, USAGE))
-		ft_putstr_fd(&tab_usage[0], 2);
+		ft_putstr_fd(&g_tab_usage[0], 2);
 	else if(err_msg)
 		ft_putendl_fd(err_msg, STDERR_FILENO);
 	return (1);
@@ -98,7 +98,7 @@ int					main(int ac, char **av)
 	if (ac > MAX_ARGS || ac < 2)
 		return (error(TOO_MANY_ARGS, USAGE, NULL));	
 	if (!(arg = merge_args(ac, av)))
-		return (error(BAD_ARGS, USAGE, NULL));	
+		return (error(BAD_ARGS, USAGE, NULL));
 	ft_memset(&env, 0, sizeof(t_env));
 	env.cycle_to_die = CYCLE_TO_DIE;
 	if (vm(&env, arg))
