@@ -1,5 +1,0 @@
-# Tmux Configuration file
-
-unbind C-b
-set-option -g prefix C-x
-bind-key C-x send-prefix
