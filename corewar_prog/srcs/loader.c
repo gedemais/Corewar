@@ -6,12 +6,11 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2020/02/05 09:30:49 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 08:34:48 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-#include <stdio.h>
 
 int				read_big_endian(t_env *env, int fd, bool magic)
 {

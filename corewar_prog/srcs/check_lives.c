@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 21:08:32 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 10:00:45 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 08:06:20 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,22 @@
 
 static inline t_process	*kill_process(t_env *env, t_process *tmp, t_process *p)
 {
-	if (env->opt[V] & (1 << 3))
+	if (env->opt[O_V] & (1 << 3))
 	{
-		printf("Process %d hasn't lived for %d cycles (CTD %d)\n",
-			tmp->rank, env->cycle_tot - tmp->alive, env->cycle_to_die);
+		env->arg.str = "Process ";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.n = tmp->rank;
+		buffer_cor(env->arg, 3, 0);
+		env->arg.str = " hasn't lived for ";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.n = env->cycle_tot - tmp->alive;
+		buffer_cor(env->arg, 3, 0);
+		env->arg.str = " cycles (CTD ";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.n = env->cycle_to_die;
+		buffer_cor(env->arg, 3, 0);
+		env->arg.str = ")\n";
+		buffer_cor(env->arg, 0, 0);
 	}
 	if (tmp == env->process)
 	{
@@ -70,10 +82,17 @@ void					check_live(t_env *env)
 		count = 0;
 	if (env->curr_lives >= NBR_LIVE || count >= MAX_CHECKS)
 		env->cycle_to_die -= CYCLE_DELTA;
-	if ((env->opt[V] & (1 << 1))
+	if ((env->opt[O_V] & (1 << 1))
 			&& (count >= MAX_CHECKS
 				|| env->curr_lives >= NBR_LIVE))
-		printf("Cycle to die is now %d\n", env->cycle_to_die);
+	{
+		env->arg.str = "Cycle to die is now "; 
+		buffer_cor(env->arg, 0, 0);
+		env->arg.n = env->cycle_to_die;
+		buffer_cor(env->arg, 3, 0);
+		env->arg.str = "\n"; 
+		buffer_cor(env->arg, 0, 0);
+	}
 	if (count >= MAX_CHECKS)
 		count = 0;
 	env->curr_lives = 0;

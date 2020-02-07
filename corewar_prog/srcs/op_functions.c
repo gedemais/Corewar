@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:16:20 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/01 06:46:33 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 05:34:12 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,18 @@ void				live(t_env *env, t_process *p)
 		return ;
 	env->live_pl[value - 1]++;
 	env->last_live = (uint32_t)value;
-	if (!(env->opt[V] & (1 << 0)))
+	if (!(env->opt[O_V] & (1 << 0)))
 		return ;
-	printf("Player %u (%s) is said to be alive\n",
-				env->player[value - 1].id, &env->player[value - 1].name[0]);
+	env->arg.str = "Player ";
+	buffer_cor(env->arg, 0, 0);
+	env->arg.u = env->player[value - 1].id;
+	buffer_cor(env->arg, 2, 0);
+	env->arg.str = " (";
+	buffer_cor(env->arg, 0, 0);
+	env->arg.str = &env->player[value - 1].name[0];
+	buffer_cor(env->arg, 0, 0);
+	env->arg.str = ") is said to be alive\n";
+	buffer_cor(env->arg, 0, 0);
 }
 
 void				ld(t_env *env, t_process *p)

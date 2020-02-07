@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 00:38:04 by moguy             #+#    #+#             */
-/*   Updated: 2020/01/31 08:40:07 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 00:20:21 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void				ldi(t_env *env, t_process *p)
 
 void				aff(t_env *env, t_process *p)
 {
-	if (!env->opt[A])
+	if (!env->opt[O_A])
 		return ;
 	ft_putchar((char)(p->r[p->instruct.args[0].arg - 1] % 256));
 }

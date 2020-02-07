@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 17:55:04 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 11:58:55 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 08:41:18 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static inline int	check_verbose(t_env *env, char *arg, unsigned int *j)
 	nb = ft_atoi(&arg[i]);
 	if (nb > 0 && nb <= VERB_MAX)
 	{
-		env->opt[V] = (int)nb;
+		env->opt[O_V] = (int)nb;
 		*j = after_word(arg, i);
 		return (0);
 	}
@@ -61,17 +61,18 @@ static inline int	help_get_opt(t_env *env, char *arg, unsigned int *j,
 	unsigned int	i;
 
 	i = *j;
-	if (!ft_strncmp(&arg[i], OPT_A, 3) && env->opt[A] == false && (i += 3))
-		env->opt[A] = true;
-	else if (!ft_strncmp(&arg[i], OPT_D, 3) && env->opt[D] == false)
+	if (!ft_strncmp(&arg[i], OPT_A, 3) && env->opt[O_A] == false && (i += 3))
+		env->opt[O_A] = true;
+	else if (!ft_strncmp(&arg[i], OPT_D, 3) && env->opt[O_D] == false)
 	{
-		if ((env->opt[D] = get_dump(arg, &i)) < 0)
+		if ((env->opt[O_D] = get_dump(arg, &i)) <= 0)
 			return (error(BAD_DUMP, USAGE, NULL));
 	}
-	else if (!ft_strncmp(&arg[i], OPT_S, 3) && env->opt[D] == false)
+	else if (!ft_strncmp(&arg[i], OPT_S, 3) && env->opt[O_D] == false
+			&& env->opt[O_S] == false)
 	{
-		env->opt[S] = true;
-		if ((env->opt[D] = get_dump(arg, &i)) == 0)
+		env->opt[O_S] = true;
+		if ((env->opt[O_D] = get_dump(arg, &i)) <= 0)
 			return (error(BAD_DUMP, USAGE, NULL));
 	}
 	else if (!ft_strncmp(&arg[i], OPT_N, 3)
@@ -93,7 +94,7 @@ static inline int	get_opt(t_env *env, char *arg, unsigned int *j)
 	ret = 0;
 	while (arg[i] == '-')
 	{
-		if (!ft_strncmp(&arg[i], OPT_V, 3) && env->opt[V] == 0)
+		if (!ft_strncmp(&arg[i], OPT_V, 3) && env->opt[O_V] == 0)
 		{
 			if (check_verbose(env, arg, &i))
 				return (error(BAD_VERBOSE, USAGE, NULL));

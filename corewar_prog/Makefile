@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/05 07:38:22 by moguy            ###   ########.fr        #
+#    Updated: 2020/02/07 08:46:03 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,6 +48,7 @@ INC=$(addprefix $(INC_PATH), $(INC_NAME))
 SRCS_PATH=srcs/
 SRCS_NAME=	after_space.c\
 		after_word.c\
+		buffer.c\
 		check_lives.c\
 		create_launch.c\
 		cw_loop.c\
@@ -97,6 +98,7 @@ clean:
 
 fclean: clean
 	@rm -rf $(NAME)
+	@rm test1.txt test2.txt result.txt
 	@make -C $(LIB_PATH) fclean
 
 re: fclean all

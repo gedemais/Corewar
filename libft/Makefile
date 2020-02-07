@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/05 17:34:45 by gedemais          #+#    #+#              #
-#    Updated: 2020/01/16 03:17:42 by gedemais         ###   ########.fr        #
+#    Updated: 2020/02/07 00:53:03 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -96,7 +96,6 @@ SRCS  =	ft_atoi.c \
 		ft_lstiter.c \
 		ft_lstmap.c \
 		ft_strfind.c \
-		get_next_line.c \
 		ft_strrealloc.c \
 		ft_convert_base.c \
 		ft_nblen.c \

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 10:02:54 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 05:31:27 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,15 +68,30 @@ static inline void	introducing_champions(t_env *env)
 	unsigned int	i;
 
 	i = 0;
-	printf("Introducing contestants...\n");
+	env->arg.str = "Introducing contestants...\n";
+	buffer_cor(env->arg, 0, 0);
 	while (i < env->nb_pl)
 	{
-		printf("* Player %u, weighing %u bytes, \"%s\" (\"%s\") !\n",
-				env->player[i].id, env->player[i].size, env->player[i].name,
-				env->player[i].com);
+		env->arg.str = "* Player ";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.u = env->player[i].id;
+		buffer_cor(env->arg, 2, 0);
+		env->arg.str = ", weighing ";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.u = env->player[i].size;
+		buffer_cor(env->arg, 2, 0);
+		env->arg.str = " bytes, \"";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.str = env->player[i].name;
+		buffer_cor(env->arg, 0, 0);
+		env->arg.str = "\" (\"";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.str = env->player[i].com;
+		buffer_cor(env->arg, 0, 0);
+		env->arg.str = "\") !\n";
+		buffer_cor(env->arg, 0, 0);
 		i++;
 	}
-	fflush(stdout);
 }
 
 static inline int	vm(t_env *env, char *arg)

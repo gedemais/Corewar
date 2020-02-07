@@ -48,19 +48,19 @@ champd[10]="-v 2 -d 1 ../resources/champion_compilees/toto.cor"
 champd[11]="-v 2 -d 1 ../resources/champion_compilees/turtle.cor"
 champd[12]="-v 2 -d 1 ../resources/champion_compilees/zork.cor"
 
-champo[0]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/helltrain.cor"
-champo[1]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/maxidef.cor"
-champo[2]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/Gagnant.cor"
-champo[3]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/Octobre_Rouge_V4.2.cor"
-champo[4]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/bigzork.cor"
-champo[5]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/ex.cor"
-champo[6]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/fluttershy.cor"
-champo[7]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/jumper.cor"
-champo[8]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/mortel.cor"
-champo[9]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/slider2.cor"
-champo[10]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/toto.cor"
-champo[11]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/turtle.cor"
-champo[12]="-v 2 -d 1 -s 10 -a ../resources/champion_compilees/zork.cor"
+champo[0]="-v 2 -s 10 -a ../resources/champion_compilees/helltrain.cor"
+champo[1]="-v 2 -s 10 -a ../resources/champion_compilees/maxidef.cor"
+champo[2]="-v 2 -s 10 -a ../resources/champion_compilees/Gagnant.cor"
+champo[3]="-v 2 -s 10 -a ../resources/champion_compilees/Octobre_Rouge_V4.2.cor"
+champo[4]="-v 2 -s 10 -a ../resources/champion_compilees/bigzork.cor"
+champo[5]="-v 2 -s 10 -a ../resources/champion_compilees/ex.cor"
+champo[6]="-v 2 -s 10 -a ../resources/champion_compilees/fluttershy.cor"
+champo[7]="-v 2 -s 10 -a ../resources/champion_compilees/jumper.cor"
+champo[8]="-v 2 -s 10 -a ../resources/champion_compilees/mortel.cor"
+champo[9]="-v 2 -s 10 -a ../resources/champion_compilees/slider2.cor"
+champo[10]="-v 2 -s 10 -a ../resources/champion_compilees/toto.cor"
+champo[11]="-v 2 -s 10 -a ../resources/champion_compilees/turtle.cor"
+champo[12]="-v 2 -s 10 -a ../resources/champion_compilees/zork.cor"
 
 champs[0]="-v 2 -s 1 ../resources/champion_compilees/helltrain.cor"
 champs[1]="-v 2 -s 1 ../resources/champion_compilees/maxidef.cor"
@@ -119,10 +119,10 @@ name[11]="turtle.cor"
 name[12]="zork.cor"
 
 make DEBUG=1
-for i in ${!champv[@]}; do
+for i in ${!champs[@]}; do
 echo ${name[i]}
-./corewar ${champv[i]} > $TEST1
-./$ARG2 ${champv[i]} > $TEST2
+./corewar ${champs[i]} > $TEST1
+./$ARG2 ${champs[i]} > $TEST2
 cmp -b $TEST1 $TEST2 > $RESULT
 cat $RESULT
 if [ -s "$RESULT" ] ; then

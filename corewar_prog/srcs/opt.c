@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 20:01:11 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 05:50:05 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 08:36:00 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,14 +81,13 @@ void				dump(t_env *env)
 	unsigned int			i;
 
 	i = 0;
-	fflush(stdout);
 	arena = &env->arena[0];
+	buffer_cor(env->arg, -1, 1);
 	while (i < MEM_SIZE - 1)
 	{
 		print_octet((arena[i] >> 4) & 0xf, arena[i] & 0xf, false);
 		i++;
 	}
 	print_octet((arena[i] >> 4) & 0xf, arena[i] & 0xf, true);
-	env->cycle_to_dump = env->opt[D];
-	fflush(stdout);
+	env->cycle_to_dump = env->opt[O_D];
 }

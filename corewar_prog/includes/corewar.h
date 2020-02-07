@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 10:06:23 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 08:35:04 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,26 @@
 # include <stdbool.h>
 # include <string.h>
 # include <sys/types.h>
-# include <stdio.h>
+
+/*
+** =============================================================================
+**						BUFFER
+** =============================================================================
+*/
+
+typedef union		u_buf
+{
+	unsigned int	u;
+	unsigned int	x;
+	int				n;
+	char			c;
+	char			*str;
+}					t_buf;
+
+typedef struct		s_btab
+{
+	void			(*f)(t_buf arg, char *buf, int *j);
+}					t_btab;
 
 /*
 ** =============================================================================
@@ -29,11 +48,11 @@
 
 typedef enum		e_option
 {
-	A,
-	D,
-	N,
-	S,
-	V
+	O_A,
+	O_D,
+	O_N,
+	O_S,
+	O_V
 }					t_option;
 
 /*
@@ -125,8 +144,9 @@ struct				s_process
 	uint32_t		pad : 20;
 	int				alive;
 	int				cycle_to_exec;
-	uint8_t			encoding;
 	int				rank;
+	uint8_t			encoding;
+	char			pad2[7];
 };
 
 /*
@@ -160,6 +180,7 @@ typedef struct		s_env
 	uint32_t		last_live;
 	unsigned int	curr_lives;
 	unsigned int	nb_pl;
+	t_buf			arg;
 }					t_env;
 
 /*
@@ -174,6 +195,12 @@ typedef struct		s_env
 
 unsigned int		after_space(char *arg, unsigned int i);
 unsigned int		after_word(char *arg, unsigned int i);
+void				buf_char(t_buf arg, char *buf, int *j);
+void				buffer_cor(t_buf arg, int path, bool flush);
+void				buf_hex(t_buf arg, char *buf, int *j);
+void				buf_int(t_buf arg, char *buf, int *j);
+void				buf_uint(t_buf arg, char *buf, int *j);
+void				buf_str(t_buf arg, char *buf, int *j);
 unsigned int		get_name_len(char *name);
 char				hex_tab(uint8_t quartet);
 char				*merge_args(int ac, char **av);
@@ -264,6 +291,15 @@ void				aff(t_env *env, t_process *process);
 ** 						FUNCTION_TABLE
 ** =============================================================================
 */
+
+static const t_btab g_buf_tab[5] =
+{
+	{&buf_str},
+	{&buf_hex},
+	{&buf_uint},
+	{&buf_int},
+	{&buf_char},
+};
 
 typedef struct		s_op
 {

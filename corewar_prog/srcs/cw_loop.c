@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 10:03:38 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/07 08:35:18 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,15 @@ static inline int	cycle_run(t_env *env, t_process *p)
 
 	tmp = p;
 	env->cycle_curr++;
-	if (env->opt[V] & (1 << 1))
-		printf("It is now cycle %d\n", env->cycle_tot + env->cycle_curr);
+	if (env->opt[O_V] & (1 << 1))
+	{
+		env->arg.str = "It is now cycle ";
+		buffer_cor(env->arg, 0, 0);
+		env->arg.n = env->cycle_tot + env->cycle_curr;
+		buffer_cor(env->arg, 3, 0);
+		env->arg.str = "\n";
+		buffer_cor(env->arg, 0, 0);
+	}
 	while (tmp)
 	{
 		if ((tmp->cycle_to_exec - 1) == 0)
@@ -44,7 +51,7 @@ int					init_arena(t_env *env)
 	unsigned int	offset;
 
 	i = 0;
-	env->cycle_to_dump = (int)env->opt[D];
+	env->cycle_to_dump = (int)env->opt[O_D];
 	offset = MEM_SIZE / env->nb_pl;
 	while (i < env->nb_pl)
 	{
@@ -62,17 +69,27 @@ static inline void	print_winner(t_env *env)
 	unsigned int	i;
 
 	i = env->last_live - 1;
+	env->arg.str = "Contestant ";
+	buffer_cor(env->arg, 0, 0);
 	if (env->last_live == 0)
-		printf("Contestant %u, \"%s\", has won !\n",
-			env->player[env->nb_pl - 1].id, env->player[env->nb_pl - 1].name);
+		env->arg.u = env->player[env->nb_pl - 1].id;
 	else
-		printf("Contestant %u, \"%s\", has won !\n",
-			env->player[i].id, env->player[i].name);
+		env->arg.u = env->player[i].id;
+	buffer_cor(env->arg, 2, 0);
+	env->arg.str = ", \"";
+	buffer_cor(env->arg, 0, 0);
+	if (env->last_live == 0)
+		env->arg.str = env->player[env->nb_pl - 1].name;
+	else
+		env->arg.str = env->player[i].name;
+	buffer_cor(env->arg, 0, 0);
+	env->arg.str = "\", has won !\n";
+	buffer_cor(env->arg, 0, 0);
 }
 
 int					cw_loop(t_env *env)
 {
-	if (env->opt[S])
+	if (env->opt[O_S])
 		dump(env);
 	while (env->process && env->cycle_tot <= MAX_CYCLE)
 	{
@@ -84,16 +101,17 @@ int					cw_loop(t_env *env)
 			cycle_run(env, env->process);
 			if (env->cycle_curr >= env->cycle_to_die)
 				check_live(env);
-			if (env->opt[D] != 0 && (env->cycle_to_dump -= 1) == 0
+			if (env->opt[O_D] != 0 && (env->cycle_to_dump -= 1) == 0
 					&& env->process)
 			{
 				dump(env);
-				if (!env->opt[S])
+				if (!env->opt[O_S])
 					return (0);
 			}
 		}
 		env->cycle_curr = 0;
 	}
 	print_winner(env);
+	buffer_cor(env->arg, -1, 1);
 	return (0);
 }
