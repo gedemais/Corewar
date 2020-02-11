@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 17:55:04 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/07 08:41:18 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/11 05:12:05 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,8 @@ static inline int	get_file(t_env *env, char *arg, unsigned int *j)
 			return (1);
 		i = after_space(arg, i);
 	}
-	if (!ft_strncmp(&arg[i + get_name_len(&arg[i]) - 4], EXT, 4))
+	if ((int)(i + get_name_len(&arg[i]) - 4) >= 0
+			&& !ft_strncmp(&arg[i + get_name_len(&arg[i]) - 4], EXT, 4))
 	{
 		if (env->nb_pl > 3)
 			return (error(singleton_str(3), USAGE, NULL));

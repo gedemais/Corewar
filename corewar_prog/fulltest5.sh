@@ -23,6 +23,7 @@ name[11]='turtle.cor'
 name[12]='zork.cor'
 
 make DEBUG=1
+count=0
 i=0
 while [ "$i" != 13 ]
 do
@@ -32,20 +33,29 @@ do
 		k=0
 		while [ "$k" != 13 ]
 		do
-			echo "test ./corewar -v 31 ${name[$i]} ${name[$j]} ${name[$k]}" &
-			./corewar $ARG4 $ARG3${name[$i]} $ARG3${name[$j]} $ARG3${name[$k]} > $TEST1 &
-			./$ARG2 $ARG4 $ARG3${name[$i]} $ARG3${name[$j]} $ARG3${name[$k]} > $TEST2
-			cmp -b $TEST1 $TEST2 > $RESULT &
-			cat $RESULT
-			if [ -s "$RESULT" ] ; then
-				echo -e '\033[5;31;40m KO \033[0m'
-			else
-				echo -e '\033[5;32;40m OK \033[0m'
-			fi
-			echo '/////////////////////////////////////////////////////////////////////////'
+			l=0
+			while [ "$l" != 13 ]
+			do
+				echo "test ./corewar -v 31 ${name[$i]} ${name[$j]} ${name[$k]} ${name[$l]}" &
+				./corewar $ARG4 $ARG3${name[$i]} $ARG3${name[$j]} $ARG3${name[$k]} $ARG3${name[$l]} > $TEST1 &
+				./$ARG2 $ARG4 $ARG3${name[$i]} $ARG3${name[$j]} $ARG3${name[$k]} $ARG3${name[$l]} > $TEST2
+				cmp -b $TEST1 $TEST2 > $RESULT &
+				cat $RESULT
+				if [ -s "$RESULT" ] ; then
+					echo -e '\033[5;31;40m KO \033[0m'
+				else
+					echo -e '\033[5;32;40m OK \033[0m'
+				fi
+				l=$(($l+1))
+				count=$(($count+1))
+				echo "Test n$count"
+			done
+			echo '+++1'
 			k=$(($k+1))
 		done
+		echo '++1'
 		j=$(($j+1))
 	done
+	echo '+1'
 	i=$(($i+1))
 done
