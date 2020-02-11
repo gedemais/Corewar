@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/07 05:31:27 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/08 01:06:06 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,25 +31,6 @@ static const char	g_tab_usage[] = "Usage: ./corewar [-d N -s N -v N | "
 "#############################################################################"
 "##########################\n";
 
-void				free_env(t_env *env, char *arg)
-{
-	t_process		*tmp;
-
-	tmp = NULL;
-	if (arg)
-		ft_strdel(&arg);
-	if (env->process)
-	{
-		while (env->process->next)
-		{
-			tmp = env->process;
-			env->process = env->process->next;
-			ft_memdel((void**)&tmp);
-		}
-		ft_memdel((void**)&env->process);
-	}
-}
-
 int					error(char *error_msg, char *err_msg, char *junk)
 {
 	if (junk)
@@ -63,6 +44,28 @@ int					error(char *error_msg, char *err_msg, char *junk)
 	return (1);
 }
 
+static inline void	introducing_champions_help(t_env *env, unsigned int i)
+{
+	env->arg.str = "* Player ";
+	buffer_cor(env->arg, 0, 0);
+	env->arg.u = env->player[i].id;
+	buffer_cor(env->arg, 2, 0);
+	env->arg.str = ", weighing ";
+	buffer_cor(env->arg, 0, 0);
+	env->arg.u = env->player[i].size;
+	buffer_cor(env->arg, 2, 0);
+	env->arg.str = " bytes, \"";
+	buffer_cor(env->arg, 0, 0);
+	env->arg.str = env->player[i].name;
+	buffer_cor(env->arg, 0, 0);
+	env->arg.str = "\" (\"";
+	buffer_cor(env->arg, 0, 0);
+	env->arg.str = env->player[i].com;
+	buffer_cor(env->arg, 0, 0);
+	env->arg.str = "\") !\n";
+	buffer_cor(env->arg, 0, 0);
+}
+
 static inline void	introducing_champions(t_env *env)
 {
 	unsigned int	i;
@@ -72,24 +75,7 @@ static inline void	introducing_champions(t_env *env)
 	buffer_cor(env->arg, 0, 0);
 	while (i < env->nb_pl)
 	{
-		env->arg.str = "* Player ";
-		buffer_cor(env->arg, 0, 0);
-		env->arg.u = env->player[i].id;
-		buffer_cor(env->arg, 2, 0);
-		env->arg.str = ", weighing ";
-		buffer_cor(env->arg, 0, 0);
-		env->arg.u = env->player[i].size;
-		buffer_cor(env->arg, 2, 0);
-		env->arg.str = " bytes, \"";
-		buffer_cor(env->arg, 0, 0);
-		env->arg.str = env->player[i].name;
-		buffer_cor(env->arg, 0, 0);
-		env->arg.str = "\" (\"";
-		buffer_cor(env->arg, 0, 0);
-		env->arg.str = env->player[i].com;
-		buffer_cor(env->arg, 0, 0);
-		env->arg.str = "\") !\n";
-		buffer_cor(env->arg, 0, 0);
+		introducing_champions_help(env, i);
 		i++;
 	}
 }

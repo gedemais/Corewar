@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 21:08:32 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/07 08:06:20 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/08 00:56:26 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,11 +86,11 @@ void					check_live(t_env *env)
 			&& (count >= MAX_CHECKS
 				|| env->curr_lives >= NBR_LIVE))
 	{
-		env->arg.str = "Cycle to die is now "; 
+		env->arg.str = "Cycle to die is now ";
 		buffer_cor(env->arg, 0, 0);
 		env->arg.n = env->cycle_to_die;
 		buffer_cor(env->arg, 3, 0);
-		env->arg.str = "\n"; 
+		env->arg.str = "\n";
 		buffer_cor(env->arg, 0, 0);
 	}
 	if (count >= MAX_CHECKS)

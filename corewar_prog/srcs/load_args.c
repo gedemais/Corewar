@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 17:44:18 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 06:06:45 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/11 01:56:35 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 int32_t				get_mem_cell(t_env *env, t_process *p, size_t siz)
 {
-	size_t	i;
-	int32_t	val;
-	uint8_t	tmp;
-	bool	sign;
+	size_t		i;
+	int32_t		val;
+	uint8_t		tmp;
+	bool		sign;
 
 	i = 0;
 	val = 0;
@@ -37,8 +37,8 @@ int32_t				get_mem_cell(t_env *env, t_process *p, size_t siz)
 
 int32_t				get_arg_value(t_env *env, t_process *p, int i, bool mod)
 {
-	int32_t	value;
-	int32_t	arg;
+	int32_t		value;
+	int32_t		arg;
 
 	arg = p->instruct.args[i].arg;
 	if (p->instruct.args[i].type == T_DIR)
@@ -55,18 +55,23 @@ int32_t				get_arg_value(t_env *env, t_process *p, int i, bool mod)
 
 static inline void	get_args(t_env *env, t_process *p, bool dir)
 {
-	int		i;
+	int			i;
 
 	i = 0;
 	p->tpc++;
 	while (i < g_func_tab[p->instruct.op - 1].nb_arg)
 	{
 		p->pctmp = p->tpc;
-		if ((p->instruct.args[i].type == T_DIR)
-				&& (p->tpc = p->tpc + ((dir) ? 2 : 4)))
+		if (p->instruct.args[i].type == T_DIR)
+		{
+			p->tpc = p->tpc + ((dir) ? 2 : 4);
 			p->instruct.args[i].arg = get_mem_cell(env, p, (dir) ? 2 : 4);
-		else if ((p->instruct.args[i].type == T_IND) && (p->tpc = p->tpc + 2))
+		}
+		else if (p->instruct.args[i].type == T_IND)
+		{
+			p->tpc = p->tpc + 2;
 			p->instruct.args[i].arg = get_mem_cell(env, p, 2);
+		}
 		else if (p->instruct.args[i].type == T_REG)
 		{
 			p->tpc += 1;
@@ -78,27 +83,28 @@ static inline void	get_args(t_env *env, t_process *p, bool dir)
 
 bool				reg_is_valid(t_process *p, t_op_arg arg[MAX_ARGS_NUMBER])
 {
-	int		i;
+	int			i;
+	uint32_t	op;
 
 	i = -1;
+	op = p->instruct.op;
 	while (++i < MAX_ARGS_NUMBER)
-		if ((i < g_func_tab[p->instruct.op - 1].nb_arg && arg[i].type == 0)
-			|| (arg[i].type == T_REG
+		if ((i < g_func_tab[op - 1].nb_arg && arg[i].type == 0)
+				|| (arg[i].type == T_REG
 				&& (arg[i].arg <= REG_NONE || arg[i].arg >= REG_MAX)))
 			return (false);
-	if ((p->instruct.op == OP_ST || p->instruct.op == OP_AFF
-			|| p->instruct.op == OP_STI) && arg[0].type != T_REG)
-		return (false);
-	if ((p->instruct.op == OP_LD || p->instruct.op == OP_LLD)
-		&& arg[1].type != T_REG)
-		return (false);
-	if ((p->instruct.op == OP_AND || p->instruct.op == OP_OR
-			|| p->instruct.op == OP_XOR || p->instruct.op == OP_LDI
-			|| p->instruct.op == OP_LLDI) && arg[2].type != T_REG)
-		return (false);
-	if ((p->instruct.op == OP_ADD || p->instruct.op == OP_SUB)
-			&& (arg[0].type != T_REG || arg[1].type != T_REG
-				|| arg[2].type != T_REG))
+	if (((op == OP_ST || op == OP_AFF || op == OP_STI) && arg[0].type != T_REG)
+		|| ((op == OP_LD || op == OP_LLD) && arg[1].type != T_REG)
+			|| ((op == OP_AND || op == OP_OR || op == OP_XOR || op == OP_LDI
+						|| op == OP_LLDI) && arg[2].type != T_REG)
+			|| ((op == OP_ADD || op == OP_SUB) && (arg[0].type != T_REG
+						|| arg[1].type != T_REG || arg[2].type != T_REG))
+			|| ((op == OP_LD || op == OP_LLD) && arg[0].type == T_REG)
+			|| ((op == OP_LIVE || op == OP_ZJMP || op == OP_FORK
+						|| op == OP_LFORK) && arg[0].type != T_DIR)
+			|| (op == OP_ST && arg[1].type == T_DIR)
+			|| ((op == OP_LDI || op == OP_LLDI) && arg[1].type == T_IND)
+			|| (op == OP_STI && arg[2].type == T_IND))
 		return (false);
 	return (true);
 }

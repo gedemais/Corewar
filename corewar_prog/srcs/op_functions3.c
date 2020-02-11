@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/11/27 00:15:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/01/31 08:54:53 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/08 05:06:16 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void				lldi(t_env *env, t_process *p)
 	val[2] = p->instruct.args[2].arg;
 	p->pctmp = p->pc + (uint32_t)(val[0] + val[1]);
 	p->r[val[2] - 1] = get_mem_cell(env, p, REG_SIZE);
+	p->carry = (p->r[val[2] - 1]) ? false : true;
 }
 
 void				lfork(t_env *env, t_process *p)

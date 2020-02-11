@@ -6,51 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 15:48:03 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/07 06:09:13 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/08 03:13:20 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
-
-static inline void	verbose_pc(t_env *env, t_process *p)
-{
-	int				i;
-
-	i = -1;
-	env->arg.str = "ADV ";
-	buffer_cor(env->arg, 0, 0);
-	env->arg.n = p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096);
-	buffer_cor(env->arg, 3, 0);
-	env->arg.str = " (";
-	buffer_cor(env->arg, 0, 0);
-	env->arg.x = p->pc;
-	buffer_cor(env->arg, 1, 0);
-	env->arg.str = " -> ";
-	buffer_cor(env->arg, 0, 0);
-	env->arg.x = (p->tpc < p->pc) ? (4096 + p->tpc) : p->tpc;
-	buffer_cor(env->arg, 1, 0);
-	env->arg.str = ") ";
-	buffer_cor(env->arg, 0, 0);
-	p->pctmp = p->pc;
-	while (++i < p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096))
-	{
-		env->arg.c = hex_tab((env->arena[p->pctmp] >> 4) & 0xf);
-		buffer_cor(env->arg, 4, 0);
-		env->arg.c = hex_tab(env->arena[p->pctmp] & 0xf);
-		buffer_cor(env->arg, 4, 0);
-		if (i + 1 < p->tpc - p->pc + ((p->tpc > p->pc) ? 0 : 4096))
-		{
-			env->arg.str = " ";
-			buffer_cor(env->arg, 0, 0);
-		}
-		else
-		{
-			env->arg.str = " \n";
-			buffer_cor(env->arg, 0, 0);
-		}
-		p->pctmp++;
-	}
-}
 
 static inline int	check_encoding(t_env *env, t_process *p)
 {
@@ -62,7 +22,7 @@ static inline int	check_encoding(t_env *env, t_process *p)
 	j = 0;
 	p->pctmp = p->tpc;
 	p->encoding = (uint8_t)get_mem_cell(env, p, 1);
-	while (i-- > 0)
+	while (i-- > 0 && j < (int)g_func_tab[p->instruct.op - 1].nb_arg)
 	{
 		enco = ((p->encoding >> (2 * i)) & MASK_ENCO);
 		if (enco == DIR_CODE)

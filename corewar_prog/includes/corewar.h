@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/07 08:35:04 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/08 01:12:41 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,7 +211,11 @@ int					rev_bits(int num);
 */
 
 int					get_dump(char *arg, unsigned int *j);
+void				verbose_pc(t_env *env, t_process *p);
 void				verbose_op(t_env *env, t_process *p);
+void				help_verbose_op(t_env *env, t_process *p, uint32_t op);
+void				help_verbose2(t_env *env, t_process *p, uint32_t op, int i);
+void				help_verbose3(t_env *env, t_process *p, uint32_t op, int i);
 
 /*
 ** OPTIONS
@@ -256,14 +260,6 @@ void				write_mem_cell(t_env *v, t_process *p, int32_t value);
 t_process			*new_lst(uint32_t id, uint32_t pc);
 t_process			*push_lst(t_env *env, uint32_t id, uint32_t pc);
 t_process			*pop_lst(t_process *process, t_process *prev);
-
-/*
-** TESTS AND DISPLAY OF THE STRUCTURES
-*/
-
-void				aff_env(t_env *env, bool all);
-void				aff_player(t_player *player);
-void				aff_process(t_process *process, bool all);
 
 /*
 ** OP_FUNCTIONS

@@ -6,11 +6,21 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 13:56:12 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/07 08:35:18 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/08 00:59:21 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+static inline void	help_cycle_run(t_env *env)
+{
+	env->arg.str = "It is now cycle ";
+	buffer_cor(env->arg, 0, 0);
+	env->arg.n = env->cycle_tot + env->cycle_curr;
+	buffer_cor(env->arg, 3, 0);
+	env->arg.str = "\n";
+	buffer_cor(env->arg, 0, 0);
+}
 
 static inline int	cycle_run(t_env *env, t_process *p)
 {
@@ -19,14 +29,7 @@ static inline int	cycle_run(t_env *env, t_process *p)
 	tmp = p;
 	env->cycle_curr++;
 	if (env->opt[O_V] & (1 << 1))
-	{
-		env->arg.str = "It is now cycle ";
-		buffer_cor(env->arg, 0, 0);
-		env->arg.n = env->cycle_tot + env->cycle_curr;
-		buffer_cor(env->arg, 3, 0);
-		env->arg.str = "\n";
-		buffer_cor(env->arg, 0, 0);
-	}
+		help_cycle_run(env);
 	while (tmp)
 	{
 		if ((tmp->cycle_to_exec - 1) == 0)

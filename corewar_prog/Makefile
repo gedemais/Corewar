@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/07 08:46:03 by moguy            ###   ########.fr        #
+#    Updated: 2020/02/08 01:28:57 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,12 +49,14 @@ SRCS_PATH=srcs/
 SRCS_NAME=	after_space.c\
 		after_word.c\
 		buffer.c\
+		buffer_help.c\
 		check_lives.c\
 		create_launch.c\
 		cw_loop.c\
 		get_data.c\
 		get_id.c\
 		get_name_len.c\
+		help_verbose2.c\
 		load_args.c\
 		loader.c\
 		lst.c\
@@ -67,7 +69,8 @@ SRCS_NAME=	after_space.c\
 		opt.c\
 		opt_utils.c\
 		reverse_bits.c\
-		verbose_op.c
+		verbose_op.c\
+		verbose_op_help.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
