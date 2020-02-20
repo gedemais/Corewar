@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 20:33:03 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/15 20:40:47 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 03:55:30 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ char	get_tok_comment(t_env *env, char *stream, unsigned int *i)
 
 	(void)env;
 	j = 1;
-	if (stream[0] != COMMENT_CHAR)
+	if (stream[0] != COMMENT_CHAR && stream[0] != ';')
 		return (0);
 	while (stream[j] && stream[j] != '\n')
 		j++;

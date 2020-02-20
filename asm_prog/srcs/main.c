@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:38:28 by gedemais          #+#    #+#             */
-/*   Updated: 2020/02/02 00:23:46 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 04:56:30 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,13 @@ int					main(int argc, char **argv)
 	if (argc != 2)
 	{
 		ft_putendl_fd(USAGE, 2);
-		if (LEAKS)
-			system("leaks asm");
 		return (1);
 	}
 	else if (asm_compiler(&env, argv[1]) != 0)
 	{
 		free_env(&env);
-		if (LEAKS)
-			system("leaks asm");
 		return (1);
 	}
 	free_env(&env);
-	if (LEAKS)
-		system("leaks asm");
 	return (0);
 }

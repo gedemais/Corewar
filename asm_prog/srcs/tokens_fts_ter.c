@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 20:31:06 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/15 20:41:05 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 03:26:48 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char	get_tok_string(t_env *env, char *stream, unsigned int *i)
 	j = 1;
 	if (stream[0] != '"')
 		return (0);
-	while (stream[j] && stream[j] != '"' && stream[j] != '\n')
+	while (stream[j] && stream[j] != '"')
 		j++;
 	if (!stream[j] || stream[j] != '"')
 		return (0);

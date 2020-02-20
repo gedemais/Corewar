@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 17:40:45 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 15:08:45 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 04:14:38 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,16 +57,13 @@ char	get_lex_label(t_env *env, t_token *tok)
 	(void)env;
 	if (!tok || tok->type != TOK_LABEL)
 		return (0);
-	if (!tok->next
-		|| ((tok->next->type == TOK_NEWLINE && check_after(tok->next))
-		&& invalid_label_err(tok)))
-		return (-1);
-	if (tok->next->type != TOK_OPCODE && tok->next->type != TOK_NEWLINE)
+	if (tok->next->type != TOK_OPCODE && tok->next->type != TOK_NEWLINE
+		&& tok->next->type != TOK_LABEL)
 		return (-1);
 	tok = tok->next;
 	while (tok && tok->type == TOK_NEWLINE)
 		tok = tok->next;
-	if (!tok || tok->type != TOK_OPCODE)
+	if (tok && tok->type != TOK_OPCODE && tok->type != TOK_LABEL)
 		return (-1);
 	return (LEX_LABEL);
 }

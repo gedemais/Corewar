@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/16 02:54:03 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 05:15:45 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define ASM_H
 
 # include "../../libft/libft.h"
-# include <op.h>
+# include "../corewar_prog/includes/op.h"
 # include <error.h>
 # include <globals.h>
 # include <stdbool.h>
@@ -25,7 +25,6 @@
 # define BUFF_WRITE 4096
 
 # define HEADER_SIZE 2180
-# define LEAKS false
 
 # define MAX_TYPE_SIZE 32
 

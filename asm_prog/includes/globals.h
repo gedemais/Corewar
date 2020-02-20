@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/15 21:26:48 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/15 21:28:13 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 04:29:01 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static int			g_op_args[NB_OPS][MAX_ARGS_NUMBER * MAX_PARAM_NB] = {
 		0, 0, 0},
 
 	{TOK_REG, TOK_NUMBER, TOK_LNUMBER,
-		TOK_NUMBER, TOK_REG, 0,
+		TOK_LNUMBER, TOK_REG, 0,
 		TOK_REG, 0, 0},
 
 	{TOK_LNUMBER, 0, 0,

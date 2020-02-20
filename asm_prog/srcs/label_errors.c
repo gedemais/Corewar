@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/01/08 14:26:58 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 14:27:11 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 03:10:53 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int		undefined_label_err(t_env *env)
 	i = 0;
 	print_err_name(UNDEFINED_LABEL);
 	print_line_n_col(env->tok.line, env->tok.col, true);
-	while (&env->file[env->tok.line_start + i]
+	while (env->file[env->tok.line_start + i]
 		&& env->file[env->tok.line_start + i] != '\n')
 	{
 		ft_putchar_fd(env->file[env->tok.line_start + i], 2);

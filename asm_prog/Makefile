@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/01/16 03:16:18 by gedemais         ###   ########.fr        #
+#    Updated: 2020/02/20 05:15:29 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ INC_PATH=includes/
 INC_NAME=	asm.h\
 			error.h\
 			globals.h\
-			op.h
+#			../corewar_prog/includes/op.h
 
 INC=$(addprefix $(INC_PATH), $(INC_NAME))
 
@@ -79,7 +79,7 @@ all: $(NAME)
 $(NAME): $(LIB) $(OBJS)
 	$(CC) $(FLAGS) -I$(INC_PATH) -I $(LIB_PATH) -o $(NAME) $(OBJS) $(LIB)
 
-$(SRCS_PATH)%.o: $(SRCS_PATH)%.c $(INC)
+$(SRCS_PATH)%.o: $(SRCS_PATH)%.c $(INC) ../corewar_prog/includes/op.h
 	$(CC) $(FLAGS) -I$(INC_PATH) -I$(LIB_PATH) -o $@ -c $<
 
 $(LIB): $(LIB_PATH)

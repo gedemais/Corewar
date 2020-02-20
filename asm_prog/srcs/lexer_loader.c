@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/13 11:15:53 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 16:11:41 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 04:41:32 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ int			load_lex_name_prop(t_env *env, t_lexem *lex, t_token **tok)
 		ft_putstr_fd(NAME_LENGTH_ERR, 2);
 		ft_putstr_fd(err, 2);
 		ft_putendl_fd(" bytes.", 2);
+		free(err);
 		return (-1);
 	}
 	lex->type = LEX_NAME_PROP;
@@ -48,13 +49,14 @@ int			load_lex_comment_prop(t_env *env, t_lexem *lex, t_token **tok)
 	*tok = (*tok)->next;
 	if (!(lex->args[0].str = ft_strndup(&(*tok)->ptr[1], (int)(*tok)->len - 2)))
 		return (-1);
-	if (ft_strlen(lex->args[0].str) >= PROG_NAME_LENGTH)
+	if (ft_strlen(lex->args[0].str) >= COMMENT_LENGTH)
 	{
 		if (!(err = ft_itoa(COMMENT_LENGTH)))
 			return (-1);
 		ft_putstr_fd(COMMENT_LENGTH_ERR, 2);
 		ft_putstr_fd(err, 2);
 		ft_putendl_fd(" bytes.", 2);
+		free(err);
 		return (-1);
 	}
 	lex->type = LEX_COMMENT_PROP;
