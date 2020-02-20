@@ -6,20 +6,20 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 01:06:06 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/20 00:59:37 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
 static const char	g_tab_usage[] = "Usage: ./corewar [-d N -s N -v N | "
-"-ncurses --stealth] [-a] [-n N1] <champion1.cor> <...>\n"
+"--ncurses --stealth] [-a] [-n 1..number of champions] <champion1.cor> <...>\n"
 "    -a        : Prints output from \"aff\" (Default is to hide it)\n"
 "#### TEXT OUTPUT MODE #######################################################"
 "##########################\n"
 "    -d N      : Dumps memory after N cycles then exits\n"
 "    -n N      : Give an ID to the following player, it must be between 1 and "
-"the number of contestants\n"
+"the number of champions\n"
 "    -s N      : Runs N cycles, dumps memory, pauses, then repeats\n"
 "    -v N      : Verbosity levels, can be added together to enable several\n"
 "                - 0 : Show only essentials\n"
@@ -28,6 +28,10 @@ static const char	g_tab_usage[] = "Usage: ./corewar [-d N -s N -v N | "
 "                - 4 : Show operations (Params are NOT litteral ...)\n"
 "                - 8 : Show deaths\n"
 "                - 16 : Show PC movements (Except for jumps)\n"
+"#### NCURSES OUTPUT MODE ####################################################"
+"##########################\n"
+"    --ncurses : Ncurses output mode\n"
+"    --stealth : Hides the real contents of the memory\n"
 "#############################################################################"
 "##########################\n";
 
@@ -84,9 +88,12 @@ static inline int	vm(t_env *env, char *arg)
 {
 	if (get_data(env, arg))
 		return (1);
-	introducing_champions(env);
 	if (init_arena(env))
 		return (1);
+	if (env->opt[O_NCURSES] == true)
+		init_visu(env);
+	else
+		introducing_champions(env);
 	if (cw_loop(env))
 		return (1);
 	free_env(env, arg);
@@ -99,7 +106,7 @@ int					main(int ac, char **av)
 	char			*arg;
 
 	if (ac > MAX_ARGS || ac < 2)
-		return (error(TOO_MANY_ARGS, USAGE, NULL));
+		return (error((ac == 1) ? NO_ARGS : TOO_MANY_ARGS, USAGE, NULL));
 	if (!(arg = merge_args(ac, av)))
 		return (error(BAD_ARGS, USAGE, NULL));
 	ft_memset(&env, 0, sizeof(t_env));

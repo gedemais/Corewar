@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/08 01:28:57 by moguy            ###   ########.fr        #
+#    Updated: 2020/02/20 01:26:29 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,38 +39,62 @@ LIB=$(LIB_PATH)libft.a
 
 INC_PATH=includes/
 INC_NAME=corewar.h\
-	op.h\
-	libft.h\
-	define.h
+		 cor_ncurses.h\
+		 op.h\
+		 libft.h\
+		 define.h
 
 INC=$(addprefix $(INC_PATH), $(INC_NAME))
 
 SRCS_PATH=srcs/
-SRCS_NAME=	after_space.c\
-		after_word.c\
-		buffer.c\
-		buffer_help.c\
-		check_lives.c\
-		create_launch.c\
-		cw_loop.c\
-		get_data.c\
-		get_id.c\
-		get_name_len.c\
-		help_verbose2.c\
-		load_args.c\
-		loader.c\
-		lst.c\
-		main.c\
-		merge_args.c\
-		op_functions.c\
-		op_functions2.c\
-		op_functions3.c\
-		op_functions4.c\
-		opt.c\
-		opt_utils.c\
-		reverse_bits.c\
-		verbose_op.c\
-		verbose_op_help.c
+SRCS_NAME=after_space.c\
+		  after_word.c\
+		  buffer.c\
+		  buffer_help.c\
+		  check_lives.c\
+		  create_launch.c\
+		  cycle_run.c\
+		  cw_loop.c\
+		  dump.c\
+		  get_data.c\
+		  help_get_data.c\
+		  get_name_len.c\
+		  help_verbose.c\
+		  init_arena.c\
+		  load_args.c\
+		  loader.c\
+		  lst.c\
+		  main.c\
+		  merge_args.c\
+		  reverse_bits.c\
+		  utils.c\
+		  verbose_op.c\
+		  verbose_pc_op_help.c\
+		  write_mem_cell.c\
+		  op_add.c\
+		  op_aff.c\
+		  op_and.c\
+		  op_fork.c\
+		  op_ld.c\
+		  op_ldi.c\
+		  op_lfork.c\
+		  op_live.c\
+		  op_lld.c\
+		  op_lldi.c\
+		  op_or.c\
+		  op_st.c\
+		  op_sti.c\
+		  op_sub.c\
+		  op_xor.c\
+		  op_zjmp.c\
+		  init_ncurses.c\
+		  keyboard_visu.c\
+		  refresh_all.c\
+		  write_arena.c\
+		  write_border.c\
+		  write_info.c\
+		  write_define.c\
+		  write_breakdown.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
 
@@ -85,7 +109,7 @@ $(LIB):
 	@make -C $(LIB_PATH)
 
 $(NAME) : $(OBJS)
-	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS) $(LIB)
+	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS) $(LIB) -lncurses
 	@cp $(NAME) ../
 	@echo "$(GRE)Done !$(DEF)"
 
@@ -101,7 +125,6 @@ clean:
 
 fclean: clean
 	@rm -rf $(NAME)
-	@rm test1.txt test2.txt result.txt
 	@make -C $(LIB_PATH) fclean
 
 re: fclean all

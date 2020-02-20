@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/11/05 17:34:45 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/07 00:53:03 by moguy            ###   ########.fr        #
+#    Updated: 2020/02/13 03:05:25 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -117,13 +117,13 @@ $(NAME): $(OBJS)
 	@echo "$(GRE)Libft successfully compiled !$(DEF)"
 
 ./%.o: ./%.c libft.h
-	$(CC) $(FLAGS) -c $<
+	@$(CC) $(FLAGS) -c $<
 
 clean: 
-	rm -rf $(OBJS)
+	@rm -rf $(OBJS)
 
 fclean: clean
-	rm -rf $(NAME)
+	@rm -rf $(NAME)
 
 re: fclean all
 

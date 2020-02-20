@@ -6,19 +6,19 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 01:17:03 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 01:25:53 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/14 02:22:13 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/corewar.h"
 
-void				buf_char(t_buf arg, char *buf, int *j)
+void				conv_char(t_buf arg, char *buf, int *j)
 {
 	buf[*j] = arg.c;
 	*j += 1;
 }
 
-static inline void	help_int(char *buf, char *tmp, int i, int k)
+static inline void	help_conv_int(char *buf, char *tmp, int i, int k)
 {
 	while (--k >= 0)
 	{
@@ -27,7 +27,7 @@ static inline void	help_int(char *buf, char *tmp, int i, int k)
 	}
 }
 
-void				buf_int(t_buf arg, char *buf, int *j)
+void				conv_int(t_buf arg, char *buf, int *j)
 {
 	int				i;
 	int				k;
@@ -53,10 +53,10 @@ void				buf_int(t_buf arg, char *buf, int *j)
 	}
 	tmp[k++] = dt[n % 10];
 	*j = i + k;
-	help_int(&buf[0], &tmp[0], i, k);
+	help_conv_int(&buf[0], &tmp[0], i, k);
 }
 
-void				buf_uint(t_buf arg, char *buf, int *j)
+void				conv_uint(t_buf arg, char *buf, int *j)
 {
 	int				i;
 	int				k;
@@ -76,7 +76,7 @@ void				buf_uint(t_buf arg, char *buf, int *j)
 	}
 	tmp[k++] = deci_tab[n % 10];
 	*j = i + k;
-	help_int(&buf[0], &tmp[0], i, k);
+	help_conv_int(&buf[0], &tmp[0], i, k);
 }
 
 void				buffer_cor(t_buf arg, int path, bool flush)
@@ -85,7 +85,7 @@ void				buffer_cor(t_buf arg, int path, bool flush)
 	static char		buf[SHRT_MAX];
 
 	if (path > -1)
-		g_buf_tab[path].f(arg, &buf[0], &i);
+		g_conv_tab[path].f(arg, &buf[0], &i);
 	if (flush || i > SHRT_MAX - 100)
 	{
 		write(1, &buf[0], (size_t)i);

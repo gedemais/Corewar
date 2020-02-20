@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 01:12:41 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/20 01:15:36 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,14 @@
 # define COREWAR_H
 # include "libft.h"
 # include "define.h"
+# include "cor_ncurses.h"
 # include "op.h"
 # include <limits.h>
 # include <stdbool.h>
 # include <string.h>
 # include <sys/types.h>
+# include <ncurses.h>
+# include <curses.h>
 
 /*
 ** =============================================================================
@@ -51,6 +54,8 @@ typedef enum		e_option
 	O_A,
 	O_D,
 	O_N,
+	O_NCURSES,
+	O_STEALTH,
 	O_S,
 	O_V
 }					t_option;
@@ -155,6 +160,16 @@ struct				s_process
 ** =============================================================================
 */
 
+typedef struct		s_arena
+{
+	int				living;
+	int				recent;
+	short int		id;
+	bool			used;
+	uint8_t			value;
+	char			pad[4];
+}					t_arena;
+
 typedef struct		s_player
 {
 	char			champ[CHAMP_MAX_SIZE];
@@ -170,16 +185,26 @@ typedef struct		s_env
 {
 	t_process		*process;
 	t_player		player[MAX_PLAYERS];
-	uint8_t			arena[MEM_SIZE];
-	unsigned int	live_pl[MAX_PLAYERS];
+	t_arena			arena[MEM_SIZE];
+	unsigned long	live_pl[MAX_PLAYERS];
+	unsigned long	live_pl_last[MAX_PLAYERS];
+	int				last_cycle_live[MAX_PLAYERS];
 	int				opt[OPT_MAX];
 	int				cycle_curr;
 	int				cycle_to_dump;
 	int				cycle_to_die;
 	int				cycle_tot;
-	uint32_t		last_live;
+	int				last_cycle_lived;
+	int				xmax;
+	int				ymax;
 	unsigned int	curr_lives;
+	unsigned int	last_rank;
 	unsigned int	nb_pl;
+	unsigned int	ncurses_speed;
+	unsigned int	pause;
+	uint32_t		last_live;
+	bool			onetime;
+	char			pad[3];
 	t_buf			arg;
 }					t_env;
 
@@ -190,17 +215,33 @@ typedef struct		s_env
 */
 
 /*
+** VISU
+*/
+
+int					keyboard_visu(t_env *env);
+void				init_colors(void);
+void				init_visu(t_env *env);
+int					main_visu(void);
+int					pause_loop(t_env *env);
+void				refresh_all(t_env *env);
+void				write_arena(t_env *env);
+void				write_border(t_env *env);
+void				write_info(t_env *env);
+void				write_info_define(t_env *env, int x, int y);
+int					write_lives_breakdown(t_env *env, int x, int y);
+
+/*
 ** UTILS
 */
 
 unsigned int		after_space(char *arg, unsigned int i);
 unsigned int		after_word(char *arg, unsigned int i);
-void				buf_char(t_buf arg, char *buf, int *j);
 void				buffer_cor(t_buf arg, int path, bool flush);
-void				buf_hex(t_buf arg, char *buf, int *j);
-void				buf_int(t_buf arg, char *buf, int *j);
-void				buf_uint(t_buf arg, char *buf, int *j);
-void				buf_str(t_buf arg, char *buf, int *j);
+void				conv_char(t_buf arg, char *buf, int *j);
+void				conv_hex(t_buf arg, char *buf, int *j);
+void				conv_int(t_buf arg, char *buf, int *j);
+void				conv_uint(t_buf arg, char *buf, int *j);
+void				conv_str(t_buf arg, char *buf, int *j);
 unsigned int		get_name_len(char *name);
 char				hex_tab(uint8_t quartet);
 char				*merge_args(int ac, char **av);
@@ -231,6 +272,7 @@ int					check_too_high_id(t_env *env);
 int					error(char *error_msg, char *err_msg, char *junk);
 void				free_env(t_env *env, char *arg);
 int					get_data(t_env *env, char *arg);
+int					help_get_data(t_env *env, char *arg, unsigned int *j);
 int					get_id(t_env *env, char *arg, unsigned int *j, bool end);
 int					init_arena(t_env *env);
 int					loader(t_env *env, char *arg, unsigned int *j);
@@ -245,6 +287,7 @@ int					add_instruction(t_env *env, t_process *process);
 void				check_live(t_env *env);
 void				create_instruct(t_env *env, t_process *process);
 int					create_pro(t_env *env, unsigned int i, unsigned int offset);
+int					cycle_run(t_env *env, t_process *p);
 int					cw_loop(t_env *env);
 int32_t				get_arg_value(t_env *v, t_process *p, int i, bool mod);
 int32_t				get_mem_cell(t_env *v, t_process *p, size_t siz);
@@ -288,13 +331,13 @@ void				aff(t_env *env, t_process *process);
 ** =============================================================================
 */
 
-static const t_btab g_buf_tab[5] =
+static const t_btab g_conv_tab[5] =
 {
-	{&buf_str},
-	{&buf_hex},
-	{&buf_uint},
-	{&buf_int},
-	{&buf_char},
+	{&conv_str},
+	{&conv_hex},
+	{&conv_uint},
+	{&conv_int},
+	{&conv_char},
 };
 
 typedef struct		s_op

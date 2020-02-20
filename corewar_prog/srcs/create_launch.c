@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 15:48:03 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 03:13:20 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/17 08:20:18 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,12 @@ void				launch_instruct(t_env *env, t_process *p)
 
 void				create_instruct(t_env *env, t_process *p)
 {
+	env->arena[p->pc].used = false;
 	p->pc = p->tpc;
 	p->pctmp = p->pc;
 	p->tpc++;
 	p->instruct.op = (uint32_t)get_mem_cell(env, p, 1);
+	env->arena[p->pc].used = true;
 	if (p->instruct.op <= OP_NONE || p->instruct.op >= OP_MAX)
 		return ;
 	p->cycle_to_exec = (int)g_func_tab[p->instruct.op - 1].wait_cycles;
@@ -85,6 +87,7 @@ int					create_pro(t_env *env, unsigned int i, unsigned int ofset)
 		if (!(env->process = new_lst(env->player[i].id, (uint32_t)ofset)))
 			return (error(LST_ERR, NULL, NULL));
 		env->process->rank = 1;
+		env->last_rank = 1;
 	}
 	env->process->tpc = env->process->pc;
 	create_instruct(env, env->process);

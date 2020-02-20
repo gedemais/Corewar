@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/14 16:08:31 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 05:53:12 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/17 08:02:57 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ t_process	*push_lst(t_env *env, uint32_t id, uint32_t pc)
 		return (NULL);
 	new->next = env->process;
 	new->rank = rank;
+	env->last_rank = (unsigned int)rank;
 	env->process = new;
 	env->process->tpc = env->process->pc;
 	rank++;

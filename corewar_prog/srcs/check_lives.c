@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 21:08:32 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 00:56:26 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/18 06:59:34 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ void					check_live(t_env *env)
 	if (env->curr_lives >= NBR_LIVE || count >= MAX_CHECKS)
 		env->cycle_to_die -= CYCLE_DELTA;
 	if ((env->opt[O_V] & (1 << 1))
-			&& (count >= MAX_CHECKS
-				|| env->curr_lives >= NBR_LIVE))
+			&& (count >= MAX_CHECKS || env->curr_lives >= NBR_LIVE))
 	{
 		env->arg.str = "Cycle to die is now ";
 		buffer_cor(env->arg, 0, 0);
@@ -93,7 +92,9 @@ void					check_live(t_env *env)
 		env->arg.str = "\n";
 		buffer_cor(env->arg, 0, 0);
 	}
-	if (count >= MAX_CHECKS)
-		count = 0;
+	count = (count >= MAX_CHECKS) ? 0 : count;
 	env->curr_lives = 0;
+	ft_memcpy(&env->live_pl_last[0], &env->live_pl[0],
+			sizeof(unsigned long) * MAX_PLAYERS);
+	ft_memset(&env->live_pl[0], 0, sizeof(unsigned long) * MAX_PLAYERS);
 }

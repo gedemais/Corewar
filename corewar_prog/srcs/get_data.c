@@ -5,125 +5,112 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/26 17:55:04 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/11 05:12:05 by moguy            ###   ########.fr       */
+/*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
+/*   Updated: 2020/02/20 01:18:57 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-static inline int	get_file(t_env *env, char *arg, unsigned int *j)
+static inline void		give_id(t_env *env, unsigned int i, unsigned int j,
+		uint8_t opt_n)
 {
-	unsigned int	i;
-
-	i = *j;
-	if (!ft_strncmp(&arg[i], OPT_N, 3))
+	while (i < env->nb_pl)
 	{
-		if (get_id(env, arg, &i, false))
-			return (1);
-		i = after_space(arg, i);
-	}
-	if ((int)(i + get_name_len(&arg[i]) - 4) >= 0
-			&& !ft_strncmp(&arg[i + get_name_len(&arg[i]) - 4], EXT, 4))
-	{
-		if (env->nb_pl > 3)
-			return (error(singleton_str(3), USAGE, NULL));
-		if (loader(env, arg, &i))
-			return (1);
-		i = after_word(arg, i);
-		env->nb_pl++;
-	}
-	else
-		return (error(BAD_ARGS, USAGE, NULL));
-	*j = i;
-	return (0);
-}
-
-static inline int	check_verbose(t_env *env, char *arg, unsigned int *j)
-{
-	unsigned int	i;
-	long long int	nb;
-
-	i = *j + 3;
-	nb = ft_atoi(&arg[i]);
-	if (nb > 0 && nb <= VERB_MAX)
-	{
-		env->opt[O_V] = (int)nb;
-		*j = after_word(arg, i);
-		return (0);
-	}
-	else
-		return (1);
-}
-
-static inline int	help_get_opt(t_env *env, char *arg, unsigned int *j,
-		int ret)
-{
-	unsigned int	i;
-
-	i = *j;
-	if (!ft_strncmp(&arg[i], OPT_A, 3) && env->opt[O_A] == false && (i += 3))
-		env->opt[O_A] = true;
-	else if (!ft_strncmp(&arg[i], OPT_D, 3) && env->opt[O_D] == false)
-	{
-		if ((env->opt[O_D] = get_dump(arg, &i)) <= 0)
-			return (error(BAD_DUMP, USAGE, NULL));
-	}
-	else if (!ft_strncmp(&arg[i], OPT_S, 3) && env->opt[O_D] == false
-			&& env->opt[O_S] == false)
-	{
-		env->opt[O_S] = true;
-		if ((env->opt[O_D] = get_dump(arg, &i)) <= 0)
-			return (error(BAD_DUMP, USAGE, NULL));
-	}
-	else if (!ft_strncmp(&arg[i], OPT_N, 3)
-		|| ((ret = (int)i + (int)get_name_len(&arg[i]) - 4) >= 0
-			&& !ft_strncmp(&arg[ret], EXT, 4)))
-		return (-1);
-	else
-		return (error(BAD_OPT, USAGE, NULL));
-	*j = i;
-	return (0);
-}
-
-static inline int	get_opt(t_env *env, char *arg, unsigned int *j)
-{
-	unsigned int	i;
-	int				ret;
-
-	i = *j;
-	ret = 0;
-	while (arg[i] == '-')
-	{
-		if (!ft_strncmp(&arg[i], OPT_V, 3) && env->opt[O_V] == 0)
+		if (env->player[i].id == 0)
 		{
-			if (check_verbose(env, arg, &i))
-				return (error(BAD_VERBOSE, USAGE, NULL));
+			while (j < 5)
+			{
+				if (!(opt_n & (1 << j)))
+				{
+					env->player[i].id = (uint32_t)j;
+					j++;
+					break ;
+				}
+				j++;
+			}
+		}
+		i++;
+	}
+}
+
+static inline uint8_t	ft_power_cor(uint8_t nb, uint8_t pow)
+{
+	uint8_t	tmp;
+
+	tmp = nb;
+	if (pow < 1)
+		return (0);
+	while (pow > 1)
+	{
+		tmp *= nb;
+		pow--;
+	}
+	return (tmp);
+}
+
+static inline void		sort_players(t_env *env)
+{
+	t_player		tmp;
+	unsigned int	i;
+
+	i = 0;
+	while (i < env->nb_pl - 1)
+	{
+		if (env->player[i].id > env->player[i + 1].id)
+		{
+			ft_memcpy(&tmp, &env->player[i], sizeof(t_player));
+			ft_memcpy(&env->player[i], &env->player[i + 1], sizeof(t_player));
+			ft_memcpy(&env->player[i + 1], &tmp, sizeof(t_player));
+			i = 0;
 		}
 		else
-			ret = help_get_opt(env, arg, &i, ret);
-		if (ret == -1)
-			break ;
-		else if (ret == 1)
-			return (1);
-		i = after_space(arg, i);
+			i++;
 	}
-	*j = i;
+}
+
+int						get_id(t_env *env, char *arg, unsigned int *j, bool end)
+{
+	static uint8_t	opt_n = 0;
+	long long int	id;
+	unsigned int	i;
+
+	if (end)
+	{
+		give_id(env, 0, 1, opt_n);
+		sort_players(env);
+		return (0);
+	}
+	i = after_space(arg, *j + 3);
+	if (!ft_isdigit(arg[i]) || (id = ft_atoi(&arg[i])) < 1 || id > 4)
+		return (error(BAD_ID, USAGE, NULL));
+	env->player[env->nb_pl].id = (uint32_t)id;
+	*j = i + 1;
+	if (!(opt_n & (1 << env->player[env->nb_pl].id)))
+		opt_n |= ft_power_cor(2, (uint8_t)id);
+	else
+		return (error(SAME_ID, USAGE, NULL));
 	return (0);
 }
 
-int					get_data(t_env *env, char *arg)
+int						get_data(t_env *env, char *arg)
 {
 	unsigned int	i;
 
 	i = after_space(arg, 0);
 	while (arg[i])
+		if (help_get_data(env, arg, &i))
+			return (1);
+	if (env->opt[O_NCURSES] == 1)
 	{
-		if (arg[i] == '-' && get_opt(env, arg, &i))
-			return (1);
-		if (get_file(env, arg, &i))
-			return (1);
-		i = after_space(arg, i);
+		if (env->opt[O_STEALTH])
+		{
+			ft_memset(&env->opt[0], 0, sizeof(int) * OPT_MAX);
+			env->opt[O_STEALTH] = true;
+		}
+		else
+			ft_memset(&env->opt[0], 0, sizeof(int) * OPT_MAX);
+		env->opt[O_NCURSES] = 1;
 	}
 	if (get_id(env, arg, 0, true))
 		return (1);

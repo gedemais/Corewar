@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 01:24:20 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 01:25:41 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/14 02:22:35 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ static inline char	hex_convert_char(unsigned int x, int unit)
 	return (hex_tab[n]);
 }
 
-void				buf_hex(t_buf arg, char *buf, int *j)
+void				conv_hex(t_buf arg, char *buf, int *j)
 {
 	int				i;
 
@@ -52,7 +52,7 @@ void				buf_hex(t_buf arg, char *buf, int *j)
 	*j = i;
 }
 
-void				buf_str(t_buf arg, char *buf, int *j)
+void				conv_str(t_buf arg, char *buf, int *j)
 {
 	int				i;
 	int				k;

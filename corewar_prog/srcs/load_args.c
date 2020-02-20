@@ -6,11 +6,39 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 17:44:18 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/11 01:56:35 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/15 01:29:08 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+bool				reg_is_valid(t_process *p, t_op_arg arg[MAX_ARGS_NUMBER])
+{
+	int			i;
+	uint32_t	op;
+
+	i = -1;
+	op = p->instruct.op;
+	while (++i < MAX_ARGS_NUMBER)
+		if ((i < g_func_tab[op - 1].nb_arg && arg[i].type == 0)
+				|| (arg[i].type == T_REG
+				&& (arg[i].arg <= REG_NONE || arg[i].arg >= REG_MAX)))
+			return (false);
+	if (((op == OP_ST || op == OP_AFF || op == OP_STI) && arg[0].type != T_REG)
+		|| ((op == OP_LD || op == OP_LLD) && arg[1].type != T_REG)
+			|| ((op == OP_AND || op == OP_OR || op == OP_XOR || op == OP_LDI
+						|| op == OP_LLDI) && arg[2].type != T_REG)
+			|| ((op == OP_ADD || op == OP_SUB) && (arg[0].type != T_REG
+						|| arg[1].type != T_REG || arg[2].type != T_REG))
+			|| ((op == OP_LD || op == OP_LLD) && arg[0].type == T_REG)
+			|| ((op == OP_LIVE || op == OP_ZJMP || op == OP_FORK
+						|| op == OP_LFORK) && arg[0].type != T_DIR)
+			|| (op == OP_ST && arg[1].type == T_DIR)
+			|| ((op == OP_LDI || op == OP_LLDI) && arg[1].type == T_IND)
+			|| (op == OP_STI && arg[2].type == T_IND))
+		return (false);
+	return (true);
+}
 
 int32_t				get_mem_cell(t_env *env, t_process *p, size_t siz)
 {
@@ -21,11 +49,11 @@ int32_t				get_mem_cell(t_env *env, t_process *p, size_t siz)
 
 	i = 0;
 	val = 0;
-	sign = (bool)(env->arena[p->pctmp] & MASK_NEG);
+	sign = (bool)(env->arena[p->pctmp].value & MASK_NEG);
 	while (i < siz)
 	{
 		val <<= 8;
-		tmp = env->arena[p->pctmp];
+		tmp = env->arena[p->pctmp].value;
 		val |= (sign) ? (tmp ^ MASK_FF) : tmp;
 		p->pctmp += 1;
 		i++;
@@ -79,34 +107,6 @@ static inline void	get_args(t_env *env, t_process *p, bool dir)
 		}
 		i++;
 	}
-}
-
-bool				reg_is_valid(t_process *p, t_op_arg arg[MAX_ARGS_NUMBER])
-{
-	int			i;
-	uint32_t	op;
-
-	i = -1;
-	op = p->instruct.op;
-	while (++i < MAX_ARGS_NUMBER)
-		if ((i < g_func_tab[op - 1].nb_arg && arg[i].type == 0)
-				|| (arg[i].type == T_REG
-				&& (arg[i].arg <= REG_NONE || arg[i].arg >= REG_MAX)))
-			return (false);
-	if (((op == OP_ST || op == OP_AFF || op == OP_STI) && arg[0].type != T_REG)
-		|| ((op == OP_LD || op == OP_LLD) && arg[1].type != T_REG)
-			|| ((op == OP_AND || op == OP_OR || op == OP_XOR || op == OP_LDI
-						|| op == OP_LLDI) && arg[2].type != T_REG)
-			|| ((op == OP_ADD || op == OP_SUB) && (arg[0].type != T_REG
-						|| arg[1].type != T_REG || arg[2].type != T_REG))
-			|| ((op == OP_LD || op == OP_LLD) && arg[0].type == T_REG)
-			|| ((op == OP_LIVE || op == OP_ZJMP || op == OP_FORK
-						|| op == OP_LFORK) && arg[0].type != T_DIR)
-			|| (op == OP_ST && arg[1].type == T_DIR)
-			|| ((op == OP_LDI || op == OP_LLDI) && arg[1].type == T_IND)
-			|| (op == OP_STI && arg[2].type == T_IND))
-		return (false);
-	return (true);
 }
 
 void				load_args(t_env *env, t_process *p, bool enco, bool dir)

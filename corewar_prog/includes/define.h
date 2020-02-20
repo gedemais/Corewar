@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:14:20 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/05 11:43:55 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/20 01:05:01 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # define BAD_VERBOSE "Verbose value is incorrect."
 # define LST_ERR "A process failed to be created, malloc error."
 # define MALLOC_ERR "Malloc error."
+# define NO_ARGS "No arguments given..."
 # define SAME_ID "Some players has the same attributed ID."
 # define TOO_MANY_ARGS "Too many arguments for the executable."
 # define VM_ERR "Virtual machine error."
@@ -51,7 +52,7 @@
 # define MAX_CYCLE 1000000
 # define NB_FUNC 16
 # define PAD_LENGTH 4
-# define OPT_MAX 5
+# define OPT_MAX 7
 # define VERB_MAX 31
 
 /*
@@ -63,6 +64,8 @@
 # define OPT_A "-a "
 # define OPT_D "-d "
 # define OPT_N "-n "
+# define OPT_NCUR "--ncurses "
+# define OPT_STEALTH "--stealth "
 # define OPT_S "-s "
 # define OPT_V "-v "
 # define EXT ".cor"
