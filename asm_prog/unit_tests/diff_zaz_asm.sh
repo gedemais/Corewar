@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Copying the corresponding champ
 ./asm $1
 hexdump *.cor > mine
 rm *.cor

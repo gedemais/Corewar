@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 12:48:51 by gedemais          #+#    #+#             */
-/*   Updated: 2020/02/20 05:15:45 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/20 19:13:30 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 # include <globals.h>
 # include <stdbool.h>
 # include <errno.h>
-# include <stdio.h>
 
 # define BUFF_READ 65536
 # define BUFF_WRITE 4096
