@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 02:18:59 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/18 08:42:19 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/20 05:16:50 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 static inline int	help_pause(t_env *env, int key_input)
 {
 	if (key_input == 45 && env->ncurses_speed > 0)
-		env->ncurses_speed -= 2000;
-	else if (key_input == 43 && env->ncurses_speed < 250000)
 		env->ncurses_speed += 2000;
+	else if (key_input == 43 && env->ncurses_speed < 250000)
+		env->ncurses_speed -= 2000;
 	else if (key_input == 113 || key_input == 27 || key_input == 81)
 	{
 		clear();

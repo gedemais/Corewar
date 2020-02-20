@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/20 01:15:36 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/20 05:38:43 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -204,7 +204,7 @@ typedef struct		s_env
 	unsigned int	pause;
 	uint32_t		last_live;
 	bool			onetime;
-	char			pad[3];
+	char			pad[7];
 	t_buf			arg;
 }					t_env;
 

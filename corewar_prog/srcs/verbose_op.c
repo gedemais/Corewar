@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/05 07:08:48 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 04:56:26 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/20 05:14:53 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,14 +88,14 @@ void				verbose_op(t_env *env, t_process *p)
 
 	i = p->rank;
 	op = p->instruct.op;
+	if (op == OP_AFF)
+		return ;
 	if (i < 10)
 		env->arg.str = "P    ";
 	else if (i >= 10 && i < 100)
 		env->arg.str = "P   ";
 	else if (i >= 100 && i < 1000)
 		env->arg.str = "P  ";
-	else if (i >= 1000 && i < 10000)
-		env->arg.str = "P ";
 	else
 		env->arg.str = "P ";
 	buffer_cor(env->arg, 0, 0);

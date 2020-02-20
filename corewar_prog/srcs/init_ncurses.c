@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 02:35:07 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/17 09:03:47 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/20 04:13:32 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	init_colors(void)
 {
 	init_color(50, 234, 236, 238);
-	init_pair(0, COLOR_WHITE, COLOR_BLACK);
+	init_pair(0, 50, COLOR_BLACK);
 	init_pair(20, 50, 50);
 	init_pair(10, 50, 50);
 	init_pair(1, COLOR_RED, COLOR_BLACK);
