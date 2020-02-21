@@ -6,17 +6,43 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 04:37:07 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/18 07:12:46 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 02:13:13 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+static inline void	istherealive(t_env *env, int x, int y, int size)
+{
+	char	str[42];
+
+	if (env->last_live == 0)
+	{
+		sprintf(&str[0], "%s", env->player[env->nb_pl - 1].name);
+		if (env->xmax > 14 + (x + (int)ft_strlen(
+						env->player[env->nb_pl - 1].name)))
+			size = (int)ft_strlen(env->player[env->nb_pl - 1].name);
+		else
+			size = env->xmax - x - 14;
+	}
+	else
+	{
+		sprintf(&str[0], "%s", env->player[env->last_live - 1].name);
+		if (env->xmax > 14 + (x + (int)ft_strlen(
+						env->player[env->last_live - 1].name)))
+			size = (int)ft_strlen(env->player[env->last_live - 1].name);
+		else
+			size = env->xmax - x - 14;
+	}
+	mvprintw(y + 17, x + 14, "%.*s", size, &str[0]);
+}
 
 static inline void	help_info_define2(t_env *env, int x, int y)
 {
 	char	str[42];
 	int		size;
 
+	size = 0;
 	if (!env->process)
 	{
 		if ((env->xmax > x || env->ymax > y + 17)
@@ -24,16 +50,8 @@ static inline void	help_info_define2(t_env *env, int x, int y)
 				&& sprintf(&str[0], "The winner is "))
 			mvprintw(y + 17, x, "%.*s", size, &str[0]);
 		attron(COLOR_PAIR(env->last_live));
-		if ((env->xmax > x + 14 || env->ymax > y + 17)
-				&& sprintf(&str[0], "%s", env->player[env->last_live - 1].name))
-		{
-			if (env->xmax > 14 + (x + (int)ft_strlen(
-							env->player[env->last_live - 1].name)))
-				size = (int)ft_strlen(env->player[env->last_live - 1].name);
-			else
-				size = env->xmax - x - 14;
-			mvprintw(y + 17, x + 14, "%.*s", size, &str[0]);
-		}
+		if ((env->xmax > x + 14 || env->ymax > y + 17))
+			istherealive(env, x, y, size);
 		attroff(COLOR_PAIR(env->last_live));
 	}
 }

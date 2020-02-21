@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/13 02:18:59 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/20 05:16:50 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 01:46:30 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,14 @@
 
 static inline int	help_pause(t_env *env, int key_input)
 {
-	if (key_input == 45 && env->ncurses_speed > 0)
+	if (key_input == 45 && env->ncurses_speed < 250000)
 		env->ncurses_speed += 2000;
-	else if (key_input == 43 && env->ncurses_speed < 250000)
+	else if (key_input == 43 && env->ncurses_speed > 0)
 		env->ncurses_speed -= 2000;
 	else if (key_input == 113 || key_input == 27 || key_input == 81)
 	{
 		clear();
+		refresh();
 		endwin();
 		return (1);
 	}
@@ -29,8 +30,7 @@ static inline int	help_pause(t_env *env, int key_input)
 		env->onetime = true;
 		return (-1);
 	}
-	if (key_input == 32 || key_input == 45 || key_input == 43
-			|| !env->process)
+	if (key_input == 45 || key_input == 43 || !env->process)
 	{
 		write_info(env);
 		refresh();
@@ -53,13 +53,12 @@ int					pause_loop(t_env *env)
 			write_info(env);
 			refresh();
 			env->pause = false;
-			break ;
+			return (0);
 		}
-		key_input = help_pause(env, key_input);
-		if (key_input == 1)
+		if ((key_input = help_pause(env, key_input)) == 1)
 			return (1);
 		else if (key_input == -1)
-			break ;
+			return (0);
 	}
 	return (0);
 }
