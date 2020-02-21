@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/18 04:35:46 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/18 08:34:29 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 07:12:31 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** get the value of the color of the dash for the result of the previous ctd.
+*/
 
 static inline int	get_color_last(t_env *env, int j)
 {
@@ -41,6 +45,10 @@ static inline int	get_color_last(t_env *env, int j)
 	return (COLOR_PAIR(0));
 }
 
+/*
+** get the value of the color of the dash.
+*/
+
 static inline int	get_color(t_env *env, int j)
 {
 	int				i;
@@ -70,6 +78,10 @@ static inline int	get_color(t_env *env, int j)
 	return (COLOR_PAIR(0) | A_NORMAL);
 }
 
+/*
+** writes the live breakdown with dash for the previous ctd.
+*/
+
 static inline void	breakdown_last(t_env *env, int x, int y, int i)
 {
 	char	str[42];
@@ -92,6 +104,10 @@ static inline void	breakdown_last(t_env *env, int x, int y, int i)
 	}
 	mvaddch(y + 4, x + i + 1, ']');
 }
+
+/*
+** writes the live breakdown with dash.
+*/
 
 int					write_lives_breakdown(t_env *env, int y, int x)
 {

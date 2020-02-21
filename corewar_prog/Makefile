@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/20 01:26:29 by moguy            ###   ########.fr        #
+#    Updated: 2020/02/21 03:14:17 by moguy            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,7 @@ SRCS_NAME=after_space.c\
 		  cycle_run.c\
 		  cw_loop.c\
 		  dump.c\
+		  free_env.c\
 		  get_data.c\
 		  help_get_data.c\
 		  get_name_len.c\

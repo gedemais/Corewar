@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/07 17:53:41 by gedemais          #+#    #+#             */
-/*   Updated: 2020/02/07 08:34:48 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 07:03:27 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,10 @@ int				read_big_endian(t_env *env, int fd, bool magic)
 	}
 	return (0);
 }
+
+/*
+** get and verify the header of the file and it's code.
+*/
 
 int				loader(t_env *env, char *arg, unsigned int *j)
 {

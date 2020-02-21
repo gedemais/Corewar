@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 07:15:39 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/14 07:16:02 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 04:52:19 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** show the current cycle.
+*/
 
 static inline void	help_cycle_run(t_env *env)
 {
@@ -21,6 +25,10 @@ static inline void	help_cycle_run(t_env *env)
 	env->arg.str = "\n";
 	buffer_cor(env->arg, 0, 0);
 }
+
+/*
+** execute one cycle for each process alive.
+*/
 
 int					cycle_run(t_env *env, t_process *p)
 {

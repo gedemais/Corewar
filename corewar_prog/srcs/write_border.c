@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/15 07:32:57 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/18 07:07:59 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 05:00:34 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** draw the border of the ncurses.
+*/
 
 void	write_border(t_env *env)
 {

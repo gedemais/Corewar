@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/26 22:18:40 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/20 05:42:06 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 07:08:41 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** stock a big string for error purpose.
+*/
 
 char	*singleton_str(int error)
 {
@@ -30,6 +34,10 @@ fight in the area at once, for a minimum of one.");
 	return (&magic[error][0]);
 }
 
+/*
+** verify if the player's id are between 1 and number of players.
+*/
+
 int		check_too_high_id(t_env *env)
 {
 	unsigned int	i;
@@ -43,6 +51,10 @@ int		check_too_high_id(t_env *env)
 	}
 	return (0);
 }
+
+/*
+** get the dump's value.
+*/
 
 int		get_dump(char *arg, unsigned int *j)
 {

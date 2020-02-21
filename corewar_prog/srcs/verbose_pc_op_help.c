@@ -6,30 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 00:54:39 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/15 01:32:43 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 03:13:46 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/corewar.h"
-
-void				free_env(t_env *env, char *arg)
-{
-	t_process		*tmp;
-
-	tmp = NULL;
-	if (arg)
-		ft_strdel(&arg);
-	if (env->process)
-	{
-		while (env->process->next)
-		{
-			tmp = env->process;
-			env->process = env->process->next;
-			ft_memdel((void**)&tmp);
-		}
-		ft_memdel((void**)&env->process);
-	}
-}
 
 static inline void	help_verbose_pc(t_env *env, t_process *p)
 {

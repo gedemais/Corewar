@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   after_space.c                                      :+:      :+:    :+:   */
+/*   free_env.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/10/19 14:21:28 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/21 06:30:03 by moguy            ###   ########.fr       */
+/*   Created: 2020/02/21 03:13:07 by moguy             #+#    #+#             */
+/*   Updated: 2020/02/21 03:13:43 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
 
-unsigned int		after_space(char *arg, unsigned int i)
+void				free_env(t_env *env, char *arg)
 {
-	if (!arg)
-		return (0);
-	while (arg[i] && ft_is_whitespace(arg[i]))
-		i++;
-	return (i);
+	t_process		*tmp;
+
+	tmp = NULL;
+	if (arg)
+		ft_strdel(&arg);
+	if (env->process)
+	{
+		while (env->process->next)
+		{
+			tmp = env->process;
+			env->process = env->process->next;
+			ft_memdel((void**)&tmp);
+		}
+		ft_memdel((void**)&env->process);
+	}
 }

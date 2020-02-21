@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 04:52:20 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/20 04:15:11 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 05:00:29 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** draw the arena with only 'f' if --stealth is given.
+*/
 
 static inline int	write_stealth(t_env *env, int x, int y, int color)
 {
@@ -22,6 +26,10 @@ static inline int	write_stealth(t_env *env, int x, int y, int color)
 		mvwaddch(stdscr, y, x + 2, ' ');
 	return (1);
 }
+
+/*
+** get the color and the value of each arena case and put it to ncurses.
+*/
 
 static inline void	write_color(t_env *env, int x, int y, int i)
 {
@@ -51,6 +59,10 @@ static inline void	write_color(t_env *env, int x, int y, int i)
 	if (x + 2 < env->xmax)
 		mvwaddch(stdscr, y, x + 2, ' ');
 }
+
+/*
+** loop to write all the arena.
+*/
 
 void				write_arena(t_env *env)
 {

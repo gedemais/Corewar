@@ -6,11 +6,16 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 17:44:18 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/15 01:29:08 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 07:57:29 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** check if the register is valid and if the type of args given is corresponding
+** to the op_code.
+*/
 
 bool				reg_is_valid(t_process *p, t_op_arg arg[MAX_ARGS_NUMBER])
 {
@@ -40,6 +45,10 @@ bool				reg_is_valid(t_process *p, t_op_arg arg[MAX_ARGS_NUMBER])
 	return (true);
 }
 
+/*
+** get the value of a cell of the arena.
+*/
+
 int32_t				get_mem_cell(t_env *env, t_process *p, size_t siz)
 {
 	size_t		i;
@@ -63,6 +72,10 @@ int32_t				get_mem_cell(t_env *env, t_process *p, size_t siz)
 	return (val);
 }
 
+/*
+** get the value of the arg given if is type is register, indirect or direct.
+*/
+
 int32_t				get_arg_value(t_env *env, t_process *p, int i, bool mod)
 {
 	int32_t		value;
@@ -80,6 +93,11 @@ int32_t				get_arg_value(t_env *env, t_process *p, int i, bool mod)
 	}
 	return (value);
 }
+
+/*
+** get the arguments of an op, given by following the op_code and the encoding
+** bytes in the arena, with get_mem_cell.
+*/
 
 static inline void	get_args(t_env *env, t_process *p, bool dir)
 {
@@ -108,6 +126,10 @@ static inline void	get_args(t_env *env, t_process *p, bool dir)
 		i++;
 	}
 }
+
+/*
+** get the args of an op without encoding byte and with an encoding byte.
+*/
 
 void				load_args(t_env *env, t_process *p, bool enco, bool dir)
 {

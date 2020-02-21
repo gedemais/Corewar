@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 02:35:07 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/20 04:13:32 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 06:57:52 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** initialize the COLOR_PAIR possible.
+*/
 
 void	init_colors(void)
 {
@@ -35,6 +39,10 @@ void	init_colors(void)
 	init_pair(24, COLOR_WHITE, COLOR_GREEN);
 	init_pair(34, COLOR_GREEN, COLOR_WHITE);
 }
+
+/*
+** initialize the ncurses environnement.
+*/
 
 void	init_visu(t_env *env)
 {

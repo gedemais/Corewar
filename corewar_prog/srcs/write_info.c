@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 02:02:06 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/18 07:10:00 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 05:04:44 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** write some info and there values in ncurses.
+*/
 
 static inline void	info_top(t_env *env, int x, int y)
 {
@@ -41,6 +45,10 @@ static inline void	info_top(t_env *env, int x, int y)
 		mvprintw(y + 7, x, "%.*s", size, &str[0]);
 }
 
+/*
+** write the players and there info in the war, in ncurses.
+*/
+
 static inline void	info_player(t_env *env, int y, int i, int j)
 {
 	int		x;
@@ -69,6 +77,10 @@ static inline void	info_player(t_env *env, int y, int i, int j)
 		mvprintw(y + j + 2, x + 2, "%.*s", size, &str[0]);
 	attroff(COLOR_PAIR(i + 1));
 }
+
+/*
+** loop to write the info and the players.
+*/
 
 void				write_info(t_env *env)
 {

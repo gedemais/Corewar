@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 20:48:16 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/20 01:18:57 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 06:40:24 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** give an id to the players who doesn't already have one.
+*/
 
 static inline void		give_id(t_env *env, unsigned int i, unsigned int j,
 		uint8_t opt_n)
@@ -49,6 +53,10 @@ static inline uint8_t	ft_power_cor(uint8_t nb, uint8_t pow)
 	return (tmp);
 }
 
+/*
+** sort the players by id.
+*/
+
 static inline void		sort_players(t_env *env)
 {
 	t_player		tmp;
@@ -68,6 +76,10 @@ static inline void		sort_players(t_env *env)
 			i++;
 	}
 }
+
+/*
+** get the -n designated id.
+*/
 
 int						get_id(t_env *env, char *arg, unsigned int *j, bool end)
 {
@@ -92,6 +104,10 @@ int						get_id(t_env *env, char *arg, unsigned int *j, bool end)
 		return (error(SAME_ID, USAGE, NULL));
 	return (0);
 }
+
+/*
+** process the argv, get option and file.
+*/
 
 int						get_data(t_env *env, char *arg)
 {

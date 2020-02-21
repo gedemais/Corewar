@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 02:10:31 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/17 08:54:28 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 07:12:53 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** writes in the arena.
+*/
 
 void		write_mem_cell(t_env *env, t_process *p, int32_t value)
 {

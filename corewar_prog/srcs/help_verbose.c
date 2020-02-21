@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 01:23:11 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/08 01:23:43 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 06:56:46 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/corewar.h"
+
+/*
+** wrtie a 'r' or not according to the function op_code and their arg number.
+*/
 
 static inline void	help_v2(t_env *env, t_process *p, uint32_t op, int i)
 {
@@ -34,6 +38,10 @@ static inline void	help_v2(t_env *env, t_process *p, uint32_t op, int i)
 		buffer_cor(env->arg, 3, 0);
 	}
 }
+
+/*
+** get the arg value according to the op op_codeand their arg number.
+*/
 
 void				help_verbose2(t_env *env, t_process *p, uint32_t op, int i)
 {

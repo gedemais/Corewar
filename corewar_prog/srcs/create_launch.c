@@ -6,11 +6,15 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 15:48:03 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/17 08:20:18 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 06:33:41 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "corewar.h"
+
+/*
+** get the different value of the encoding byte.
+*/
 
 static inline int	check_encoding(t_env *env, t_process *p)
 {
@@ -35,6 +39,10 @@ static inline int	check_encoding(t_env *env, t_process *p)
 	}
 	return (0);
 }
+
+/*
+** .
+*/
 
 void				launch_instruct(t_env *env, t_process *p)
 {

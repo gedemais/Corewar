@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/30 20:01:11 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/15 01:23:13 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/21 06:37:44 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,10 @@ char				hex_tab(uint8_t quartet)
 
 	return (hex_value[quartet]);
 }
+
+/*
+** return the index of the dump arena.
+*/
 
 static inline char	hex_lines(int j)
 {
