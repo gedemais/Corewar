@@ -6,7 +6,7 @@
 /*   By: gedemais <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/16 15:58:18 by gedemais          #+#    #+#             */
-/*   Updated: 2020/01/08 19:12:23 by gedemais         ###   ########.fr       */
+/*   Updated: 2020/02/21 02:51:13 by gedemais         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ int					write_header(t_env *env, int *fd)
 		ft_putendl_fd(EMPTY_OP_SECTION, 2);
 		return (-1);
 	}
-	if ((*fd = open(env->bin_name, O_CREAT | O_WRONLY, 0666)) < 0)
+	if ((*fd = open(env->bin_name, O_CREAT | O_WRONLY, 444)) < 0)
 		return (-1);
 	write_content(env, *fd, buff, lbe_buff);
 	return (0);
