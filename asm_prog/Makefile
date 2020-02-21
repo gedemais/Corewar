@@ -1,12 +1,10 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
+# **************************************************************************** # # :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/20 05:15:29 by gedemais         ###   ########.fr        #
+#    Updated: 2020/02/20 19:39:17 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,8 +38,7 @@ LIB=$(LIB_PATH)libft.a
 INC_PATH=includes/
 INC_NAME=	asm.h\
 			error.h\
-			globals.h\
-#			../corewar_prog/includes/op.h
+			globals.h
 
 INC=$(addprefix $(INC_PATH), $(INC_NAME))
 
@@ -77,16 +74,14 @@ OBJS=$(SRCS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(LIB) $(OBJS)
-	$(CC) $(FLAGS) -I$(INC_PATH) -I $(LIB_PATH) -o $(NAME) $(OBJS) $(LIB)
+	@$(CC) $(FLAGS) -I$(INC_PATH) -I $(LIB_PATH) -o $(NAME) $(OBJS) $(LIB)
+	@cp asm ../
 
 $(SRCS_PATH)%.o: $(SRCS_PATH)%.c $(INC) ../corewar_prog/includes/op.h
-	$(CC) $(FLAGS) -I$(INC_PATH) -I$(LIB_PATH) -o $@ -c $<
+	@$(CC) $(FLAGS) -I$(INC_PATH) -I$(LIB_PATH) -o $@ -c $<
 
 $(LIB): $(LIB_PATH)
-	@echo -------------------
-	@echo "Making Libft"
-	@echo -------------------
-	make -C $(LIB_PATH)
+	@make -C $(LIB_PATH)
 	
 clean:
 	rm -rf $(OBJS)
