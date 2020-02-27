@@ -6,11 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 01:23:11 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/21 06:56:46 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/27 16:59:19 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/corewar.h"
+#include "corewar.h"
 
 /*
 ** wrtie a 'r' or not according to the function op_code and their arg number.

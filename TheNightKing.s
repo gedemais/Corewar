@@ -1,4 +1,4 @@
-.name "champion_du_siecle"
+.name "TheNightKing"
 .comment "faut juste battre zork en vrai..."
 
 l0:	st r1, 6

@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 01:17:03 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/21 06:31:01 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/27 16:58:31 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,19 +31,13 @@ void				conv_int(t_buf arg, char *buf, int *j)
 {
 	int				i;
 	int				k;
-	int				n;
+	long			n;
 	char			tmp[10];
 	static char		dt[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
 	k = 0;
-	n = arg.n;
+	n = (long)arg.n;
 	i = *j;
-	if (n == -2147483648)
-	{
-		ft_strcpy(&buf[i], "-2147483648");
-		i += 11;
-		return ;
-	}
 	if (n < 0 && (n = -n))
 		buf[i++] = '-';
 	while (n > 9)
