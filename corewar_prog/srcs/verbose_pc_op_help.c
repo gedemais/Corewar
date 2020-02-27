@@ -6,11 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 00:54:39 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/21 03:13:46 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/27 17:08:43 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/corewar.h"
+#include "corewar.h"
 
 static inline void	help_verbose_pc(t_env *env, t_process *p)
 {

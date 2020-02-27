@@ -6,11 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/07 01:17:03 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/27 16:58:31 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/27 17:08:19 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/corewar.h"
+#include "corewar.h"
 
 void				conv_char(t_buf arg, char *buf, int *j)
 {

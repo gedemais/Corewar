@@ -6,11 +6,11 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/08 01:24:20 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/14 02:22:35 by moguy            ###   ########.fr       */
+/*   Updated: 2020/02/27 17:08:31 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/corewar.h"
+#include "corewar.h"
 
 static inline char	hex_convert_char(unsigned int x, int unit)
 {
