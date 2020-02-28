@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/28 12:04:14 by gedemais         ###   ########.fr        #
+#    Updated: 2020/02/28 13:17:56 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -104,7 +104,6 @@ all: $(LIB) $(NAME)
 
 $(NAME) : $(LIB) $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS) $(LIB) -lncurses
-	@cp $(NAME) ../
 
 $(SRCS_PATH)%.o : $(SRCS_PATH)%.c $(INC)
 	@$(CC) $(FLAGS) -I$(INC_PATH) -I$(LIB_PATH) -o $@ -c $<
