@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/10/07 12:37:04 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/20 19:45:58 by gedemais         ###   ########.fr        #
+#    Updated: 2020/02/28 12:12:55 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -36,11 +36,15 @@ LIB=$(LIB_PATH)libft.a
 all: $(LIB) $(COR_NAME) $(ASM_NAME)
 
 $(COR_NAME): $(COR_PATH)
+	@echo "Making $(RED)COREWAR virtual machine$(DEF)..."
 	@make -C $(COR_PATH)
+	@cp $(COR_PATH)$(COR_NAME) ./
+	@echo "$(GRE)Done !$(DEF)"
 
 $(ASM_NAME): $(ASM_PATH)
 	@echo "Making $(RED)ASM Compiler$(DEF)..."
 	@make -C $(ASM_PATH)
+	@cp $(ASM_PATH)$(ASM_NAME) ./
 	@echo "$(GRE)Done !$(DEF)"
 
 $(LIB): $(LIB_PATH)
@@ -54,9 +58,9 @@ clean:
 
 fclean:
 	@make -C $(LIB_PATH) fclean
-	@rm -rf $(COR_NAME)
-	@rm -rf $(ASM_NAME)
 	@make -C $(COR_PATH) fclean
 	@make -C $(ASM_PATH) fclean
+	@rm -rf $(COR_NAME)
+	@rm -rf $(ASM_NAME)
 
 re: fclean all

@@ -6,7 +6,7 @@
 #    By: gedemais <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/23 03:23:53 by gedemais          #+#    #+#              #
-#    Updated: 2020/02/21 03:14:17 by moguy            ###   ########.fr        #
+#    Updated: 2020/02/28 12:04:14 by gedemais         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ ORG = \033[1;31m
 NAME=corewar
 
 CC=gcc
-CFLAGS= -Wall -Werror -Wextra -Ofast -march=native
+CFLAGS= -Wall -Werror -Wextra
 
 DEBUG ?= 0
 ifeq ($(DEBUG), 1)
@@ -98,34 +98,27 @@ SRCS_NAME=after_space.c\
 		  write_breakdown.c
 
 SRCS=$(addprefix $(SRCS_PATH), $(SRCS_NAME))
+OBJS=$(SRCS:.c=.o)
 
-OBJS_PATH=objs/
-OBJS_NAME=$(SRCS_NAME:.c=.o)
+all: $(LIB) $(NAME)
 
-OBJS=$(addprefix $(OBJS_PATH), $(OBJS_NAME))
-
-all: $(LIB) $(NAME) 
-
-$(LIB):
-	@make -C $(LIB_PATH)
-
-$(NAME) : $(OBJS)
+$(NAME) : $(LIB) $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) -I $(INC_PATH) $(OBJS) $(LIB) -lncurses
 	@cp $(NAME) ../
-	@echo "$(GRE)Done !$(DEF)"
 
-$(OBJS_PATH)%.o : $(SRCS_PATH)%.c $(INC)
-	@echo "Making $(RED)COREWAR virtual machine$(DEF)..."
-	@mkdir -p $(OBJS_PATH)
-	@$(CC) $(CFLAGS) -c $(SRCS) -I $(INC_PATH)
-	@mv $(OBJS_NAME) $(OBJS_PATH)
+$(SRCS_PATH)%.o : $(SRCS_PATH)%.c $(INC)
+	@$(CC) $(FLAGS) -I$(INC_PATH) -I$(LIB_PATH) -o $@ -c $<
+
+$(LIB): $(LIB_PATH)
+	@make -C $(LIB_PATH)
 
 clean:
-	@rm -rf $(OBJS_PATH)
+	@rm -rf $(OBJS)
 	@make -C $(LIB_PATH) clean
 
 fclean: clean
 	@rm -rf $(NAME)
+	@rm -rf $(NAME).dSYM
 	@make -C $(LIB_PATH) fclean
 
 re: fclean all
