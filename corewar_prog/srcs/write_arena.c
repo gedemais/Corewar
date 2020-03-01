@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 04:52:20 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/21 05:00:29 by moguy            ###   ########.fr       */
+/*   Updated: 2020/03/01 20:17:45 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,10 @@ static inline void	write_color(t_env *env, int x, int y, int i)
 {
 	int		color;
 
-	color = env->arena[i].id;
-	if (color < 0)
-		color = -color;
+	color = ft_abs(env->arena[i].id);
 	if (env->arena[i].living-- > 0 && color != 0)
 	{
+		color = ft_abs(env->arena[i].living_id);
 		color += 20;
 		attron(A_BOLD);
 	}

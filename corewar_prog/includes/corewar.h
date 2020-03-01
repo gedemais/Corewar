@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/11 16:14:10 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/20 05:38:43 by moguy            ###   ########.fr       */
+/*   Updated: 2020/03/01 20:13:44 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ struct				s_process
 typedef struct		s_arena
 {
 	int				living;
+	short int		living_id;
 	int				recent;
 	short int		id;
 	bool			used;

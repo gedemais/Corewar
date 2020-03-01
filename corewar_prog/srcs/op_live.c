@@ -6,7 +6,7 @@
 /*   By: moguy <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/14 02:06:39 by moguy             #+#    #+#             */
-/*   Updated: 2020/02/17 06:19:31 by moguy            ###   ########.fr       */
+/*   Updated: 2020/03/01 20:16:08 by moguy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void				live(t_env *env, t_process *p)
 	env->last_cycle_lived = p->alive;
 	env->last_cycle_live[value - 1] = p->alive;
 	env->arena[p->pc].living = 50;
+	env->arena[p->pc].living_id = value;
 	if (!(env->opt[O_V] & (1 << 0)))
 		return ;
 	env->arg.str = "Player ";
